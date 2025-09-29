@@ -42,12 +42,9 @@ using (var scope = app.Services.CreateScope())
 }
 
 // ====== 5) Middlewares ======
-if (app.Environment.IsDevelopment())
-{
     app.UseSwagger();
     app.UseSwaggerUI();
     app.UseCors("dev");
-}
 
 app.MapGet("/healthz", () => Results.Ok(new { ok = true }));
 
