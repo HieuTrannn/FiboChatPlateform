@@ -57,5 +57,30 @@ namespace Identity.Application.Implements
 
             return response;
         }
+
+        public async Task<UserResponse> DeleteUserAsync(Guid id)
+        {
+            var user = await _unitOfWork.Users.GetByIdAsync(id);
+            if (user == null)
+            {
+                _logger.LogError("User not found with id: {Id}", id);
+                throw new CustomExceptions.NoDataFoundException("User not found");
+            }
+
+            await _unitOfWork.Users.DeleteStatusAsync(id);
+
+            var response = new UserResponse
+            {
+                Id = user.Id,
+                Email = user.Email,
+                Name = user.Name,
+                Role = user.Role,
+                Status = user.Status,
+                Cohort = user.Cohort,
+                CreatedAt = user.CreatedAt,
+            };
+
+            return response;
+        }
     }
 }

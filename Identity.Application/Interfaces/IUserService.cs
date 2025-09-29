@@ -6,5 +6,6 @@ namespace Identity.Application.Interfaces
     {
         Task<List<UserResponse>> GetAllUsersAsync();
         Task<UserResponse> GetUserByIdAsync(Guid id);
+        Task<UserResponse> DeleteUserAsync(Guid id);
     }
 }

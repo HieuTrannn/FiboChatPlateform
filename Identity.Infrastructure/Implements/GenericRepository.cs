@@ -94,7 +94,7 @@ namespace Identity.Infrastructure.Implements
             }
         }
 
-        public async Task DeleteStatusAsync(string id)
+        public async Task DeleteStatusAsync(Guid id)
         {
             var entity = await GetByIdAsync(id);
             if (entity != null)

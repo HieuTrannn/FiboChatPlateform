@@ -47,5 +47,20 @@ namespace Identity.Api.Controllers
                 return StatusCode(500, ApiResponse<string>.InternalErrorResponse($"Error at the {nameof(UserController)}: {ex.Message}"));
             }
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(Guid id)
+        {
+            try
+            {
+                var user = await _userService.DeleteUserAsync(id);
+                return Ok(ApiResponse<UserResponse>.OkResponse(user, "Delete user successfully", "200"));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(UserController), ex.Message);
+                return StatusCode(500, ApiResponse<string>.InternalErrorResponse($"Error at the {nameof(UserController)}: {ex.Message}"));
+            }
+        }
     }
 }

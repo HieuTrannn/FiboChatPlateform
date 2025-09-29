@@ -17,7 +17,7 @@ namespace Identity.Infrastructure.Interfaces
         Task UpdateAsync(T entity);
         Task DeleteAsync(object id);
         Task DeleteManyAsync(Expression<Func<T, bool>> predicate);
-        Task DeleteStatusAsync(string id);
+        Task DeleteStatusAsync(Guid id);
         Task SaveAsync();
         Task InsertRangeAsync(IEnumerable<T> entities);
         Task<T?> FindAsync(Expression<Func<T, bool>> predicate, string? includeProperties = null);
