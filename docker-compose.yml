@@ -1,0 +1,133 @@
+version: "3.9"
+name: swp392
+
+networks: { msnet: {} }
+
+volumes:
+  pg_identity: {}
+  pg_kb: {}
+  pg_qa: {}
+  pg_chat: {}
+  pg_mod: {}
+  pg_tag: {}
+  pg_vec: {}
+  pg_audit: {}
+  redis_data: {}
+
+services:
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    ports: ["6379:6379"]
+    volumes: ["redis_data:/data"]
+    networks: [msnet]
+
+  postgres-identity:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: identitydb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+    ports: ["5433:5432"]
+    volumes:
+      - pg_identity:/var/lib/postgresql/data
+      - ./postgres/identity/:/docker-entrypoint-initdb.d/
+    networks: [msnet]
+
+  postgres-kb:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: kbdb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+    ports: ["5434:5432"]
+    volumes:
+      - pg_kb:/var/lib/postgresql/data
+      - ./postgres/kb/:/docker-entrypoint-initdb.d/
+    networks: [msnet]
+
+  postgres-qa:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: qadb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+    ports: ["5437:5432"]
+    volumes:
+      - pg_qa:/var/lib/postgresql/data
+      - ./postgres/qa/:/docker-entrypoint-initdb.d/
+    networks: [msnet]
+
+  postgres-chat:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: chatdb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+    ports: ["5438:5432"]
+    volumes:
+      - pg_chat:/var/lib/postgresql/data
+      - ./postgres/chat/:/docker-entrypoint-initdb.d/
+    networks: [msnet]
+
+  postgres-mod:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: moddb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+    ports: ["5439:5432"]
+    volumes:
+      - pg_mod:/var/lib/postgresql/data
+      - ./postgres/mod/:/docker-entrypoint-initdb.d/
+    networks: [msnet]
+
+  postgres-tag:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: tagdb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+    ports: ["5440:5432"]
+    volumes:
+      - pg_tag:/var/lib/postgresql/data
+      - ./postgres/tag/:/docker-entrypoint-initdb.d/
+    networks: [msnet]
+
+  postgres-vec:
+    image: pgvector/pgvector:pg16 # has pgvector preinstalled
+    environment:
+      POSTGRES_DB: vecdb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+    ports: ["5436:5432"]
+    volumes:
+      - pg_vec:/var/lib/postgresql/data
+      - ./postgres/vec/:/docker-entrypoint-initdb.d/
+    networks: [msnet]
+
+  postgres-audit:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: auditdb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+    ports: ["5441:5432"]
+    volumes:
+      - pg_audit:/var/lib/postgresql/data
+      - ./postgres/audit/:/docker-entrypoint-initdb.d/
+    networks: [msnet]
+
+  # Add your API services here (example):
+  # qa-curation-api:
+  #   build: { context: ../src/services/QACuration, dockerfile: Dockerfile }
+  #   environment:
+  #     CONNECTION_STRING: "Host=postgres-qa;Port=5432;Database=qadb;Username=user;Password=pass"
+  #   depends_on: [postgres-qa]
+  #   networks: [msnet]
+
+  # gateway:
+  #   build: { context: ../src/gateway/Gateway.Api, dockerfile: Dockerfile }
+  #   ports: ["8080:8080"]
+  #   depends_on: [qa-curation-api]
+  #   networks: [msnet]
