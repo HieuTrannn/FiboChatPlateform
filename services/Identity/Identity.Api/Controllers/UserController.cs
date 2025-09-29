@@ -6,7 +6,7 @@ using Identity.Contracts.DTOs.UserDtos;
 namespace Identity.Api.Controllers
 {
     [ApiController]
-    [Route("identity/[controller]")]
+    [Route("api/users")]
     public class UserController : BaseController
     {
         private readonly IUserService _userService;
