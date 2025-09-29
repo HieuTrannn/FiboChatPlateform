@@ -4,14 +4,13 @@ services:
     container_name: fibochat-db
     restart: always
     environment:
-      POSTGRES_USER: fibo
-      POSTGRES_PASSWORD: fibopass
-      POSTGRES_DB: FiboChatPlateform
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: FiboChatPlatform
     ports:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - ./deploy/postgres/fibo_init.sql:/docker-entrypoint-initdb.d/fibo_init.sql
 
 volumes:
   pgdata:
