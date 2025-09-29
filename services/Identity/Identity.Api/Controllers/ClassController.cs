@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Identity.Api.Controllers
 {
     [ApiController]
-    [Route("identity/[controller]")]
+    [Route("api/classes")]
     public class ClassController : BaseController
     {
         private readonly IClassService _classService;

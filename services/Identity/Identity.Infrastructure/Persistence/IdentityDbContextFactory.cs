@@ -13,7 +13,8 @@ namespace Identity.Infrastructure.Persistence
         public IdentityDbContext CreateDbContext(string[] args)
         {
             // Ưu tiên lấy từ ENV để không hardcode (nếu không có thì fallback)
-            var cs = Environment.GetEnvironmentVariable("CONNECTION_STRING");
+            var cs = Environment.GetEnvironmentVariable("CONNECTION_STRING")
+              ?? "Host=localhost;Port=5432;Database=FiboChatPlateform;Username=postgres;Password=123456";
             var opt = new DbContextOptionsBuilder<IdentityDbContext>()
                 .UseNpgsql(cs)
                 .Options;
