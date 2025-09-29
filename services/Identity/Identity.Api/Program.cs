@@ -9,9 +9,7 @@ using Identity.Domain.Entities;
 var builder = WebApplication.CreateBuilder(args);
 
 // ====== 1) Connection string (appsettings.json hoặc ENV) ======
-var cs = builder.Configuration.GetConnectionString("Postgres")
-         ?? Environment.GetEnvironmentVariable("CONNECTION_STRING")
-         ?? "Host=localhost;Port=5433;Database=identitydb;Username=user;Password=pass"; // fallback dev
+var cs = builder.Configuration.GetConnectionString("Postgres");
 
 // ====== 2) Infrastructure & DI ======
 builder.Services.AddDbContext<IdentityDbContext>(opt => opt.UseNpgsql(cs));

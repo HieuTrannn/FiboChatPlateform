@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{5DA0BBE5
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gateway.Api", "Gateway.Api\Gateway.Api.csproj", "{A8F34E86-2B30-4387-BDB5-BFF02D8CFAF2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Api", "Identity.Api\Identity.Api.csproj", "{6B3D8840-5368-47A6-8EC7-486F10A163BC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Api", "services\Identity\Identity.Api\Identity.Api.csproj", "{6B3D8840-5368-47A6-8EC7-486F10A163BC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "gateway", "gateway", "{4307E21C-8D29-4FB7-B9FD-4CEE81ACCAA8}"
 EndProject
@@ -21,13 +21,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{F2
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "KnowledgeBase", "KnowledgeBase", "{8F4D3114-21F6-490C-A80E-A872FDCB32D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Application", "Identity.Application\Identity.Application.csproj", "{74DA98F4-4426-4533-A873-F0176803CAD6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Application", "services\Identity\Identity.Application\Identity.Application.csproj", "{74DA98F4-4426-4533-A873-F0176803CAD6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Domain", "Identity.Domain\Identity.Domain.csproj", "{C17735FB-24E3-479F-8256-77483FCEE53B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Domain", "services\Identity\Identity.Domain\Identity.Domain.csproj", "{C17735FB-24E3-479F-8256-77483FCEE53B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Infrastructure", "Identity.Infrastructure\Identity.Infrastructure.csproj", "{627D4245-2DC2-47E2-AE2D-31A8BCB01A09}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Infrastructure", "services\Identity\Identity.Infrastructure\Identity.Infrastructure.csproj", "{627D4245-2DC2-47E2-AE2D-31A8BCB01A09}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Contracts", "Identity.Contracts\Identity.Contracts.csproj", "{0B2759FF-8B76-4E5D-9D2C-470A8CBA3A82}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Contracts", "services\Identity\Identity.Contracts\Identity.Contracts.csproj", "{0B2759FF-8B76-4E5D-9D2C-470A8CBA3A82}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deploy", "deploy", "{62569C97-C863-411B-99C5-327BD0A39351}"
 	ProjectSection(SolutionItems) = preProject

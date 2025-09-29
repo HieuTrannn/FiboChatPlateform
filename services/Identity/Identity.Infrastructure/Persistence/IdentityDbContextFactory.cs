@@ -13,9 +13,7 @@ namespace Identity.Infrastructure.Persistence
         public IdentityDbContext CreateDbContext(string[] args)
         {
             // Ưu tiên lấy từ ENV để không hardcode (nếu không có thì fallback)
-            var cs = Environment.GetEnvironmentVariable("CONNECTION_STRING")
-                     ?? "Host=localhost;Port=5433;Database=identitydb;Username=user;Password=pass";
-
+            var cs = Environment.GetEnvironmentVariable("Postgres");
             var opt = new DbContextOptionsBuilder<IdentityDbContext>()
                 .UseNpgsql(cs)
                 .Options;
