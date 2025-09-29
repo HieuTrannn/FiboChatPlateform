@@ -46,9 +46,6 @@ using (var scope = app.Services.CreateScope())
     app.UseSwaggerUI();
     app.UseCors("dev");
 
-
-app.MapGet("/healthz", () => Results.Ok(new { ok = true }));
-
 app.MapControllers();
 
 app.Run();
