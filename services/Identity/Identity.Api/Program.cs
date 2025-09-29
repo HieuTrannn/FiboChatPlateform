@@ -4,12 +4,12 @@ using Identity.Application.Interfaces;
 using Identity.Infrastructure.Implements;
 using Identity.Application.Implements;
 using Identity.Infrastructure.Interfaces;
-using Identity.Domain.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // ====== 1) Connection string (appsettings.json hoặc ENV) ======
-var cs = builder.Configuration.GetConnectionString("Postgres");
+var cs = builder.Configuration.GetConnectionString("Postgres")
+    ?? Environment.GetEnvironmentVariable("CONNECTION_STRING");
 
 // ====== 2) Infrastructure & DI ======
 builder.Services.AddDbContext<IdentityDbContext>(opt => opt.UseNpgsql(cs));
@@ -17,6 +17,7 @@ builder.Services.AddDbContext<IdentityDbContext>(opt => opt.UseNpgsql(cs));
 // Repository & Service DI
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IClassService, ClassService>();
 
 // ====== 3) API plumbing ======
 builder.Services.AddControllers();
