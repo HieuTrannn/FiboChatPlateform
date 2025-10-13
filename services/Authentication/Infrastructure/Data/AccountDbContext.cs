@@ -1,11 +1,16 @@
 ﻿using Authentication.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Authentication.Infrastructure.Data
 {
-    public class AccountDbContext(DbContextOptions<AccountDbContext> options) : DbContext(options)
+    public class AccountDbContext : DbContext
     {
+        public AccountDbContext(DbContextOptions<AccountDbContext> options) : base(options)
+        {
+        }
+
         public DbSet<Account> Accounts { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<Class> Classes { get; set; }
     }
 }
