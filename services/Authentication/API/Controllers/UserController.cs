@@ -1,0 +1,78 @@
+﻿using Authentication.Application.DTOs;
+using Authentication.Application.Interfaces;
+using Authentication.Domain.Entities;
+using Contracts.Common;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using static Authentication.Application.DTOs.AuthenDTO;
+
+namespace Authentication.API.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class UserController : ControllerBase
+    {
+        private readonly ILogger<UserController> _logger;
+        private readonly IUserService _userService;
+        private readonly IConfiguration _configuration;
+        public UserController(ILogger<UserController> logger, IUserService userService, IConfiguration configuration)
+        {
+            _logger = logger;
+            _userService = userService;
+            _configuration = configuration;
+        }
+        [AllowAnonymous]
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterReq request)
+        {
+            var response = await _userService.RegisterUserAsync(request);
+            return StatusCode(response.StatusCode, response);
+        }
+        [AllowAnonymous]
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] AuthRequest request)
+        {
+            try
+            {
+                var response = await _userService.Login(request);
+                return Ok(ApiResponse<AuthResponse>.Ok("Login successful", response));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("{Classname} - Error at get account async cause by {}", nameof(UserController), ex.Message);
+                return BadRequest(ex);
+            }
+        }
+
+        [Authorize]
+        [HttpPut("change-password")]
+        public async Task<IActionResult> ChangePassword([FromForm] ChangePasswordRequest request)
+        {
+            try
+            {
+                var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+                if (string.IsNullOrEmpty(email))
+                {
+                    _logger.LogWarning("No email claim found in JWT token");
+                    return Unauthorized(new RegisterResponse { Success = false, Message = "Invalid token: Email claim missing" });
+                }
+
+                var response = await _userService.ChangePassword(email, request);
+                if (!response.Success)
+                {
+                    return BadRequest(ApiResponse<RegisterResponse>.BadRequestResponse(response.Message));
+                }
+
+                return Ok(ApiResponse<Account>.OkResponse(response.Message, StatusCode: "Success"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<string>.InternalError("Error changing password: " + ex.Message));
+            }
+        }
+
+    }
+}
+

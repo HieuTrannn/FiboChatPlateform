@@ -1,81 +1,83 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
+﻿using Authentication.Domain.Abstraction;
+using Authentication.Infrastructure.Data;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-//namespace Authentication.Infrastructure.Implementation
-//{
-//        public class UnitOfWork : IUnitOfWork
-//        {
-//            private readonly  _dbContext;
-//            private bool _disposed = false;
-//            private Dictionary<Type, object> _repositories;
+namespace Authentication.Infrastructure.Implementation
+{
+    public class UnitOfWork  : IUnitOfWork
+    {
+        private readonly AccountDbContext _dbContext;
+            private bool _disposed = false;
+        private Dictionary<Type, object> _repositories;
 
-//            public UnitOfWork( dbContext)
-//            {
-//                _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-//                _repositories = new Dictionary<Type, object>();
-//            }
+        public UnitOfWork(AccountDbContext dbContext)
+        {
+            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+            _repositories = new Dictionary<Type, object>();
+        }
 
-//            public IGenericRepository<T> GetRepository<T>() where T : class
-//            {
-//                var type = typeof(T);
-//                if (!_repositories.ContainsKey(type))
-//                {
-//                    _repositories[type] = new GenericRepository<T>(_dbContext);
-//                }
-//                return (IGenericRepository<T>)_repositories[type];
-//            }
+        public IGenericRepository<T> GetRepository<T>() where T : class
+        {
+            var type = typeof(T);
+            if (!_repositories.ContainsKey(type))
+            {
+                _repositories[type] = new GenericRepository<T>(_dbContext);
+            }
+            return (IGenericRepository<T>)_repositories[type];
+        }
 
-//            public void BeginTransaction()
-//            {
-//                _dbContext.Database.BeginTransaction();
-//            }
+        public void BeginTransaction()
+        {
+            _dbContext.Database.BeginTransaction();
+        }
 
-//            public void CommitTransaction()
-//            {
-//                _dbContext.Database.CommitTransaction();
-//            }
+        public void CommitTransaction()
+        {
+            _dbContext.Database.CommitTransaction();
+        }
 
-//            public void RollBack()
-//            {
-//                _dbContext.Database.RollbackTransaction();
-//            }
+        public void RollBack()
+        {
+            _dbContext.Database.RollbackTransaction();
+        }
 
 
-//            public void Save()
-//            {
-//                _dbContext.SaveChanges();
-//            }
+        public void Save()
+        {
+            _dbContext.SaveChanges();
+        }
 
-//            public async Task SaveChangeAsync()
-//            {
-//                await _dbContext.SaveChangesAsync();
-//            }
+        public async Task SaveChangeAsync()
+        {
+            await _dbContext.SaveChangesAsync();
+        }
 
-//            public void Dispose()
-//            {
-//                Dispose(true);
-//                GC.SuppressFinalize(this);
-//            }
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
 
-//            protected virtual void Dispose(bool disposing)
-//            {
-//                if (!_disposed)
-//                {
-//                    if (disposing)
-//                    {
-//                        _dbContext.Dispose();
-//                    }
-//                    _disposed = true;
-//                }
-//            }
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _dbContext.Dispose();
+                }
+                _disposed = true;
+            }
+        }
 
-//            // Thêm phương thức để kiểm tra trạng thái transaction
-//            public bool HasActiveTransaction()
-//            {
-//                return _dbContext.Database.CurrentTransaction != null;
-//            }
-//        }
-//    }
+        // Thêm phương thức để kiểm tra trạng thái transaction
+        public bool HasActiveTransaction()
+        {
+            return _dbContext.Database.CurrentTransaction != null;
+        }
+    }
+}
