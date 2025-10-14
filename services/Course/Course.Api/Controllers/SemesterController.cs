@@ -1,0 +1,136 @@
+using Course.Application.Interfaces;
+using Course.Contracts.DTOs;
+using Course.Domain.DTOs.SemesterDTOs;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Course.Api.Controllers
+{
+    [ApiController]
+    [Route("api/semesters")]
+    public class SemesterController : BaseController
+    {
+        private readonly ISemesterService _semesterService;
+        private readonly ILogger<SemesterController> _logger;
+
+        public SemesterController(ISemesterService semesterService, ILogger<SemesterController> logger)
+        {
+            _semesterService = semesterService;
+            _logger = logger;
+        }
+
+        /// <summary>
+        /// Get all semesters (active and pending only)
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> GetAllSemesters()
+        {
+            try {
+                var semesters = await _semesterService.GetAllAsync();
+                if (semesters == null)
+                {
+                    return NotFound(ApiResponse<List<SemesterResponse>>.NotFoundResponse("Semesters not found"));
+                }
+                return Ok(ApiResponse<List<SemesterResponse>>.OkResponse(semesters, "Get all semesters successfully", "200"));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(SemesterController), ex.Message);
+                return HandleException(ex, nameof(SemesterController));
+            }
+        }
+
+        /// <summary>
+        /// Get a semester by id (active and pending only)
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetSemesterById(Guid id)
+        {
+            try {
+                var semester = await _semesterService.GetByIdAsync(id);
+                if (semester == null)
+                {
+                    return NotFound(ApiResponse<SemesterResponse>.NotFoundResponse("Semester not found"));
+                }
+                return Ok(ApiResponse<SemesterResponse>.OkResponse(semester, "Get semester by id successfully", "200"));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(SemesterController), ex.Message);
+                return HandleException(ex, nameof(SemesterController));
+            }
+        }
+
+        /// <summary>
+        /// Create a new semester
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> CreateSemester([FromForm] SemesterCreateRequest request)
+        {
+            try {
+                var semester = await _semesterService.CreateAsync(request);
+                if (semester == null)
+                {
+                    return BadRequest(ApiResponse<SemesterResponse>.BadRequestResponse("Create semester failed"));
+                }
+                return Ok(ApiResponse<SemesterResponse>.OkResponse(semester, "Create semester successfully", "200"));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(SemesterController), ex.Message);
+                return HandleException(ex, nameof(SemesterController));
+            }
+        }
+
+        /// <summary>
+        /// Update a semester
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateSemester(Guid id, [FromForm] SemesterUpdateRequest request)
+        {
+            try {
+                var semester = await _semesterService.UpdateAsync(id, request);
+                if (semester == null)
+                {
+                    return BadRequest(ApiResponse<SemesterResponse>.BadRequestResponse("Update semester failed"));
+                }
+                return Ok(ApiResponse<SemesterResponse>.OkResponse(semester, "Update semester successfully", "200"));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(SemesterController), ex.Message);
+                return HandleException(ex, nameof(SemesterController));
+            }
+        }
+
+        /// <summary>
+        /// Delete a semester (active cannot be deleted)
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteSemester(Guid id)
+        {
+            try {
+                var semester = await _semesterService.DeleteAsync(id);
+                if (semester == null)
+                {
+                    return BadRequest(ApiResponse<SemesterResponse>.BadRequestResponse("Delete semester failed"));
+                }
+                return Ok(ApiResponse<SemesterResponse>.OkResponse(semester, "Delete semester successfully", "200"));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(SemesterController), ex.Message);
+                return HandleException(ex, nameof(SemesterController));
+            }
+        }
+    }
+}
