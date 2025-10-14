@@ -10,7 +10,7 @@ using static Authentication.Application.DTOs.AuthenDTO;
 
 namespace Authentication.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/user")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -73,6 +73,42 @@ namespace Authentication.API.Controllers
             }
         }
 
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromForm] string email)
+        {
+            try
+            {
+                var response = await _userService.ForgotPasswordAsync(email);
+                if (!response.Success)
+                {
+                    return BadRequest(ApiResponse<RegisterResponse>.BadRequestResponse(response.Message));
+                }
+                return Ok(ApiResponse<Account>.OkResponse(response.Message, StatusCode: "Success"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<string>.InternalError("Error in forgot password: " + ex.Message));
+            }
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromForm] string token, [FromForm] string newPassword)
+        {
+            try
+            {
+                var response = await _userService.ResetPasswordAsync(token, newPassword);
+                if (!response.Success)
+                {
+                    return BadRequest(ApiResponse<RegisterResponse>.BadRequestResponse(response.Message));
+                }
+                return Ok(ApiResponse<Account>.OkResponse(response.Message, StatusCode: "Success"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<string>.InternalError("Error in reset password: " + ex.Message));
+            }
+        }
+         
     }
 }
 

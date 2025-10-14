@@ -9,5 +9,7 @@ namespace Authentication.Application.Interfaces
         Task<ApiResponse<RegisterResponse>> RegisterUserAsync(RegisterReq request);
         Task<AuthResponse> Login(AuthRequest request);
         Task<RegisterResponse> ChangePassword(string email, ChangePasswordRequest changePasswordRequest);
+        Task<RegisterResponse> ForgotPasswordAsync(string email);
+        Task<RegisterResponse> ResetPasswordAsync(string token, string newPassword);
     }
 }

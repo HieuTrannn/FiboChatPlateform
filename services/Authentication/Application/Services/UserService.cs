@@ -104,21 +104,21 @@ namespace Authentication.Application.Services
             {
                 var accountRepo = _unitOfWork.GetRepository<Account>();
                 var account = await accountRepo.FindByConditionAsync(u => u.Email == request.Email);
-                if (account == null || !VerifyPassword(request.Password, account.Password))
+                if (account == null)
                 {
                     _logger.LogInformation("Login failed: Account not found");
-                    throw new KeyNotFoundException("Your account has not register");
+                    throw new KeyNotFoundException("You have not register");
+                }
+
+                if (!VerifyPassword(request.Password, account.Password))
+                {
+                    _logger.LogInformation("Login failed: Invalid username or password");
+                    throw new KeyNotFoundException("Invalid username or password");
                 }
 
                 //Get the role information
                 //var role = await _unitOfWork.GetRepository<Role>().GetByIdAsync(account.Id ?? string.Empty);
                 //account.Role = role;
-
-                if (account == null || !VerifyPassword(account.Password, account.Password))
-                {
-                    _logger.LogInformation("Login failed");
-                    throw new KeyNotFoundException("Invalid username or password");
-                }
 
                 var token = GenerateJwtToken(account);
                 var response = request.Adapt<AuthResponse>();
@@ -169,28 +169,105 @@ namespace Authentication.Application.Services
             {
                 _logger.LogError(ex, "Error changing password");
                 return new RegisterResponse { Success = false, Message = ex.Message };
-            };
+            }
+            ;
         }
 
         public async Task<RegisterResponse> ForgotPasswordAsync(string email)
         {
+            var userRepository = _unitOfWork.GetRepository<Account>();
+            var user = await userRepository.FindByConditionAsync(u => u.Email == email);
+
+            if (user == null)
+            {
+                _logger.LogWarning("Forgot password requested for non-existent email: {Email}", email);
+                return new RegisterResponse
+                {
+                    Success = true,
+                    Message = "if your account exists, you will recive the email"
+                };
+            }
+
+            string resetToken = GenerateResetToken(email);
+            var resetData = new PasswordResetData
+            {
+                Token = resetToken,
+                ExpiresAt = DateTime.UtcNow.AddHours(1)
+            };
+
+            await SendPasswordResetEmail(user, resetData.Token);
+
+            return new RegisterResponse
+            {
+                Success = true,
+                Message = "Check your email to reset your password."
+            };
+        }
+
+        public async Task<RegisterResponse> ResetPasswordAsync(string token, string newPassword)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
+
             try
             {
-                _logger.LogInformation("Processing forgot password request for email: {Email}", email);
+                var principal = tokenHandler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ClockSkew = TimeSpan.Zero
+                }, out _);
 
-                var userRepository = _unitOfWork.GetRepository< Account>();
+                var email = principal.Claims.FirstOrDefault(c => c.Type == "email")?.Value;
+
+                if (email == null)
+                    return new RegisterResponse { Success = false, Message = "Token invalidate" };
+
+                var userRepository = _unitOfWork.GetRepository<Account>();
                 var user = await userRepository.FindByConditionAsync(u => u.Email == email);
 
                 if (user == null)
-                {
-                    // For security reasons, don't reveal that the user doesn't exist
-                    _logger.LogWarning("Forgot password requested for non-existent email: {Email}", email);
-                    return new RegisterResponse { Success = true, Message = "If your email exists in our system, you will receive a password reset link" };
-                }
-                // Generate a password reset token
-                string resetToken = Guid.NewGuid().ToString();
+                    return new RegisterResponse { Success = false, Message = "User not found" };
+
+                user.Password = _rsaService.Encrypt(newPassword);
+                user.UpdatedAt = DateTime.UtcNow;
+                await userRepository.UpdateAsync(user);
+                await _unitOfWork.SaveChangeAsync();
+
+                return new RegisterResponse { Success = true, Message = "Change Password Succcessfully" };
             }
+            catch (SecurityTokenExpiredException)
+            {
+                return new RegisterResponse { Success = false, Message = "Token Exprired" };
             }
+            catch
+            {
+                return new RegisterResponse { Success = false, Message = "Token invalid" };
+            }
+        }
+
+
+        private async Task SendPasswordResetEmail(Account account, string token)
+        {
+            string resetLink = $"https://fiboaichat.com/reset-password?token={token}";
+
+            var templateData = new Dictionary<string, string>
+              {
+                { "USERNAME", account.Email },
+                { "RESET_LINK", resetLink },
+                { "subject", "Đặt Lại Mật Khẩu - FiboAiChat" }
+            };
+
+            await _emailService.SendEmailAsync(
+                recipientEmail: account.Email,
+                recipientName: account.Email,
+                templateFileName: "ResetPassword.html",
+                templateData: templateData
+            );
+        }
 
         private bool VerifyPassword(string inputPassword, string encryptedPassword)
         {
@@ -208,7 +285,7 @@ namespace Authentication.Application.Services
                     Subject = new ClaimsIdentity(new[]
                     {
                     new Claim(ClaimTypes.NameIdentifier, account.Id.ToString()),
-                    new Claim(ClaimTypes.Role, account.Role.RoleName.ToString()),
+                    //new Claim(ClaimTypes.Role, account.Role.RoleName.ToString()),
                     //new Claim(ClaimTypes.Name, account.FullName.ToString()),
                     new Claim(ClaimTypes.Email, account.Email.ToString()),
                     // new Claim("userId", account.Id.ToString()),
@@ -255,5 +332,28 @@ namespace Authentication.Application.Services
                 .Select(x => validChars[random.Next(validChars.Length)]);
             return new string(chars.ToArray());
         }
+
+        private string GenerateResetToken(string email)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[]
+                {
+                new Claim("email", email),
+                new Claim("purpose", "password_reset")
+                 }),
+                Expires = DateTime.UtcNow.AddHours(1), // 1 giờ
+                SigningCredentials = new SigningCredentials(
+                    new SymmetricSecurityKey(key),
+                    SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
+
     }
 }
