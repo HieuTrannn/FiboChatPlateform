@@ -19,6 +19,7 @@ using System.Security.Claims;
 using System.Security.Principal;
 using System.Text;
 using static Authentication.Application.DTOs.AuthenDTO;
+using static Authentication.Application.DTOs.UserDTO;
 
 namespace Authentication.Application.Services
 {
@@ -116,6 +117,15 @@ namespace Authentication.Application.Services
                     throw new KeyNotFoundException("Invalid username or password");
                 }
 
+                if(account.IsVerified == false)
+                {
+                    return new AuthResponse
+                    {
+                        Message = "You must change your password before continuing.",
+                        RequirePasswordChange = true
+                    };
+                }
+
                 //Get the role information
                 //var role = await _unitOfWork.GetRepository<Role>().GetByIdAsync(account.Id ?? string.Empty);
                 //account.Role = role;
@@ -137,7 +147,7 @@ namespace Authentication.Application.Services
             }
         }
 
-        public async Task<RegisterResponse> ChangePassword(string email, ChangePasswordRequest changePasswordRequest)
+        public async Task<RegisterResponse> ChangePasswordAsync(string email, ChangePasswordRequest changePasswordRequest)
         {
             try
             {
@@ -160,6 +170,7 @@ namespace Authentication.Application.Services
                     return new RegisterResponse { Success = false, Message = "New password and confirm password do not match" };
                 }
                 user.Password = _rsaService.Encrypt(changePasswordRequest.NewPassword);
+                user.IsVerified = true;
                 await userRepo.UpdateAsync(user);
                 await _unitOfWork.SaveChangeAsync();
 
@@ -249,7 +260,31 @@ namespace Authentication.Application.Services
             }
         }
 
-
+        public async Task<UserInfo> GetUserById(string userId)
+        {
+            try
+            {
+                _logger.LogInformation("Fetching user by ID: {UserId}", userId);
+                var userRepo = _unitOfWork.GetRepository<Account>();
+                var user = await userRepo.GetByIdAsync(userId);
+                if (user == null)
+                {
+                    _logger.LogWarning("User not found with ID: {UserId}", userId);
+                    throw new KeyNotFoundException("User not found");
+                }
+                _logger.LogInformation("User found: {UserEmail}", user.Email);
+                return user.Adapt<UserInfo>();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching user by ID: {UserId}", userId);
+                throw;
+            }
+            finally
+            {
+                _unitOfWork.Dispose();
+            }
+        }
         private async Task SendPasswordResetEmail(Account account, string token)
         {
             string resetLink = $"https://fiboaichat.com/reset-password?token={token}";

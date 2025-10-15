@@ -25,15 +25,18 @@ namespace Authentication.Domain.Entities
 
         [MaxLength(10)]
         public string? PhoneNumber { get; set; }
-        [Required]
         public string? StudentID { get; set; }
         public Guid? RoleId { get; set; }
         public string? Address { get; set; }
         [Column(TypeName = "text")]
-        public string? RefreshToken { get; set; }
-        public DateTime? RefreshTokenExpiryTime { get; set; }
         public bool IsVerified { get; set; }
         public virtual Role? Role { get; set; }
+
+        public Guid? ClassId { get; set; }
+
+        [ForeignKey("ClassId")]
+        public virtual Class? Class { get; set; }
+        public virtual Lecture? Lecture { get; set; }
 
         //public bool IsEmailVerified { get; set; }
 

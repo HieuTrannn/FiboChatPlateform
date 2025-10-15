@@ -27,8 +27,17 @@ namespace Authentication.API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterReq request)
         {
-            var response = await _userService.RegisterUserAsync(request);
-            return StatusCode(response.StatusCode, response);
+            try
+            {
+                var response = await _userService.RegisterUserAsync(request);
+                return StatusCode(response.StatusCode, response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("{Classname} - Error at register async cause by {}", nameof(UserController), ex.Message);
+                return BadRequest(ex);
+            }
+
         }
         [AllowAnonymous]
         [HttpPost("login")]
@@ -59,7 +68,7 @@ namespace Authentication.API.Controllers
                     return Unauthorized(new RegisterResponse { Success = false, Message = "Invalid token: Email claim missing" });
                 }
 
-                var response = await _userService.ChangePassword(email, request);
+                var response = await _userService.ChangePasswordAsync(email, request);
                 if (!response.Success)
                 {
                     return BadRequest(ApiResponse<RegisterResponse>.BadRequestResponse(response.Message));

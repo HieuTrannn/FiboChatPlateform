@@ -9,7 +9,8 @@ namespace Authentication.Domain.Entities
         public string Name { get; set; }  
 
         [Required]
-        public int Year { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
 
         public bool IsActive { get; set; } 
 

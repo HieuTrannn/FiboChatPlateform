@@ -3,6 +3,7 @@ using System;
 using Authentication.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Authentication.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(AccountDbContext))]
-    partial class AccountDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251015050153_Update_Account")]
+    partial class Update_Account
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -151,7 +154,23 @@ namespace Authentication.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Authentication.Domain.Entities.Lecture", b =>
                 {
-                    b.Property<Guid>("LecturerId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("DeletedBy")
                         .HasColumnType("uuid");
 
                     b.Property<string>("FullName")
@@ -160,11 +179,22 @@ namespace Authentication.Infrastructure.Data.Migrations
                     b.Property<int>("Gender")
                         .HasColumnType("integer");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("LecturerId");
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
 
                     b.ToTable("Lecture");
                 });
@@ -291,17 +321,12 @@ namespace Authentication.Infrastructure.Data.Migrations
             modelBuilder.Entity("Authentication.Domain.Entities.Lecture", b =>
                 {
                     b.HasOne("Authentication.Domain.Entities.Account", "Account")
-                        .WithOne("Lecture")
-                        .HasForeignKey("Authentication.Domain.Entities.Lecture", "LecturerId")
+                        .WithMany()
+                        .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Account");
-                });
-
-            modelBuilder.Entity("Authentication.Domain.Entities.Account", b =>
-                {
-                    b.Navigation("Lecture");
                 });
 
             modelBuilder.Entity("Authentication.Domain.Entities.Class", b =>
