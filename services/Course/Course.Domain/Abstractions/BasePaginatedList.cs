@@ -1,4 +1,4 @@
-﻿namespace Course.Domain.Abstractions
+namespace Course.Domain.Abstractions
 {
     public class BasePaginatedList<T>
     {

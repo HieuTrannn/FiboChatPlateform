@@ -1,6 +1,6 @@
-using Course.Domain.DTOs.ClassDTOs;
+using Authentication.Application.DTOs.ClassDTOs;
 
-namespace Course.Application.Interfaces
+namespace Authentication.Application.Interfaces
 {
     public interface IClassService
     {

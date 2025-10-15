@@ -2,8 +2,6 @@
 using Course.Infrastructure.Interfaces;
 using Course.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Course.Application.Interfaces;
-using Course.Application.Implements;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,16 +14,9 @@ builder.Services.AddDbContext<CourseDbContext>(opt => opt.UseNpgsql(cs));
 
 // Repository & Service DI
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<ISemesterService, SemesterService>();
-builder.Services.AddScoped<IClassService, ClassService>();
 
 var authBase = builder.Configuration["Services:AuthBaseUrl"];
-builder.Services.AddHttpClient<IAccountsClient, AccountsClient>(c =>
-{
-	if (!Uri.TryCreate(authBase, UriKind.Absolute, out var uri))
-		throw new InvalidOperationException("Invalid Services:AuthBaseUrl (e.g., https://localhost:7047)");
-	c.BaseAddress = uri;
-});
+
 
 // ====== 3) API plumbing ======
 builder.Services.AddControllers();

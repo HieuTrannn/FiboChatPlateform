@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
-using Course.Application.Interfaces;
-using Course.Domain.DTOs.ClassDTOs;
-using Course.Contracts.DTOs;
+using Authentication.Application.Interfaces;
+using Authentication.Application.DTOs.ClassDTOs;
+using Contracts.Common;
 
-namespace Course.Api.Controllers
+namespace Authentication.API.Controllers
 {
     [ApiController]
     [Route("api/classes")]
-    public class ClassController : BaseController
+    public class ClassController : ControllerBase
     {
         private readonly IClassService _classService;
         private readonly ILogger<ClassController> _logger;
@@ -28,12 +28,16 @@ namespace Course.Api.Controllers
             try
             {
                 var classes = await _classService.GetAllAsync();
-                return Ok(ApiResponse<List<ClassResponse>>.OkResponse(classes, "Get all classes successfully", "200"));
+                if (classes == null)
+                {
+                    return NotFound(ApiResponse<List<ClassResponse>>.NotFound("Classes not found"));
+                }
+                return Ok(ApiResponse<List<ClassResponse>>.Ok(classes, "Get all classes successfully", "200"));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(ClassController), ex.Message);
-                return HandleException(ex, nameof(ClassController));
+                return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(ClassController)}: {ex.Message}"));
             }
         }
 
@@ -48,12 +52,16 @@ namespace Course.Api.Controllers
             try
             {
                 var c = await _classService.GetByIdAsync(id);
-                return Ok(ApiResponse<ClassResponse>.OkResponse(c, "Get class by id successfully", "200"));
+                if (c == null)
+                {
+                    return NotFound(ApiResponse<ClassResponse>.NotFound("Class not found"));
+                }
+                return Ok(ApiResponse<ClassResponse>.Ok(c, "Get class by id successfully", "200"));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(ClassController), ex.Message);
-                return HandleException(ex, nameof(ClassController));
+                return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(ClassController)}: {ex.Message}"));
             }
         }
 
@@ -68,12 +76,16 @@ namespace Course.Api.Controllers
             try
             {
                 var c = await _classService.CreateAsync(request);
-                return Ok(ApiResponse<ClassResponse>.OkResponse(c, "Create class successfully", "200"));
+                if (c == null)
+                {
+                    return BadRequest(ApiResponse<ClassResponse>.BadRequest("Create class failed"));
+                }
+                return Ok(ApiResponse<ClassResponse>.Ok(c, "Create class successfully", "200"));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(ClassController), ex.Message);
-                return HandleException(ex, nameof(ClassController));
+                return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(ClassController)}: {ex.Message}"));
             }
         }
 
@@ -89,12 +101,16 @@ namespace Course.Api.Controllers
             try
             {
                 var c = await _classService.UpdateAsync(id, request);
-                return Ok(ApiResponse<ClassResponse>.OkResponse(c, "Update class successfully", "200"));
+                if (c == null)
+                {
+                    return BadRequest(ApiResponse<ClassResponse>.BadRequest("Update class failed"));
+                }
+                return Ok(ApiResponse<ClassResponse>.Ok(c, "Update class successfully", "200"));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(ClassController), ex.Message);
-                return HandleException(ex, nameof(ClassController));
+                return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(ClassController)}: {ex.Message}"));
             }
         }
 
@@ -109,13 +125,17 @@ namespace Course.Api.Controllers
             try
             {
                 var c = await _classService.DeleteAsync(id);
-                return Ok(ApiResponse<ClassResponse>.OkResponse(c, "Delete class successfully", "200"));
+                if (c == null)
+                {
+                    return BadRequest(ApiResponse<ClassResponse>.BadRequest("Delete class failed"));
+                }
+                return Ok(ApiResponse<ClassResponse>.Ok(c, "Delete class successfully", "200"));
             }
 
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(ClassController), ex.Message);
-                return HandleException(ex, nameof(ClassController));
+                return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(ClassController)}: {ex.Message}"));
             }
         }
     }

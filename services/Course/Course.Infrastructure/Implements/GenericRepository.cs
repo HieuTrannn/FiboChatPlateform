@@ -4,6 +4,7 @@ using Course.Infrastructure.Interfaces;
 using Course.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace Course.Infrastructure.Implements
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
@@ -94,7 +95,7 @@ namespace Course.Infrastructure.Implements
             }
         }
 
-        public async Task DeleteStatusAsync(Guid id)
+        public async Task SoftDeleteAsync(Guid id)
         {
             var entity = await GetByIdAsync(id);
             if (entity != null)

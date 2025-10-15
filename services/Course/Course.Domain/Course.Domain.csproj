@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Folder Include="DTOs\" />
+    <ProjectReference Include="..\..\..\services\Authentication\Authentication.Domain\Authentication.Domain.csproj" />
   </ItemGroup>
 
 </Project>

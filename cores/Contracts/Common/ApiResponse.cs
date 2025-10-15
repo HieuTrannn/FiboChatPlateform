@@ -28,8 +28,8 @@ namespace Contracts.Common
             Message = message;
             Data = data;
         }
-        public static ApiResponse<T> Ok(string message, T? data = default)
-            => new((int)HttpStatusCode.OK, nameof(HttpStatusCode.OK), message, data);
+        public static ApiResponse<T> Ok(T? data, string? mess, string StatusCode)
+            => new((int)HttpStatusCode.OK, nameof(HttpStatusCode.OK), mess, data);
         public static ApiResponse<T> OkResponse(string? mess, string StatusCode)
         {
             return new ApiResponse<T>((int)HttpStatusCode.OK, StatusCodeHelper.OK.Name(), mess);
@@ -37,6 +37,8 @@ namespace Contracts.Common
         public static ApiResponse<T> BadRequest(string message, T? data = default)
             => new((int)HttpStatusCode.BadRequest, nameof(HttpStatusCode.BadRequest), message, data);
 
+        public static ApiResponse<T> NotFound(string message)
+            => new((int)HttpStatusCode.NotFound, nameof(HttpStatusCode.NotFound), message);
         public static ApiResponse<T> Error(string message)
             => new((int)HttpStatusCode.InternalServerError, nameof(HttpStatusCode.InternalServerError), message);
 

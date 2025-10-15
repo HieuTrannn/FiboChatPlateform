@@ -1,4 +1,3 @@
-using Course.Domain.Entities;
 using Course.Infrastructure.Interfaces;
 using Course.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -10,23 +9,22 @@ namespace Course.Infrastructure.Implements
         private readonly CourseDbContext _context;
         private IDbContextTransaction? _transaction;
         private bool _disposed = false;
-
+        private Dictionary<Type, object> _repositories;
         public UnitOfWork(CourseDbContext context)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _repositories = new Dictionary<Type, object>();
         }
 
-        private IGenericRepository<Topic>? _topics;
-        public IGenericRepository<Topic> Topics => _topics ??= new GenericRepository<Topic>(_context);
-
-        private IGenericRepository<Semester>? _semesters;
-        public IGenericRepository<Semester> Semesters => _semesters ??= new GenericRepository<Semester>(_context);
-
-        private IGenericRepository<Class>? _classes;
-        public IGenericRepository<Class> Classes => _classes ??= new GenericRepository<Class>(_context);
-
-        private IGenericRepository<ClassEnrollment>? _classEnrollments;
-        public IGenericRepository<ClassEnrollment> ClassEnrollments => _classEnrollments ??= new GenericRepository<ClassEnrollment>(_context);
+        public IGenericRepository<T> GetRepository<T>() where T : class
+        {
+            var type = typeof(T);
+            if (!_repositories.ContainsKey(type))
+            {
+                _repositories[type] = new GenericRepository<T>(_context);
+            }
+            return (IGenericRepository<T>)_repositories[type];
+        }
 
         public async Task<int> SaveChangesAsync()
         {

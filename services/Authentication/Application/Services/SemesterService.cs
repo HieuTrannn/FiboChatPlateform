@@ -1,12 +1,12 @@
-using Course.Application.Interfaces;
-using Course.Domain.DTOs.SemesterDTOs;
-using Course.Domain.Entities;
-using Course.Domain.Exceptions;
-using static Course.Domain.Enums.StaticEnums;
-using Course.Infrastructure.Interfaces;
+using Authentication.Application.Interfaces;
+using Authentication.Application.DTOs.SemesterDTOs;
+using Authentication.Domain.Entities;
+using Authentication.Domain.Exceptions;
+using Authentication.Domain.Abstraction;
 using Microsoft.Extensions.Logging;
+using Authentication.Domain.Enum;
 
-namespace Course.Application.Implements
+namespace Authentication.Application.Services
 {
     public class SemesterService : ISemesterService
     {
@@ -21,7 +21,7 @@ namespace Course.Application.Implements
 
         public async Task<SemesterResponse> GetByIdAsync(Guid id)
         {
-            var semester = await _unitOfWork.Semesters.GetByIdAsync(id);
+            var semester = await _unitOfWork.GetRepository<Semester>().GetByIdAsync(id);
             if (semester == null)
             {
                 _logger.LogError("Semester not found with id: {Id}", id);
@@ -34,7 +34,7 @@ namespace Course.Application.Implements
 
         public async Task<List<SemesterResponse>> GetAllAsync()
         {
-            var semesters = await _unitOfWork.Semesters.GetAllAsync(x => x.Where(x => x.Status == SemesterStatus.Active));
+            var semesters = await _unitOfWork.GetRepository<Semester>().GetAllAsync(x => x.Where(x => x.Status == SemesterStatusEnum.Active));
             var responses = await Task.WhenAll(semesters.Select(ToSemesterResponse));
             return responses.ToList();
         }
@@ -42,8 +42,8 @@ namespace Course.Application.Implements
         public async Task<SemesterResponse> CreateAsync(SemesterCreateRequest request)
         {
             // Check if semester with same code already exists
-            var existingSemester = await _unitOfWork.Semesters.ExistsAsync(x => x.Code == request.Code);
-            if (existingSemester)
+            var existingSemester = await _unitOfWork.GetRepository<Semester>().FindAsync(x => x.Code == request.Code);
+            if (existingSemester != null)
             {
                 _logger.LogError("Semester with code: {Code} already exists", request.Code);
                 throw new CustomExceptions.AlreadyExistsException("Semester with this code already exists");
@@ -65,15 +65,15 @@ namespace Course.Application.Implements
                 EndDate = request.EndDate,
             };
 
-            await _unitOfWork.Semesters.InsertAsync(semester);
-            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.GetRepository<Semester>().InsertAsync(semester);
+            await _unitOfWork.SaveChangeAsync();
 
             return await ToSemesterResponse(semester);
         }
 
         public async Task<SemesterResponse> UpdateAsync(Guid id, SemesterUpdateRequest request)
         {
-            var semester = await _unitOfWork.Semesters.GetByIdAsync(id);
+            var semester = await _unitOfWork.GetRepository<Semester>().GetByIdAsync(id);
             if (semester == null)
             {
                 _logger.LogError("Semester not found with id: {Id}", id);
@@ -85,45 +85,45 @@ namespace Course.Application.Implements
             semester.StartDate = request.StartDate ?? semester.StartDate;
             semester.EndDate = request.EndDate ?? semester.EndDate;
 
-            await _unitOfWork.Semesters.UpdateAsync(semester);
-            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.GetRepository<Semester>().UpdateAsync(semester);
+            await _unitOfWork.SaveChangeAsync();
 
             return await ToSemesterResponse(semester);
         }
 
         public async Task<SemesterResponse> DeleteAsync(Guid id)
         {
-            var semester = await _unitOfWork.Semesters.GetByIdAsync(id);
+            var semester = await _unitOfWork.GetRepository<Semester>().GetByIdAsync(id);
             if (semester == null)
             {
                 _logger.LogError("Semester not found with id: {Id}", id);
                 throw new CustomExceptions.NoDataFoundException("Semester not found");
             }
-            if (semester.Status == SemesterStatus.Active)
+            if (semester.Status == SemesterStatusEnum.Active)
             {
                 _logger.LogError("Semester is active, cannot delete");
                 throw new CustomExceptions.BusinessLogicException("Semester is active, cannot delete");
             }
-            await _unitOfWork.Semesters.DeleteStatusAsync(id);
-            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.GetRepository<Semester>().SoftDeleteAsync(id);
+            await _unitOfWork.SaveChangeAsync();
             return await ToSemesterResponse(semester);
         }
 
         public async Task<SemesterResponse> SemesterToggleStatusAsync(Guid id)
         {
-            var semester = await _unitOfWork.Semesters.GetByIdAsync(id);
+            var semester = await _unitOfWork.GetRepository<Semester>().GetByIdAsync(id);
             if (semester == null)
             {
                 _logger.LogError("Semester not found with id: {Id}", id);
                 throw new CustomExceptions.NoDataFoundException("Semester not found");
             }
 
-            semester.Status = semester.Status == SemesterStatus.Active
-                ? SemesterStatus.Pending
-                : SemesterStatus.Active;
+            semester.Status = semester.Status == SemesterStatusEnum.Active
+                ? SemesterStatusEnum.Pending
+                : SemesterStatusEnum.Active;
 
-            await _unitOfWork.Semesters.UpdateAsync(semester);
-            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.GetRepository<Semester>().UpdateAsync(semester);
+            await _unitOfWork.SaveChangeAsync();
             return await ToSemesterResponse(semester);
         }
 

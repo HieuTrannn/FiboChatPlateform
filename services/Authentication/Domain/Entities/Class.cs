@@ -1,30 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Authentication.Domain.Enum;
 
 namespace Authentication.Domain.Entities
 {
     public class Class : BaseEntity
     {
-        [Required]
-        [MaxLength(50)]
-        public string ClassName { get; set; }
-
-        [MaxLength(255)]
-        public string? Description { get; set; }
-
+        public Guid Id { get; set; }
         public Guid SemesterId { get; set; }
+        public string Code { get; set; } = null!;
+        public ClassStatusEnum Status { get; set; } = ClassStatusEnum.Pending;    // active | disabled | pending
+        public Guid? LecturerId { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        public Semester Semester { get; set; }
-
-        public Guid? HomeroomTeacherId { get; set; }
-        
-        public Account? HomeroomTeacher { get; set; }
-
-        public ICollection<Account> Students { get; set; } = new List<Account>();
+        // Navigation
+        public Semester Semester { get; set; } = null!;
+        public ICollection<ClassEnrollment> Enrollments { get; set; } = new List<ClassEnrollment>();
+        public ICollection<Group> Groups { get; set; } = new List<Group>();
     }
-
 }

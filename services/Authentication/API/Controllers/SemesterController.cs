@@ -1,13 +1,13 @@
-using Course.Application.Interfaces;
-using Course.Contracts.DTOs;
-using Course.Domain.DTOs.SemesterDTOs;
+using Authentication.Application.Interfaces;
+using Authentication.Application.DTOs.SemesterDTOs;
 using Microsoft.AspNetCore.Mvc;
+using Contracts.Common;
 
-namespace Course.Api.Controllers
+namespace Authentication.API.Controllers
 {
     [ApiController]
     [Route("api/semesters")]
-    public class SemesterController : BaseController
+    public class SemesterController : ControllerBase
     {
         private readonly ISemesterService _semesterService;
         private readonly ILogger<SemesterController> _logger;
@@ -29,14 +29,14 @@ namespace Course.Api.Controllers
                 var semesters = await _semesterService.GetAllAsync();
                 if (semesters == null)
                 {
-                    return NotFound(ApiResponse<List<SemesterResponse>>.NotFoundResponse("Semesters not found"));
+                    return NotFound(ApiResponse<string>.NotFound($"Semesters not found"));
                 }
-                return Ok(ApiResponse<List<SemesterResponse>>.OkResponse(semesters, "Get all semesters successfully", "200"));
+                return Ok(ApiResponse<List<SemesterResponse>>.Ok(semesters, "Get all semesters successfully", "200"));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(SemesterController), ex.Message);
-                return HandleException(ex, nameof(SemesterController));
+                return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(SemesterController)}: {ex.Message}"));
             }
         }
 
@@ -52,14 +52,14 @@ namespace Course.Api.Controllers
                 var semester = await _semesterService.GetByIdAsync(id);
                 if (semester == null)
                 {
-                    return NotFound(ApiResponse<SemesterResponse>.NotFoundResponse("Semester not found"));
+                    return NotFound(ApiResponse<SemesterResponse>.NotFound("Semester not found"));
                 }
-                return Ok(ApiResponse<SemesterResponse>.OkResponse(semester, "Get semester by id successfully", "200"));
+                return Ok(ApiResponse<SemesterResponse>.Ok(semester, "Get semester by id successfully", "200"));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(SemesterController), ex.Message);
-                return HandleException(ex, nameof(SemesterController));
+                return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(SemesterController)}: {ex.Message}"));
             }
         }
 
@@ -75,14 +75,14 @@ namespace Course.Api.Controllers
                 var semester = await _semesterService.CreateAsync(request);
                 if (semester == null)
                 {
-                    return BadRequest(ApiResponse<SemesterResponse>.BadRequestResponse("Create semester failed"));
+                    return BadRequest(ApiResponse<SemesterResponse>.BadRequest("Create semester failed"));
                 }
-                return Ok(ApiResponse<SemesterResponse>.OkResponse(semester, "Create semester successfully", "200"));
+                return Ok(ApiResponse<SemesterResponse>.Ok(semester, "Create semester successfully", "200"));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(SemesterController), ex.Message);
-                return HandleException(ex, nameof(SemesterController));
+                return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(SemesterController)}: {ex.Message}"));
             }
         }
 
@@ -99,14 +99,14 @@ namespace Course.Api.Controllers
                 var semester = await _semesterService.UpdateAsync(id, request);
                 if (semester == null)
                 {
-                    return BadRequest(ApiResponse<SemesterResponse>.BadRequestResponse("Update semester failed"));
+                    return BadRequest(ApiResponse<SemesterResponse>.BadRequest("Update semester failed"));
                 }
-                return Ok(ApiResponse<SemesterResponse>.OkResponse(semester, "Update semester successfully", "200"));
+                return Ok(ApiResponse<SemesterResponse>.Ok(semester, "Update semester successfully", "200"));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(SemesterController), ex.Message);
-                return HandleException(ex, nameof(SemesterController));
+                return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(SemesterController)}: {ex.Message}"));
             }
         }
 
@@ -122,14 +122,14 @@ namespace Course.Api.Controllers
                 var semester = await _semesterService.DeleteAsync(id);
                 if (semester == null)
                 {
-                    return BadRequest(ApiResponse<SemesterResponse>.BadRequestResponse("Delete semester failed"));
+                    return BadRequest(ApiResponse<SemesterResponse>.BadRequest("Delete semester failed"));
                 }
-                return Ok(ApiResponse<SemesterResponse>.OkResponse(semester, "Delete semester successfully", "200"));
+                return Ok(ApiResponse<SemesterResponse>.Ok(semester, "Delete semester successfully", "200"));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(SemesterController), ex.Message);
-                return HandleException(ex, nameof(SemesterController));
+                return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(SemesterController)}: {ex.Message}"));
             }
         }
     }

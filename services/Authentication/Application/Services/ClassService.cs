@@ -1,36 +1,34 @@
-using Course.Application.Interfaces;
-using Course.Domain.DTOs.ClassDTOs;
-using Course.Domain.Entities;
-using Course.Domain.Exceptions;
-using Course.Infrastructure.Interfaces;
+using Authentication.Application.Interfaces;
+using Authentication.Application.DTOs.ClassDTOs;
+using Authentication.Domain.Entities;
 using Microsoft.Extensions.Logging;
-using static Course.Domain.Enums.StaticEnums;
+using Authentication.Domain.Abstraction;
+using Authentication.Domain.Enum;
+using Authentication.Domain.Exceptions;
 
-namespace Course.Application.Implements
+namespace Authentication.Application.Services
 {
     public class ClassService : IClassService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<ClassService> _logger;
-        private readonly IAccountsClient _accountsClient;
 
-        public ClassService(IUnitOfWork unitOfWork, ILogger<ClassService> logger, IAccountsClient accountsClient)
+        public ClassService(IUnitOfWork unitOfWork, ILogger<ClassService> logger)
         {
             _unitOfWork = unitOfWork;
             _logger = logger;
-            _accountsClient = accountsClient;
         }
 
         public async Task<List<ClassResponse>> GetAllAsync()
         {
-            var classes = await _unitOfWork.Classes.GetAllAsync(c => c.Where(c => c.Status == ClassStatus.Active));
-            var response = await Task.WhenAll(classes.Select(ToClassResponse));
+            var classes = await _unitOfWork.GetRepository<Class>().GetAllAsync(c => c.Where(c => c.Status == ClassStatusEnum.Active));
+            var response = await Task.WhenAll(classes.Select(c => ToClassResponse(c)));
             return response.ToList();
         }
 
         public async Task<ClassResponse> GetByIdAsync(Guid id)
         {
-            var c = await _unitOfWork.Classes.GetByIdAsync(id);
+            var c = await _unitOfWork.GetRepository<Class>().GetByIdAsync(id);
             if (c == null)
             {
                 _logger.LogError("Class not found with id: {Id}", id);
@@ -61,17 +59,17 @@ namespace Course.Application.Implements
                 Code = request.Code,
                 SemesterId = request.SemesterId,
                 LecturerId = request.LecturerId,
-                Status = ClassStatus.Active,
+                Status = ClassStatusEnum.Active,
                 CreatedAt = DateTime.UtcNow,
             };
-            await _unitOfWork.Classes.InsertAsync(c);
-            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.GetRepository<Class>().InsertAsync(c);
+            await _unitOfWork.SaveChangeAsync();
             return await ToClassResponse(c);
         }
 
         public async Task<ClassResponse> UpdateAsync(Guid id, ClassUpdateRequest request)
         {
-            var c = await _unitOfWork.Classes.GetByIdAsync(id);
+            var c = await _unitOfWork.GetRepository<Class>().GetByIdAsync(id);
             if (c == null)
             {
                 _logger.LogError("Class not found with id: {Id}", id);
@@ -80,36 +78,36 @@ namespace Course.Application.Implements
             c.Code = request.Code ?? c.Code;
             c.SemesterId = request.SemesterId ?? c.SemesterId;
             c.LecturerId = request.LecturerId ?? c.LecturerId;
-            await _unitOfWork.Classes.UpdateAsync(c);
-            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.GetRepository<Class>().UpdateAsync(c);
+            await _unitOfWork.SaveChangeAsync();
             return await ToClassResponse(c);
         }
 
         public async Task<ClassResponse> DeleteAsync(Guid id)
         {
-            var c = await _unitOfWork.Classes.GetByIdAsync(id);
+            var c = await _unitOfWork.GetRepository<Class>().GetByIdAsync(id);
             if (c == null)
             {
                 _logger.LogError("Class not found with id: {Id}", id);
                 throw new CustomExceptions.NoDataFoundException("Class not found");
             }
-            if (c.Status == ClassStatus.Active)
+            if (c.Status == ClassStatusEnum.Active)
             {
                 _logger.LogError("Class is active, cannot delete");
                 throw new CustomExceptions.BusinessLogicException("Class is active, cannot delete");
             }   
-            await _unitOfWork.Classes.DeleteStatusAsync(id);
-            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.GetRepository<Class>().SoftDeleteAsync(id);
+            await _unitOfWork.SaveChangeAsync();
             return await ToClassResponse(c);
         }
 
         private async Task<ClassResponse> ToClassResponse(Class c)
         {
             var lecturer = c.LecturerId is Guid lid
-                ? await _accountsClient.GetLecturerByIdAsync(lid)
+                ? await _unitOfWork.GetRepository<Account>().GetByIdAsync(lid)
                 : null;
 
-            var semester = await _unitOfWork.Semesters.GetByIdAsync(c.SemesterId);
+            var semester = await _unitOfWork.GetRepository<Semester>().GetByIdAsync(c.SemesterId);
 
             var response = new ClassResponse
             {

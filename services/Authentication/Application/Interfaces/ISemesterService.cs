@@ -1,6 +1,6 @@
-using Course.Domain.DTOs.SemesterDTOs;
+using Authentication.Application.DTOs.SemesterDTOs;
 
-namespace Course.Application.Interfaces
+namespace Authentication.Application.Interfaces
 {
     public interface ISemesterService
     {

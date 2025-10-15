@@ -87,6 +87,44 @@ namespace Authentication.Infrastructure.Implementation
 
         }
 
+        public async Task<bool> ExistsAsync(Expression<Func<T, bool>> filter)
+        {
+            return await _dbSet.AnyAsync(filter);
+        }
+
+        public async Task SoftDeleteAsync(Guid id)
+        {
+            var entity = await GetByIdAsync(id);
+            if (entity != null)
+            {
+                var statusProperty = typeof(T).GetProperty("Status");
+                if (statusProperty != null && statusProperty.CanWrite)
+                {
+                    if (statusProperty.PropertyType.IsEnum)
+                    {
+                        // Map to Disabled enum value (case-insensitive)
+                        var enumValue = Enum.Parse(statusProperty.PropertyType, "Disabled", ignoreCase: true);
+                        statusProperty.SetValue(entity, enumValue);
+                    }
+                    else if (statusProperty.PropertyType == typeof(string))
+                    {
+                        statusProperty.SetValue(entity, "disabled");
+                    }
+                    else
+                    {
+                        _dbSet.Remove(entity); // fallback hard delete
+                    }
+
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    _dbSet.Remove(entity); // fallback hard delete
+                    await _context.SaveChangesAsync();
+                }
+            }
+        }
+
         public async Task SaveAsync()
         {
             await _context.SaveChangesAsync();

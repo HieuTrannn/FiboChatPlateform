@@ -85,11 +85,11 @@ namespace Authentication.Application.Services
 
                 await SendUserRegistrationEmail(account, rawPassword);
 
-                return ApiResponse<RegisterResponse>.Ok("Registration successful", new RegisterResponse
+                return ApiResponse<RegisterResponse>.Ok(new RegisterResponse
                 {
                     Success = true,
                     Message = "Please check your email to verify your account."
-                });
+                }, "Registration successful", "200");
             }
             catch (Exception ex)
             {
@@ -169,7 +169,8 @@ namespace Authentication.Application.Services
             {
                 _logger.LogError(ex, "Error changing password");
                 return new RegisterResponse { Success = false, Message = ex.Message };
-            };
+            }
+            ;
         }
 
         public async Task<RegisterResponse> ForgotPasswordAsync(string email)
@@ -178,7 +179,7 @@ namespace Authentication.Application.Services
             {
                 _logger.LogInformation("Processing forgot password request for email: {Email}", email);
 
-                var userRepository = _unitOfWork.GetRepository< Account>();
+                var userRepository = _unitOfWork.GetRepository<Account>();
                 var user = await userRepository.FindByConditionAsync(u => u.Email == email);
 
                 if (user == null)
@@ -189,8 +190,18 @@ namespace Authentication.Application.Services
                 }
                 // Generate a password reset token
                 string resetToken = Guid.NewGuid().ToString();
+                // Store the token in the database
+                user.RefreshToken = resetToken;
+                await userRepository.UpdateAsync(user);
+                await _unitOfWork.SaveChangeAsync();
+                return new RegisterResponse { Success = true, Message = "A password reset link has been sent to your email" };
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error processing forgot password request");
+                return new RegisterResponse { Success = false, Message = "An unexpected error occurred while processing the request" };
             }
+        }
 
         private bool VerifyPassword(string inputPassword, string encryptedPassword)
         {
