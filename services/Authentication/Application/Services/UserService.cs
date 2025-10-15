@@ -86,11 +86,11 @@ namespace Authentication.Application.Services
 
                 await SendUserRegistrationEmail(account, rawPassword);
 
-                return ApiResponse<RegisterResponse>.Ok("Registration successful", new RegisterResponse
+                return ApiResponse<RegisterResponse>.Ok(new RegisterResponse
                 {
                     Success = true,
                     Message = "Please check your email to verify your account."
-                });
+                }, "Registration successful", "200");
             }
             catch (Exception ex)
             {

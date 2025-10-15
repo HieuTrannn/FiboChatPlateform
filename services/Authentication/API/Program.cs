@@ -1,5 +1,4 @@
 using Authentication.Infrastructure.DependencyInjection;
-using Microsoft.AspNetCore.Builder;
 using Project.SharedLibrary.MiddleWare;
 using Serilog;
 var builder = WebApplication.CreateBuilder(args);

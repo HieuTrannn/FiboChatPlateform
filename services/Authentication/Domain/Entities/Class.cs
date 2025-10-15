@@ -1,28 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Authentication.Domain.Enum;
 
 namespace Authentication.Domain.Entities
 {
     public class Class : BaseEntity
     {
-        public string ClassName { get; set; } = null!;
-        // Foreign keys
-        public Guid LectureId { get; set; }
+        public Guid Id { get; set; }
         public Guid SemesterId { get; set; }
+        public string Code { get; set; } = null!;
+        public ClassStatusEnum Status { get; set; } = ClassStatusEnum.Pending;    // active | disabled | pending
+        public Guid? LecturerId { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        // Navigation properties
-        [ForeignKey("LectureId")]
-        public virtual Lecture Lecture { get; set; } = null!;
-
-        [ForeignKey("SemesterId")]
-        public virtual Semester Semester { get; set; } = null!;
-        public virtual ICollection<Account> Accounts { get; set; } = new List<Account>();
-
+        // Navigation
+        public Semester Semester { get; set; } = null!;
+        public ICollection<ClassEnrollment> Enrollments { get; set; } = new List<ClassEnrollment>();
+        public ICollection<Group> Groups { get; set; } = new List<Group>();
     }
-
 }

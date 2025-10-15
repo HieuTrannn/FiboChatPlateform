@@ -46,12 +46,12 @@ namespace Authentication.API.Controllers
             try
             {
                 var response = await _userService.Login(request);
-                return Ok(ApiResponse<AuthResponse>.Ok("Login successful", response));
+                return Ok(ApiResponse<AuthResponse>.Ok(response, "Login successful", "200"));
             }
             catch (Exception ex)
             {
                 _logger.LogError("{Classname} - Error at get account async cause by {}", nameof(UserController), ex.Message);
-                return BadRequest(ex);
+                return StatusCode(500, ApiResponse<string>.InternalError("Error at the " + nameof(UserController) + ": " + ex.Message));
             }
         }
 
@@ -71,14 +71,14 @@ namespace Authentication.API.Controllers
                 var response = await _userService.ChangePasswordAsync(email, request);
                 if (!response.Success)
                 {
-                    return BadRequest(ApiResponse<RegisterResponse>.BadRequestResponse(response.Message));
+                    return BadRequest(ApiResponse<RegisterResponse>.BadRequest(response.Message));
                 }
 
                 return Ok(ApiResponse<Account>.OkResponse(response.Message, StatusCode: "Success"));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ApiResponse<string>.InternalError("Error changing password: " + ex.Message));
+                return StatusCode(500, ApiResponse<string>.InternalError("Error at the " + nameof(UserController) + ": " + ex.Message));
             }
         }
 
