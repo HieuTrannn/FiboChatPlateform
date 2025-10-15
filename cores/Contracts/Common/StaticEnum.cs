@@ -20,7 +20,7 @@ namespace Contracts.Common
         {
             [CustomName("Admin")] Admin,
             [CustomName("Student")] Student,
-            [CustomName("Lecture")] Lecture,
+            [CustomName("Lecturer")] Lecturer,
             [CustomName("User")] User,
         }
 

@@ -27,18 +27,13 @@ namespace Authentication.Infrastructure.Implementation
             {
                 var pemPrivate = File.ReadAllText(_privateKeyPath);
                 _rsa.ImportFromPem(pemPrivate.ToCharArray());
-
-                if (File.Exists(_publicKeyPath))
-                {
-                    var pemPublic = File.ReadAllText(_publicKeyPath);
-                    _rsa.ImportFromPem(pemPublic.ToCharArray());
-                }
             }
             catch (Exception ex)
             {
                 throw new InvalidOperationException("Failed to load RSA PEM key.", ex);
             }
         }
+
 
 
         public string Encrypt(string data)

@@ -26,6 +26,7 @@ namespace Authentication.Infrastructure.DependencyInjection
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRsaService, RsaService>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<ILectureService, LectureService>();
             services.AddScoped<ISemesterService, SemesterService>();
             services.AddScoped<IClassService, ClassService>();
 

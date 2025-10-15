@@ -3,6 +3,7 @@ using System;
 using Authentication.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,13 +12,15 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Authentication.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(AccountDbContext))]
-    partial class AccountDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251015050153_Update_Account")]
+    partial class Update_Account
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.10")
+                .HasAnnotation("ProductVersion", "9.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -109,7 +112,7 @@ namespace Authentication.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Code")
+                    b.Property<string>("ClassName")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -128,17 +131,11 @@ namespace Authentication.Infrastructure.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
-                    b.Property<Guid?>("LecturerId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("LecturerId1")
+                    b.Property<Guid>("LectureId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("SemesterId")
                         .HasColumnType("uuid");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -148,78 +145,32 @@ namespace Authentication.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LecturerId1");
+                    b.HasIndex("LectureId");
 
                     b.HasIndex("SemesterId");
 
                     b.ToTable("Classes");
                 });
 
-            modelBuilder.Entity("Authentication.Domain.Entities.ClassEnrollment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ClassId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("GroupId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("RoleInClass")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClassId");
-
-                    b.HasIndex("GroupId");
-
-                    b.ToTable("ClassEnrollment");
-                });
-
-            modelBuilder.Entity("Authentication.Domain.Entities.Group", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ClassId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClassId");
-
-                    b.ToTable("Group");
-                });
-
             modelBuilder.Entity("Authentication.Domain.Entities.Lecture", b =>
                 {
-                    b.Property<Guid>("LecturerId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("DeletedBy")
                         .HasColumnType("uuid");
 
                     b.Property<string>("FullName")
@@ -228,11 +179,22 @@ namespace Authentication.Infrastructure.Data.Migrations
                     b.Property<int>("Gender")
                         .HasColumnType("integer");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("LecturerId");
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
 
                     b.ToTable("Lecture");
                 });
@@ -282,10 +244,6 @@ namespace Authentication.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -298,29 +256,28 @@ namespace Authentication.Infrastructure.Data.Migrations
                     b.Property<Guid?>("DeletedBy")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("EndDate")
+                    b.Property<DateTime>("EndDate")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTime?>("StartDate")
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<DateTime>("StartDate")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Term")
-                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("UpdatedBy")
                         .HasColumnType("uuid");
-
-                    b.Property<int>("Year")
-                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -330,7 +287,7 @@ namespace Authentication.Infrastructure.Data.Migrations
             modelBuilder.Entity("Authentication.Domain.Entities.Account", b =>
                 {
                     b.HasOne("Authentication.Domain.Entities.Class", "Class")
-                        .WithMany()
+                        .WithMany("Accounts")
                         .HasForeignKey("ClassId");
 
                     b.HasOne("Authentication.Domain.Entities.Role", "Role")
@@ -344,9 +301,11 @@ namespace Authentication.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Authentication.Domain.Entities.Class", b =>
                 {
-                    b.HasOne("Authentication.Domain.Entities.Lecture", null)
+                    b.HasOne("Authentication.Domain.Entities.Lecture", "Lecture")
                         .WithMany("Classes")
-                        .HasForeignKey("LecturerId1");
+                        .HasForeignKey("LectureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Authentication.Domain.Entities.Semester", "Semester")
                         .WithMany("Classes")
@@ -354,65 +313,25 @@ namespace Authentication.Infrastructure.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Lecture");
+
                     b.Navigation("Semester");
-                });
-
-            modelBuilder.Entity("Authentication.Domain.Entities.ClassEnrollment", b =>
-                {
-                    b.HasOne("Authentication.Domain.Entities.Class", "Class")
-                        .WithMany("Enrollments")
-                        .HasForeignKey("ClassId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Authentication.Domain.Entities.Group", "Group")
-                        .WithMany("Enrollments")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Class");
-
-                    b.Navigation("Group");
-                });
-
-            modelBuilder.Entity("Authentication.Domain.Entities.Group", b =>
-                {
-                    b.HasOne("Authentication.Domain.Entities.Class", "Class")
-                        .WithMany("Groups")
-                        .HasForeignKey("ClassId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Class");
                 });
 
             modelBuilder.Entity("Authentication.Domain.Entities.Lecture", b =>
                 {
                     b.HasOne("Authentication.Domain.Entities.Account", "Account")
-                        .WithOne("Lecture")
-                        .HasForeignKey("Authentication.Domain.Entities.Lecture", "LecturerId")
+                        .WithMany()
+                        .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Account");
                 });
 
-            modelBuilder.Entity("Authentication.Domain.Entities.Account", b =>
-                {
-                    b.Navigation("Lecture");
-                });
-
             modelBuilder.Entity("Authentication.Domain.Entities.Class", b =>
                 {
-                    b.Navigation("Enrollments");
-
-                    b.Navigation("Groups");
-                });
-
-            modelBuilder.Entity("Authentication.Domain.Entities.Group", b =>
-                {
-                    b.Navigation("Enrollments");
+                    b.Navigation("Accounts");
                 });
 
             modelBuilder.Entity("Authentication.Domain.Entities.Lecture", b =>

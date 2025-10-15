@@ -10,7 +10,7 @@ using static Authentication.Application.DTOs.AuthenDTO;
 
 namespace Authentication.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/user")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -27,8 +27,17 @@ namespace Authentication.API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterReq request)
         {
-            var response = await _userService.RegisterUserAsync(request);
-            return StatusCode(response.StatusCode, response);
+            try
+            {
+                var response = await _userService.RegisterUserAsync(request);
+                return StatusCode(response.StatusCode, response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("{Classname} - Error at register async cause by {}", nameof(UserController), ex.Message);
+                return BadRequest(ex);
+            }
+
         }
         [AllowAnonymous]
         [HttpPost("login")]
@@ -42,7 +51,7 @@ namespace Authentication.API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError("{Classname} - Error at get account async cause by {}", nameof(UserController), ex.Message);
-                return StatusCode(500, ApiResponse<string>.InternalError("Error at the " + nameof(UserController) + ": " + ex.Message));
+                return StatusCode(500, ApiResponse<string>.InternalError("Error: " + ex.Message));
             }
         }
 
@@ -59,7 +68,7 @@ namespace Authentication.API.Controllers
                     return Unauthorized(new RegisterResponse { Success = false, Message = "Invalid token: Email claim missing" });
                 }
 
-                var response = await _userService.ChangePassword(email, request);
+                var response = await _userService.ChangePasswordAsync(email, request);
                 if (!response.Success)
                 {
                     return BadRequest(ApiResponse<RegisterResponse>.BadRequest(response.Message));
@@ -73,6 +82,42 @@ namespace Authentication.API.Controllers
             }
         }
 
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromForm] string email)
+        {
+            try
+            {
+                var response = await _userService.ForgotPasswordAsync(email);
+                if (!response.Success)
+                {
+                    return BadRequest(ApiResponse<RegisterResponse>.BadRequestResponse(response.Message));
+                }
+                return Ok(ApiResponse<Account>.OkResponse(response.Message, StatusCode: "Success"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<string>.InternalError("Error in forgot password: " + ex.Message));
+            }
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromForm] string token, [FromForm] string newPassword)
+        {
+            try
+            {
+                var response = await _userService.ResetPasswordAsync(token, newPassword);
+                if (!response.Success)
+                {
+                    return BadRequest(ApiResponse<RegisterResponse>.BadRequestResponse(response.Message));
+                }
+                return Ok(ApiResponse<Account>.OkResponse(response.Message, StatusCode: "Success"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<string>.InternalError("Error in reset password: " + ex.Message));
+            }
+        }
+         
     }
 }
 

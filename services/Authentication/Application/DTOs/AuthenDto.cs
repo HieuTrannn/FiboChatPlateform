@@ -43,6 +43,8 @@ namespace Authentication.Application.DTOs
         {
             //public string FullName { get; set; }
             public string? Token { get; set; }
+            public string? Message { get; set; }
+            public bool RequirePasswordChange { get; set; } = false;
         }
     }
 }
