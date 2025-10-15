@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Project.SharedLibrary.MiddleWare;
 using Serilog;
+using System.Text.Json.Serialization;
 
 namespace SharedLibrary.DependencyInjection
 {
@@ -15,7 +16,7 @@ namespace SharedLibrary.DependencyInjection
             //Db Context
             services.AddDbContext<TContext>(option => option.UseNpgsql(
                 config
-                .GetConnectionString(fileName), posgestserverOption =>
+                .GetConnectionString("DBConnection"), posgestserverOption =>
                 posgestserverOption.EnableRetryOnFailure()));
             //config serilog 
             Log.Logger = new LoggerConfiguration()
@@ -30,16 +31,22 @@ namespace SharedLibrary.DependencyInjection
 
             // Add JWT authentication
             JWTAuthenticationScheme.AddJWTAuthenticationScheme(services, config);
+
+            //modify response 
+            services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+            });
             return services;
         }
 
         public static IApplicationBuilder UseSharedPolicies(this IApplicationBuilder app)
         {
             //Use Global Exception
-            app.UseMiddleware<GlobalException>();
+            app.UseMiddleware<GlobalExceptionMiddleware>();
 
             // Register middleware to block all outsiders API calls
-            app.UseMiddleware<ListenToOnlyApiGateWay>();
+            //app.UseMiddleware<ListenToOnlyApiGateWay>();
 
             return app;
         }
