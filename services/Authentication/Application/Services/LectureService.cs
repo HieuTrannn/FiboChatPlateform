@@ -7,6 +7,7 @@ using Mapster;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Net;
 using static Authentication.Application.DTOs.AuthenDTO;
 using static Authentication.Application.DTOs.LectureDTO;
 
@@ -79,12 +80,14 @@ namespace Authentication.Application.Services
                 await _unitOfWork.SaveChangeAsync();
 
                 _logger.LogInformation("Lecture created successfully with email: {Email}", request.Email);
-                return ApiResponse<RegisterResponse>.Ok("Registration successful", new RegisterResponse
+                return ApiResponse<RegisterResponse>.Ok(new RegisterResponse
                 {
 
                     Success = true,
                     Message = "Lecture created successfully."
-                });
+                }, "Registration successful",
+                 nameof(HttpStatusCode.OK)
+                );
             }
             catch (Exception ex)
             {

@@ -2,6 +2,7 @@
 using Contracts.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using static Authentication.Application.DTOs.AuthenDTO;
 using static Authentication.Application.DTOs.LectureDTO;
 
@@ -45,7 +46,7 @@ namespace Authentication.API.Controllers
             {
                 _logger.LogInformation("Retrieving all lecturers");
                 var response = await _lectureService.GetAllLecturers();
-                return Ok(ApiResponse<List<LectureResponse>>.Ok("Lecturers retrieved successfully", response));
+                return Ok(ApiResponse<List<LectureResponse>>.Ok(response, "Lecturers retrieved successfully", "200"));
             }
             catch (Exception ex)
             {
@@ -61,7 +62,12 @@ namespace Authentication.API.Controllers
             {
                 _logger.LogInformation("Retrieving lecturer with ID: {Id}", id);
                 var response = await _lectureService.GetLecturerById(id);
-                return Ok(ApiResponse<LectureResponse>.Ok("Lecturer retrieved successfully", response));
+                return Ok(ApiResponse<RegisterResponse>.Ok(
+                  null, // không có data
+                 "Lecturer deleted successfully",
+                nameof(HttpStatusCode.OK)
+ ));
+
             }
             catch (Exception ex)
             {
@@ -77,7 +83,7 @@ namespace Authentication.API.Controllers
             {
                 _logger.LogInformation("Deleting lecturer with ID: {Id}", id);
                 var response = await _lectureService.DeleteLecturerById(id);
-                return Ok(ApiResponse<RegisterResponse>.Ok("Lecturer deleted successfully"));
+                return Ok(ApiResponse<RegisterResponse>.Ok(response,"Lecturer deleted successfully", "200"));
             }
             catch (Exception ex)
             {
@@ -93,7 +99,7 @@ namespace Authentication.API.Controllers
             {
                 _logger.LogInformation("Updating lecturer with ID: {Id}", id);
                 var response = await _lectureService.UpdateLecturerById(id, request);
-                return Ok(ApiResponse<RegisterResponse>.Ok("Lecturer updated successfully"));
+                return Ok(ApiResponse<RegisterResponse>.Ok(response,"Lecturer updated successfully", "200"));
 
             }
             catch (Exception ex)
@@ -103,6 +109,6 @@ namespace Authentication.API.Controllers
             }
         }
 
-        }
     }
+}
 
