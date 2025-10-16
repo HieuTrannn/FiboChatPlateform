@@ -1,7 +1,9 @@
-﻿using Course.Infrastructure.Implements;
+﻿using Course.Infrastructure.DependencyInjection;
+using Course.Infrastructure.Implements;
 using Course.Infrastructure.Interfaces;
 using Course.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,25 +14,20 @@ var cs = builder.Configuration.GetConnectionString("CourseDb")
 // ====== 2) Infrastructure & DI ======
 builder.Services.AddDbContext<CourseDbContext>(opt => opt.UseNpgsql(cs));
 
-// Repository & Service DI
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+// Add services to the container.
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .CreateLogger();
 
-var authBase = builder.Configuration["Services:AuthBaseUrl"];
-
+builder.Host.UseSerilog();
 
 // ====== 3) API plumbing ======
+builder.Services.AddInfrastructureService(builder.Configuration);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-// (tuỳ chọn) CORS dev
-builder.Services.AddCors(opt =>
-{
-    opt.AddPolicy("dev", p => p
-        .AllowAnyOrigin()
-        .AllowAnyHeader()
-        .AllowAnyMethod());
-});
 
 var app = builder.Build();
 
@@ -41,10 +38,11 @@ using (var scope = app.Services.CreateScope())
 }
 
 // ====== 5) Middlewares ======
+app.UseInfrastructurePolicy();
 app.UseSwagger();
 app.UseSwaggerUI();
-app.UseCors("dev");
-
+app.UseSerilogRequestLogging();
+app.UseHttpsRedirection();
+app.UseCors("AllowAll");
 app.MapControllers();
-
 app.Run();

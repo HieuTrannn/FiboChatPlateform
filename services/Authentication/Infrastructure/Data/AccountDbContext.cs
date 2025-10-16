@@ -12,5 +12,9 @@ namespace Authentication.Infrastructure.Data
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Class> Classes { get; set; }
+        public DbSet<Semester> Semesters { get; set; }
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<ClassEnrollment> ClassEnrollments { get; set; }
+        public DbSet<Lecturer> Lecturers { get; set; }
     }
 }

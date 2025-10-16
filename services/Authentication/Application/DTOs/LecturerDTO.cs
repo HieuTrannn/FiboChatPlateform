@@ -1,14 +1,14 @@
 ﻿namespace Authentication.Application.DTOs
 {
-    public class LectureDTO
+    public class LecturerDTO
     {
-        public class LectureRequest
+        public class LecturerRequest
         {
             public string FullName { get; set; }
             public string Email { get; set; }
         }
 
-        public class LectureResponse
+        public class LecturerResponse
         {
             public string FullName { get; set; }
             public string Email { get; set; }

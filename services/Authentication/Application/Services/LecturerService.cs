@@ -9,19 +9,19 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Net;
 using static Authentication.Application.DTOs.AuthenDTO;
-using static Authentication.Application.DTOs.LectureDTO;
+using static Authentication.Application.DTOs.LecturerDTO;
 
 namespace Authentication.Application.Services
 {
-    public class LectureService : ILectureService
+    public class LecturerService : ILecturerService
     {
-        private readonly ILogger<ILectureService> _logger;
+        private readonly ILogger<ILecturerService> _logger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRsaService _rsaService;
         private readonly IEmailService _emailService;
         private readonly IGenericRepository<Account> _accountRepository;
 
-        public LectureService(ILogger<ILectureService> logger, IUnitOfWork unitOfWork, IEmailService service, IRsaService rsaService)
+        public LecturerService(ILogger<ILecturerService> logger, IUnitOfWork unitOfWork, IEmailService service, IRsaService rsaService)
         {
             _logger = logger;
             _unitOfWork = unitOfWork;
@@ -30,7 +30,7 @@ namespace Authentication.Application.Services
             _accountRepository = _unitOfWork.GetRepository<Account>();
         }
 
-        public async Task<ApiResponse<RegisterResponse>> CreateLecturer(LectureRequest request)
+        public async Task<ApiResponse<RegisterResponse>> CreateLecturer(LecturerRequest request)
         {
             try
             {
@@ -69,13 +69,13 @@ namespace Authentication.Application.Services
 
                 await SendUserRegistrationEmail(lecture, rawPassword);
 
-                var lecturer = new Lecture
+                var lecturer = new Lecturer
                 {
                     FullName = request.FullName,
                     Status = StaticEnum.StatusEnum.Active.ToString(),
                     LecturerId = lecture.Id
                 };
-                var lectureRepository = _unitOfWork.GetRepository<Lecture>();
+                var lectureRepository = _unitOfWork.GetRepository<Lecturer>();
                 await lectureRepository.InsertAsync(lecturer);
                 await _unitOfWork.SaveChangeAsync();
 
@@ -96,22 +96,22 @@ namespace Authentication.Application.Services
             }
         }
 
-        public async Task<List<LectureResponse>> GetAllLecturers()
+        public async Task<List<LecturerResponse>> GetAllLecturers()
         {
             try
             {
                 _logger.LogInformation("Retrieving all lecturers.");
-                var lectureRepository = _unitOfWork.GetRepository<Lecture>();
+                var lectureRepository = _unitOfWork.GetRepository<Lecturer>();
                 var lectures = await lectureRepository.GetAllAsync();
 
                 if (lectures == null || !lectures.Any())
                 {
                     _logger.LogWarning("No lecturers found.");
-                    return new List<LectureResponse>();
+                    return new List<LecturerResponse>();
                 }
 
 
-                return lectures.Adapt<List<LectureResponse>>();
+                return lectures.Adapt<List<LecturerResponse>>();
             }
             catch (Exception ex)
             {
@@ -121,12 +121,12 @@ namespace Authentication.Application.Services
             }
         }
 
-        public async Task<LectureResponse> GetLecturerById(string id)
+        public async Task<LecturerResponse> GetLecturerById(string id)
         {
             try
             {
                 _logger.LogInformation("Retrieving lecturer with ID: {Id}", id);
-                var lectureRepository = _unitOfWork.GetRepository<Lecture>();
+                var lectureRepository = _unitOfWork.GetRepository<Lecturer>();
                 var lecture = await lectureRepository.Entities
                     .Include(l => l.Account)
                     .FirstOrDefaultAsync(l => l.LecturerId.ToString() == id);
@@ -136,7 +136,7 @@ namespace Authentication.Application.Services
                     return null;
                 }
 
-                return lecture.Adapt<LectureResponse>();
+                return lecture.Adapt<LecturerResponse>();
             }
             catch (Exception ex)
             {
@@ -152,7 +152,7 @@ namespace Authentication.Application.Services
                 _logger.LogInformation("Deleting lecturer with ID: {Id}", id);
                 _unitOfWork.BeginTransaction();
 
-                var lectureRepository = _unitOfWork.GetRepository<Lecture>();
+                var lectureRepository = _unitOfWork.GetRepository<Lecturer>();
                 var lecture = await lectureRepository.GetByIdAsync(id);
 
                 if (lecture == null)
@@ -174,12 +174,12 @@ namespace Authentication.Application.Services
             }
         }
 
-        public async Task<RegisterResponse> UpdateLecturerById(Guid id, LectureRequest request)
+        public async Task<RegisterResponse> UpdateLecturerById(Guid id, LecturerRequest request)
         {
             try
             {
                 _logger.LogInformation("Updating lecturer with ID: {Id}", id);
-                var lectureRepository = _unitOfWork.GetRepository<Lecture>();
+                var lectureRepository = _unitOfWork.GetRepository<Lecturer>();
                 var lecture = await lectureRepository.GetByIdAsync(id);
                 var accountRepository = _unitOfWork.GetRepository<Account>();
                 var account = await accountRepository.GetByIdAsync(id.ToString());
@@ -225,7 +225,7 @@ namespace Authentication.Application.Services
             await _emailService.SendEmailAsync(
                 recipientEmail: account.Email,
                 recipientName: account.Email,
-                templateFileName: "LectureRegistration.html",
+                templateFileName: "LecturerRegistration.html",
                 templateData: templateData
             );
         }

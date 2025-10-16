@@ -4,9 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Authentication.Domain.Entities
 {
-    public class Lecture
+    public class Lecturer
     {
-
         [Key]
         [ForeignKey("Account")]
         public Guid LecturerId { get; set; }

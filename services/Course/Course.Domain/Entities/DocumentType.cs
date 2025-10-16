@@ -1,15 +1,15 @@
-﻿namespace Course.Domain.Entities
+using static Course.Domain.Enums.StaticEnums;
+
+namespace Course.Domain.Entities
 {
-    public class Topic
+    public class DocumentType
     {
         public Guid Id { get; set; }
         public string Name { get; set; } = null!;
-        public string? Description { get; set; }
-        public string Status { get; set; } = "active"; // active | disabled
+        public DocumentStatus Status { get; set; } = DocumentStatus.Active; // active | disabled
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         // navigation
-        public DocumentType DocumentType { get; set; } = null!;
         public ICollection<Document> Documents { get; set; } = new List<Document>();
     }
 }

@@ -1,35 +1,24 @@
-﻿using Authentication.Application.Interfaces;
-using Authentication.Application.Services;
-using Authentication.Domain.Abstraction;
-using Authentication.Infrastructure.Data;
-using Authentication.Infrastructure.Implementation;
 using Contracts.Common;
+using Course.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SharedLibrary.DependencyInjection;
+using Course.Infrastructure.Interfaces;
+using Course.Infrastructure.Implements;
 
-
-namespace Authentication.Infrastructure.DependencyInjection
+namespace Course.Infrastructure.DependencyInjection
 {
     public static class ServiceContainer
     {
         public static IServiceCollection AddInfrastructureService(this IServiceCollection services, IConfiguration config)
         {
             // Add db connection
-            SharedServiceContainer.AddSharedServices<AccountDbContext>(services, config, config["MySerilog:Filename"]);
+            SharedServiceContainer.AddSharedServices<CourseDbContext>(services, config, config["MySerilog:Filename"]);
 
             services.AddHttpContextAccessor();
-
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IRsaService, RsaService>();
-            services.AddScoped<IEmailService, EmailService>();
-            services.AddScoped<ILecturerService, LecturerService>();
-            services.AddScoped<ISemesterService, SemesterService>();
-            services.AddScoped<IClassService, ClassService>();
-            services.AddScoped<IGroupService, GroupService>();
 
             services.Configure<ApiBehaviorOptions>(options =>
             {
@@ -75,6 +64,5 @@ namespace Authentication.Infrastructure.DependencyInjection
             SharedServiceContainer.UseSharedPolicies(app);
             return app;
         }
-
     }
 }
