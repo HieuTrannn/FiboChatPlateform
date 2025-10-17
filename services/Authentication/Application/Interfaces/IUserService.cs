@@ -11,5 +11,6 @@ namespace Authentication.Application.Interfaces
         Task<RegisterResponse> ChangePasswordAsync(string email, ChangePasswordRequest changePasswordRequest);
         Task<RegisterResponse> ForgotPasswordAsync(string email);
         Task<RegisterResponse> ResetPasswordAsync(string token, string newPassword);
+        Task<AuthResponse> LoginWithGoogleAsync(string idToken);
     }
 }

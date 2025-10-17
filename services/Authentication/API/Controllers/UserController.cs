@@ -55,6 +55,22 @@ namespace Authentication.API.Controllers
             }
         }
 
+        [AllowAnonymous]
+        [HttpPost("login-gg")]
+        public async Task<IActionResult> LoginWithGoogleAsync([FromBody] string idToken)
+        {
+            try
+            {
+                var response = await _userService.LoginWithGoogleAsync(idToken);
+                return Ok(ApiResponse<AuthResponse>.Ok(response, "Login with Google successful", "200"));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("{Classname} - Error at login with Google async cause by {}", nameof(UserController), ex.Message);
+                return StatusCode(500, ApiResponse<string>.InternalError("Error: " + ex.Message));
+            }
+        }
+
         [Authorize]
         [HttpPut("change-password")]
         public async Task<IActionResult> ChangePassword([FromForm] ChangePasswordRequest request)

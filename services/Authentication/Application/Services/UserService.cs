@@ -3,6 +3,7 @@ using Authentication.Application.Interfaces;
 using Authentication.Domain.Abstraction;
 using Authentication.Domain.Entities;
 using Contracts.Common;
+using FirebaseAdmin.Auth;
 using Mapster;
 using MapsterMapper;
 using Microsoft.AspNetCore.Authentication;
@@ -28,12 +29,13 @@ namespace Authentication.Application.Services
         private readonly ILogger<IUserService> _logger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRsaService _rsaService;
+        private readonly IGoogleAuthService _googleAuthService;
         //private readonly ICacheService _cacheService;
         private readonly IConfiguration _configuration;
         private readonly IEmailService _emailService;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserService(ILogger<IUserService> logger, IUnitOfWork unitOfWork, IRsaService rsaService, IEmailService emailService, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+        public UserService(ILogger<IUserService> logger, IUnitOfWork unitOfWork, IRsaService rsaService, IEmailService emailService, IConfiguration configuration, IGoogleAuthService googleService, IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _unitOfWork = unitOfWork;
@@ -41,6 +43,7 @@ namespace Authentication.Application.Services
             _emailService = emailService;
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
+            _googleAuthService = googleService;
         }
 
         public async Task<ApiResponse<RegisterResponse>> RegisterUserAsync(RegisterReq request)
@@ -98,6 +101,50 @@ namespace Authentication.Application.Services
                 return ApiResponse<RegisterResponse>.InternalError("An unexpected error occurred while registering user: " + ex);
             }
         }
+
+
+        public async Task<AuthResponse> LoginWithGoogleAsync(string idToken)
+        {
+            try
+            {
+                var googleUserInfo = await _googleAuthService.VerifyGoogleTokenAsync(idToken);
+                if (googleUserInfo == null || string.IsNullOrEmpty(googleUserInfo.Email))
+                {
+                    throw new UnauthorizedAccessException("Invalid Google token");
+                }
+
+                var accountRepo = _unitOfWork.GetRepository<Account>();
+                var account = await accountRepo.FindByConditionAsync(u => u.Email == googleUserInfo.Email);
+
+                if (account == null)
+                {
+                    _logger.LogWarning("Google login attempt for unregistered email: {Email}", googleUserInfo.Email);
+                    return new AuthResponse
+                    {
+                        Success = false,
+                        Message = "This Google account is not registered in the system."
+                    };
+                }
+
+                var token = GenerateJwtToken(account);
+                var tokenid = token?.ToString() ?? string.Empty;
+                return new AuthResponse
+                {
+                    Token = tokenid,
+                    Message = "Login with Google successful"
+                };
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Error at login with Google: {Message}", e.Message);
+                throw;
+            }
+            finally
+            {
+                _unitOfWork.Dispose();
+            }
+        }
+
 
         public async Task<AuthResponse> Login(AuthRequest request)
         {

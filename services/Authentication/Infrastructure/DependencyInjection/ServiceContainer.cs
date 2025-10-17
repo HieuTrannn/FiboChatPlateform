@@ -29,6 +29,7 @@ namespace Authentication.Infrastructure.DependencyInjection
             services.AddScoped<ILectureService, LectureService>();
             services.AddScoped<ISemesterService, SemesterService>();
             services.AddScoped<IClassService, ClassService>();
+            services.AddHttpClient<IGoogleAuthService, GoogleAuthService>();
 
             services.Configure<ApiBehaviorOptions>(options =>
             {

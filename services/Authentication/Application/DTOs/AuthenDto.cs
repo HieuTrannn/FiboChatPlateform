@@ -43,8 +43,19 @@ namespace Authentication.Application.DTOs
         {
             //public string FullName { get; set; }
             public string? Token { get; set; }
+            public bool? Success { get; set; }
             public string? Message { get; set; }
             public bool RequirePasswordChange { get; set; } = false;
         }
+
+        public class GoogleUserInfo
+        {
+            public string Uid { get; set; } = string.Empty;
+            public string Email { get; set; } = string.Empty;
+            public string? Name { get; set; }
+            public string? Picture { get; set; }
+        }
     }
+
+
 }
