@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AiChatBot.Infrastructure.Implementation
 {
-    internal class IRedisService
+    public class IRedisService
     {
     }
 }

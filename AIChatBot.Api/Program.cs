@@ -1,3 +1,6 @@
+using Project.SharedLibrary.MiddleWare;
+using AiChatBot.Infrastructure.DependencyInjection;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,6 +8,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddInfrastructureService(builder.Configuration);
+builder.Services.AddHttpClient();
+
+builder.Services.AddSwaggerGen();
+
 
 var app = builder.Build();
 
@@ -12,7 +20,14 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Authentication API v1");
+        c.RoutePrefix = string.Empty;
+    });
 }
+app.UseMiddleware<GlobalExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 

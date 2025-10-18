@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace AiChatBot.Application.Interfaces
 {
-    internal interface IGeminiService
+    public interface IGeminiService
     {
+        Task<string> GenerateResponseAsync(string userPrompt);
     }
 }
