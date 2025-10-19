@@ -1,4 +1,7 @@
-﻿version: "3.9"
+﻿# =========================
+# FiboChat Platform - Docker Compose
+# Environment: Staging
+# =========================
 
 services:
   # =========================
@@ -42,7 +45,7 @@ services:
   # =========================
   authentication:
     build:
-      context: ../src
+      context: .
       dockerfile: services/Authentication/Authentication.API/Dockerfile
     container_name: fibochat-auth
     restart: always
@@ -63,7 +66,7 @@ services:
   # =========================
   course-api:
     build:
-      context: ../src
+      context: .
       dockerfile: services/Course/Course.Api/Dockerfile
     container_name: fibochat-course
     restart: always
