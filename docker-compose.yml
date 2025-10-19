@@ -84,8 +84,8 @@ services:
   # =========================
   gateway:
     build:
-      context: ../src
-      dockerfile: gateway/Gateway.Api/Dockerfile
+      context: .
+      dockerfile: Gateway.Api/Dockerfile
     container_name: fibochat-gateway
     restart: always
     depends_on:
