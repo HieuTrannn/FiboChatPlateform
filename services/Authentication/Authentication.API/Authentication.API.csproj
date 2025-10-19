@@ -23,7 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Identity\Identity.Contracts\Identity.Contracts.csproj" />
-    <ProjectReference Include="..\Infrastructure\Authentication.Infrastructure.csproj" />
+    <ProjectReference Include="..\Authentication.Infrastructure\Authentication.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

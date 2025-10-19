@@ -19,14 +19,13 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.9" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Application\Authentication.Application.csproj" />
-  </ItemGroup>
 	<ItemGroup>
 		<Content Include="Templates\**\*.*">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Authentication.Application\Authentication.Application.csproj" />
 	</ItemGroup>
 
 </Project>
