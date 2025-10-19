@@ -97,7 +97,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: "Staging"
     ports:
-      - "8000:8080"
+      - "8000:8000"
     networks:
       - fibo-net
 
