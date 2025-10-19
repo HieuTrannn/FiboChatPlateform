@@ -25,5 +25,5 @@ namespace AIChatBot.Api.Controllers
             var response = await _geminiService.GenerateResponseAsync(userPrompt);
             return Ok(new { prompt = userPrompt, response });
         }
-    }
-}
+     }
+}            
