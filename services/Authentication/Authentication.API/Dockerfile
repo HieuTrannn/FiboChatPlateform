@@ -4,10 +4,10 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 
-COPY ["services/Authentication/API/Authentication.API.csproj", "services/Authentication/Authentication.API/"]
-COPY ["services/Authentication/Application/Authentication.Application.csproj", "services/Authentication/Authentication.Application/"]
-COPY ["services/Authentication/Domain/Authentication.Domain.csproj", "services/Authentication/Authentication.Domain/"]
-COPY ["services/Authentication/Infrastructure/Authentication.Infrastructure.csproj", "services/Authentication/Authentication.Infrastructure/"]
+COPY ["services/Authentication/API/Authentication.API.csproj", "services/Authentication/API/"]
+COPY ["services/Authentication/Application/Authentication.Application.csproj", "services/Authentication/Application/"]
+COPY ["services/Authentication/Domain/Authentication.Domain.csproj", "services/Authentication/Domain/"]
+COPY ["services/Authentication/Infrastructure/Authentication.Infrastructure.csproj", "services/Authentication/Infrastructure/"]
 COPY ["cores/Contracts/Contracts.csproj", "cores/Contracts/"]
 COPY ["cores/SharedLibrary/SharedLibrary.csproj", "cores/SharedLibrary/"]
 
