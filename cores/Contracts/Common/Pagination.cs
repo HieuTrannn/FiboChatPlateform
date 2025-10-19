@@ -1,8 +1,8 @@
-﻿namespace Identity.Domain.Abstractions
+﻿namespace Contracts.Common
 {
     public class BasePaginatedList<T>
     {
-        public IReadOnlyCollection<T> Items { get; set; }
+        public IReadOnlyCollection<T> Items { get; private set; }
         public int TotalItems { get; set; }
         public int CurrentPage { get; set; }
         public int TotalPages { get; set; }
