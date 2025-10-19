@@ -12,7 +12,7 @@ COPY ["cores/Contracts/Contracts.csproj", "cores/Contracts/"]
 COPY ["cores/SharedLibrary/SharedLibrary.csproj", "cores/SharedLibrary/"]
 
 
-RUN dotnet restore "services/Authentication/API/Authentication.API.csproj"
+RUN dotnet restore "services/Authentication/Authentication.API/Authentication.API.csproj"
 
 # Copy all source code
 COPY . .
