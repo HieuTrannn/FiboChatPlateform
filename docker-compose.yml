@@ -1,97 +1,129 @@
+﻿# =========================
+# FiboChat Platform - Docker Compose
+# Environment: Staging
+# =========================
+
 services:
-  # PostgreSQL cho Authentication service
+  # =========================
+  # 1️⃣ DATABASE CHO AUTH SERVICE
+  # =========================
   postgres-auth:
-    image: pgvector/pgvector:pg16
-    container_name: fibochat-db-auth
+    image: postgres:16
+    container_name: fibochat-auth-db
     restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123456
-      POSTGRES_DB: fibo_chat-auth
+      POSTGRES_DB: fibo_chat_auth
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
-      - pgauth:/var/lib/postgresql/data
+      - postgres_auth_data:/var/lib/postgresql/data
     networks:
-      - fibochat-network
+      - fibo-net
 
-  # PostgreSQL cho Course service
+  # =========================
+  # 2️⃣ DATABASE CHO COURSE SERVICE
+  # =========================
   postgres-course:
-    image: pgvector/pgvector:pg16
-    container_name: fibochat-db-course
+    image: postgres:16
+    container_name: fibochat-course-db
     restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123456
-      POSTGRES_DB: fibo_chat-course
+      POSTGRES_DB: fibo_chat_course
     ports:
-      - "5433:5432" # Port khác để tránh conflict
+      - "5434:5432"
     volumes:
-      - pgcourse:/var/lib/postgresql/data
+      - postgres_course_data:/var/lib/postgresql/data
     networks:
-      - fibochat-network
+      - fibo-net
 
+  # =========================
+  # 3️⃣ AUTHENTICATION SERVICE
+  # =========================
+  authentication:
+    build:
+      context: .
+      dockerfile: services/Authentication/Authentication.API/Dockerfile
+    container_name: fibochat-auth
+    restart: always
+    depends_on:
+      - postgres-auth
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Staging"
+      ConnectionStrings__DbConnection: "Host=postgres-auth;Port=5432;Database=fibo_chat_auth;Username=postgres;Password=123456"
+      Authentication__Issuer: "http://fibochat-auth:8080"
+      Authentication__Audience: "http://fibochat-auth:8080"
+    ports:
+      - "5001:5001"
+    networks:
+      - fibo-net
+
+  # =========================
+  # 4️⃣ COURSE SERVICE
+  # =========================
+  course-api:
+    build:
+      context: .
+      dockerfile: services/Course/Course.Api/Dockerfile
+    container_name: fibochat-course
+    restart: always
+    depends_on:
+      - postgres-course
+      - authentication
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Staging"
+      ConnectionStrings__CourseDb: "Host=postgres-course;Port=5432;Database=fibo_chat_course;Username=postgres;Password=123456;SearchPath=course"
+      Services__AuthBaseUrl: "http://fibochat-auth:8080"
+    ports:
+      - "5002:5002"
+    networks:
+      - fibo-net
+
+  # =========================
+  # 5️⃣ GATEWAY SERVICE
+  # =========================
   gateway:
     build:
       context: .
       dockerfile: Gateway.Api/Dockerfile
     container_name: fibochat-gateway
     restart: always
-    ports:
-      - "7007:8081" # HTTPS
-      - "5045:8080" # HTTP
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTPS_PORTS=8081
-      - ASPNETCORE_HTTP_PORTS=8080
     depends_on:
-      - auth-service
-      - course-service
+      - authentication
+      - course-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Staging"
+    ports:
+      - "8000:8000"
     networks:
-      - fibochat-network
+      - fibo-net
 
-  auth-service:
-    build:
-      context: .
-      dockerfile: services/Authentication/API/Dockerfile
-    container_name: fibo_chat-auth
+  # =========================
+  # 6️⃣ REDIS CACHE (TÙY CHỌN)
+  # =========================
+  redis:
+    image: redis:7.2
+    container_name: fibochat-redis
     restart: always
     ports:
-      - "5001:8081" # HTTPS
-      - "5000:8080" # HTTP
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTPS_PORTS=8081
-      - ASPNETCORE_HTTP_PORTS=8080
-      - ConnectionStrings__DbConnection=Host=postgres-auth;Database=fibo_chat-auth;Username=postgres;Password=123456
-    depends_on:
-      - postgres-auth
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: [ "redis-server", "--appendonly", "yes" ]
     networks:
-      - fibochat-network
+      - fibo-net
 
-  course-service:
-    build:
-      context: .
-      dockerfile: services/Course/Course.Api/Dockerfile
-    container_name: fibo_chat-course
-    restart: always
-    ports:
-      - "7212:8081" # HTTPS
-      - "5224:8080" # HTTP
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTPS_PORTS=8081
-      - ASPNETCORE_HTTP_PORTS=8080
-      - ConnectionStrings__DBConnection=Host=postgres-course;Database=fibo_chat-course;Username=postgres;Password=123456
-    depends_on:
-      - postgres-course
-    networks:
-      - fibochat-network
+# =========================
+# NETWORK & VOLUMES
+# =========================
+networks:
+  fibo-net:
+    driver: bridge
 
 volumes:
-  pgauth:
-  pgcourse:
-
-networks:
-  fibochat-network:
-    driver: bridge
+  postgres_auth_data:
+  postgres_course_data:
+  redis_data:
