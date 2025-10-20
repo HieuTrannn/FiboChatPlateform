@@ -19,20 +19,16 @@ namespace Authentication.API.Controllers
         }
 
         /// <summary>
-        /// Get all classes (active and pending only)
+        /// Get all classes
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> GetAllClasses()
+        public async Task<IActionResult> GetAllClasses(int page = 1, int pageSize = 10)
         {
             try
             {
-                var classes = await _classService.GetAllAsync();
-                if (classes == null)
-                {
-                    return NotFound(ApiResponse<List<ClassResponse>>.NotFound("Classes not found"));
-                }
-                return Ok(ApiResponse<List<ClassResponse>>.Ok(classes, "Get all classes successfully", "200"));
+                var classes = await _classService.GetAllAsync(page, pageSize);
+                return Ok(ApiResponse<BasePaginatedList<ClassResponse>>.Ok(classes, "Get all classes successfully", "200"));
             }
             catch (Exception ex)
             {
@@ -42,7 +38,7 @@ namespace Authentication.API.Controllers
         }
 
         /// <summary>
-        /// Get a class by id (active and pending only)
+        /// Get a class by id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -71,7 +67,7 @@ namespace Authentication.API.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> CreateClass(ClassCreateRequest request)
+        public async Task<IActionResult> CreateClass([FromForm] ClassCreateRequest request)
         {
             try
             {
@@ -96,7 +92,7 @@ namespace Authentication.API.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateClass(Guid id, ClassUpdateRequest request)
+        public async Task<IActionResult> UpdateClass(Guid id, [FromForm] ClassUpdateRequest request)
         {
             try
             {
@@ -120,7 +116,7 @@ namespace Authentication.API.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteClass(Guid id)
+        public async Task<IActionResult> DeleteClass([FromRoute] Guid id)
         {
             try
             {
@@ -132,6 +128,78 @@ namespace Authentication.API.Controllers
                 return Ok(ApiResponse<ClassResponse>.Ok(c, "Delete class successfully", "200"));
             }
 
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(ClassController), ex.Message);
+                return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(ClassController)}: {ex.Message}"));
+            }
+        }
+
+        /// <summary>
+        /// Assign a lecturer to a class
+        /// </summary>
+        /// <param name="classId"></param>
+        /// <param name="lecturerId"></param>
+        /// <returns></returns>
+        [HttpPost("{classId}/assign-lecturer")]
+        public async Task<IActionResult> AssignLecturer(Guid classId, Guid lecturerId)
+        {
+            try
+            {
+                var c = await _classService.AssignLecturerAsync(classId, lecturerId);
+                if (c == null)
+                {
+                    return BadRequest(ApiResponse<ClassResponse>.BadRequest("Assign lecturer failed"));
+                }
+                return Ok(ApiResponse<ClassResponse>.Ok(c, "Assign lecturer successfully", "200"));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(ClassController), ex.Message);
+                return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(ClassController)}: {ex.Message}"));
+            }
+        }
+
+        /// <summary>
+        /// Unassign a lecturer from a class
+        /// </summary>
+        /// <param name="classId"></param>
+        /// <returns></returns>
+        [HttpPost("{classId}/unassign-lecturer")]
+        public async Task<IActionResult> UnassignLecturer(Guid classId)
+        {
+            try
+            {
+                var c = await _classService.UnassignLecturerAsync(classId);
+                if (c == null)
+                {
+                    return BadRequest(ApiResponse<ClassResponse>.BadRequest("Unassign lecturer failed"));
+                }
+                return Ok(ApiResponse<ClassResponse>.Ok(c, "Unassign lecturer successfully", "200"));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(ClassController), ex.Message);
+                return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(ClassController)}: {ex.Message}"));
+            }
+        }
+
+        /// Search classes
+        /// </summary>
+        /// <param name="request">Search query parameters</param>
+        /// <returns></returns>
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchClasses([FromQuery] ClassQueryRequest request)
+        {
+            try
+            {
+                var classes = await _classService.SearchAsync(request);
+                if (classes == null)
+                {
+                    return NotFound(ApiResponse<PaginatedResponse<ClassResponse>>.NotFound("No classes found"));
+                }
+                return Ok(ApiResponse<PaginatedResponse<ClassResponse>>.Ok(classes, "Search classes successfully", "200"));
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(ClassController), ex.Message);

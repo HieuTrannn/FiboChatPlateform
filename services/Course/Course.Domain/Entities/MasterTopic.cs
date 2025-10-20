@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
-using Authentication.Domain.Entities;
+using Contracts.Common;
 
 namespace Course.Domain.Entities
 {
@@ -8,14 +8,13 @@ namespace Course.Domain.Entities
         public Guid Id { get; set; }
         public Guid DomainId { get; set; }
         public Guid SemesterId { get; set; }
+        public Guid? LecturerId { get; set; }
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;
-        public string Status { get; set; } = "active"; // active | disabled
+        public StaticEnum.StatusEnum Status { get; set; } = StaticEnum.StatusEnum.Active; // active | disabled
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         // Navigation
-        [ForeignKey("SemesterId")]
-        public Semester Semester { get; set; } = null!;
         public ICollection<Topic> Topics { get; set; } = new List<Topic>();
         public ICollection<MasterTopicKeyword> MasterTopicKeywords { get; set; } = new List<MasterTopicKeyword>();
         [ForeignKey("DomainId")]

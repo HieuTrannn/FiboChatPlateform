@@ -17,4 +17,8 @@
     <ProjectReference Include="..\..\..\cores\Contracts\Contracts.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Google.Cloud.Storage.V1" Version="4.13.0" />
+  </ItemGroup>
+
 </Project>

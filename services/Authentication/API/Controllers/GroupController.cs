@@ -18,12 +18,16 @@ namespace API.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// Get all groups
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> GetAllGroups()
+        public async Task<IActionResult> GetAllGroups(int page = 1, int pageSize = 10)
         {
             try
             {
-                var groups = await _groupService.GetAllAsync(1, 10);
+                var groups = await _groupService.GetAllAsync(page, pageSize);
                 return Ok(ApiResponse<BasePaginatedList<GroupResponse>>.Ok(groups, "Get all groups successfully", "200"));
             }
             catch (Exception ex)
@@ -33,6 +37,11 @@ namespace API.Controllers
             }
         }
 
+        /// <summary>
+        /// Get all groups by class id
+        /// </summary>
+        /// <param name="classId"></param>
+        /// <returns></returns>
         [HttpGet("class/{classId}")]
         public async Task<IActionResult> GetAllGroupsByClassId(Guid classId)
         {
@@ -47,7 +56,12 @@ namespace API.Controllers
                 return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(GroupController)}: {ex.Message}"));
             }
         }
-
+        
+        /// <summary>
+        /// Get a group by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetGroupById(Guid id)
         {
@@ -63,8 +77,13 @@ namespace API.Controllers
             }
         }
 
+        /// <summary>
+        /// Create a new group
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> CreateGroup(GroupCreateRequest request)
+        public async Task<IActionResult> CreateGroup([FromForm] GroupCreateRequest request)
         {
             try
             {
@@ -79,8 +98,14 @@ namespace API.Controllers
             }
         }
 
+        /// <summary>
+        /// Update a group
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateGroup(Guid id, GroupUpdateRequest request)
+        public async Task<IActionResult> UpdateGroup(Guid id, [FromForm] GroupUpdateRequest request)
         {
             try
             {
@@ -94,8 +119,13 @@ namespace API.Controllers
             }
         }
 
+        /// <summary>
+        /// Delete a group
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteGroup(Guid id)
+        public async Task<IActionResult> DeleteGroup([FromRoute] Guid id)
         {
             try
             {
@@ -109,8 +139,14 @@ namespace API.Controllers
             }
         }
 
+        /// <summary>
+        /// Add a member to a group
+        /// </summary>
+        /// <param name="groupId"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("{groupId}/members")]
-        public async Task<IActionResult> AddMemberToGroup(Guid groupId, GroupMemberRequest request)
+        public async Task<IActionResult> AddMemberToGroup(Guid groupId, [FromForm] GroupMemberRequest request)
         {
             try
             {
@@ -124,8 +160,14 @@ namespace API.Controllers
             }
         }
 
+        /// <summary>
+        /// Remove a member from a group
+        /// </summary>
+        /// <param name="groupId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [HttpDelete("{groupId}/members/{userId}")]
-        public async Task<IActionResult> RemoveMemberFromGroup(Guid groupId, Guid userId)
+        public async Task<IActionResult> RemoveMemberFromGroup([FromRoute] Guid groupId, [FromRoute] Guid userId)
         {
             try
             {
@@ -139,6 +181,11 @@ namespace API.Controllers
             }
         }
 
+        /// <summary>
+        /// Get all members of a group
+        /// </summary>
+        /// <param name="groupId"></param>
+        /// <returns></returns>
         [HttpGet("{groupId}/members")]
         public async Task<IActionResult> GetMembersOfGroup(Guid groupId)
         {

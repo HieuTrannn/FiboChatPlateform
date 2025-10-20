@@ -1,14 +1,14 @@
 ﻿using Course.Infrastructure.DependencyInjection;
-using Course.Infrastructure.Implements;
-using Course.Infrastructure.Interfaces;
 using Course.Infrastructure.Persistence;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // ====== 1) Connection string (appsettings.json hoặc ENV) ======
-var cs = builder.Configuration.GetConnectionString("CourseDb")
+var cs = builder.Configuration.GetConnectionString("DBConnection")
     ?? Environment.GetEnvironmentVariable("CONNECTION_STRING");
 
 // ====== 2) Infrastructure & DI ======
@@ -28,6 +28,13 @@ builder.Services.AddInfrastructureService(builder.Configuration);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+var firebaseConfig = builder.Configuration.GetSection("Firebase");
+
+FirebaseApp.Create(new AppOptions
+{
+    Credential = GoogleCredential.FromFile(firebaseConfig["PrivateKeyPath"])
+});
 
 var app = builder.Build();
 

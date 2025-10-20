@@ -22,8 +22,13 @@ namespace Authentication.API.Controllers
             _lecturerService = lecturerService;
         }
 
+        /// <summary>
+        /// Create a new lecturer
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> CreateLecturer([FromBody] LecturerRequest request)
+        public async Task<IActionResult> CreateLecturer([FromForm] LecturerRequest request)
         {
             try
             {
@@ -38,7 +43,10 @@ namespace Authentication.API.Controllers
                 return BadRequest(ex);
             }
         }
-
+        /// <summary>
+        /// Get all lecturers
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> GetAllLecturers()
         {
@@ -55,8 +63,13 @@ namespace Authentication.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Get a lecturer by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetLecturerById([FromBody] string id)
+        public async Task<IActionResult> GetLecturerById(string id)
         {
             try
             {
@@ -76,8 +89,13 @@ namespace Authentication.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Delete a lecturer by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteLecturerById([FromBody] Guid id)
+        public async Task<IActionResult> DeleteLecturerById(Guid id)
         {
             try
             {
@@ -92,8 +110,14 @@ namespace Authentication.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Update a lecturer by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateLecturerById([FromForm] Guid id, [FromBody] LecturerRequest request)
+        public async Task<IActionResult> UpdateLecturerById(Guid id, [FromForm] LecturerRequest request)
         {
             try
             {

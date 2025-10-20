@@ -19,19 +19,15 @@ namespace Authentication.API.Controllers
         }
 
         /// <summary>
-        /// Get all semesters (active and pending only)
+        /// Get all semesters
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> GetAllSemesters()
+        public async Task<IActionResult> GetAllSemesters(int page = 1, int pageSize = 10)
         {
             try {
-                var semesters = await _semesterService.GetAllAsync();
-                if (semesters == null)
-                {
-                    return NotFound(ApiResponse<string>.NotFound($"Semesters not found"));
-                }
-                return Ok(ApiResponse<List<SemesterResponse>>.Ok(semesters, "Get all semesters successfully", "200"));
+                var semesters = await _semesterService.GetAllAsync(page, pageSize);
+                return Ok(ApiResponse<BasePaginatedList<SemesterResponse>>.Ok(semesters, "Get all semesters successfully", "200"));
             }
             catch (Exception ex)
             {
@@ -41,7 +37,7 @@ namespace Authentication.API.Controllers
         }
 
         /// <summary>
-        /// Get a semester by id (active and pending only)
+        /// Get a semester by id 
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>

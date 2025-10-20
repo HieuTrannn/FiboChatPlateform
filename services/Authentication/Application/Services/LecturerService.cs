@@ -29,7 +29,7 @@ namespace Authentication.Application.Services
             _emailService = service;
             _accountRepository = _unitOfWork.GetRepository<Account>();
         }
-
+        
         public async Task<ApiResponse<RegisterResponse>> CreateLecturer(LecturerRequest request)
         {
             try

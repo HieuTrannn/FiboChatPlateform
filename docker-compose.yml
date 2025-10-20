@@ -1,16 +1,33 @@
 services:
-  postgres:
+  # PostgreSQL cho Authentication service
+  postgres-auth:
     image: pgvector/pgvector:pg16
-    container_name: fibochat-db
+    container_name: fibochat-db-auth
     restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123456
-      POSTGRES_DB: FiboChatPlatform
+      POSTGRES_DB: fibo_chat-auth
     ports:
       - "5432:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pgauth:/var/lib/postgresql/data
+    networks:
+      - fibochat-network
+
+  # PostgreSQL cho Course service
+  postgres-course:
+    image: pgvector/pgvector:pg16
+    container_name: fibochat-db-course
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: fibo_chat-course
+    ports:
+      - "5433:5432" # Port khác để tránh conflict
+    volumes:
+      - pgcourse:/var/lib/postgresql/data
     networks:
       - fibochat-network
 
@@ -37,7 +54,7 @@ services:
     build:
       context: .
       dockerfile: services/Authentication/API/Dockerfile
-    container_name: fibochat-auth
+    container_name: fibo_chat-auth
     restart: always
     ports:
       - "5001:8081" # HTTPS
@@ -46,9 +63,9 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTPS_PORTS=8081
       - ASPNETCORE_HTTP_PORTS=8080
-      - ConnectionStrings__AccountDb=Host=postgres;Database=FiboChatPlatform;Username=postgres;Password=123456;SearchPath=authentication,authentication
+      - ConnectionStrings__DbConnection=Host=postgres-auth;Database=fibo_chat-auth;Username=postgres;Password=123456
     depends_on:
-      - postgres
+      - postgres-auth
     networks:
       - fibochat-network
 
@@ -56,7 +73,7 @@ services:
     build:
       context: .
       dockerfile: services/Course/Course.Api/Dockerfile
-    container_name: fibochat-course
+    container_name: fibo_chat-course
     restart: always
     ports:
       - "7212:8081" # HTTPS
@@ -65,14 +82,15 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTPS_PORTS=8081
       - ASPNETCORE_HTTP_PORTS=8080
-      - ConnectionStrings__CourseDb=Host=postgres;Database=FiboChatPlatform;Username=postgres;Password=123456;SearchPath=course,course
+      - ConnectionStrings__DBConnection=Host=postgres-course;Database=fibo_chat-course;Username=postgres;Password=123456
     depends_on:
-      - postgres
+      - postgres-course
     networks:
       - fibochat-network
 
 volumes:
-  pgdata:
+  pgauth:
+  pgcourse:
 
 networks:
   fibochat-network:

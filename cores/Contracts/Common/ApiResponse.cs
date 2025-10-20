@@ -23,8 +23,8 @@ namespace Contracts.Common
 
         public ApiResponse(int statusCode, string code, string? message = null, T? data = default)
         {
-            StatusCode = statusCode;
             Code = code;
+            StatusCode = statusCode;
             Message = message;
             Data = data;
         }

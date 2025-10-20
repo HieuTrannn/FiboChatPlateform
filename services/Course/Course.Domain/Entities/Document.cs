@@ -1,3 +1,5 @@
+using static Course.Domain.Enums.StaticEnums;
+
 namespace Course.Domain.Entities
 {
     public class Document
@@ -8,7 +10,7 @@ namespace Course.Domain.Entities
         public Guid FileId { get; set; }
         public string Title { get; set; } = null!;
         public int version { get; set; }
-        public string Status { get; set; } = "draft"; // draft | published
+        public DocumentStatus Status { get; set; } = DocumentStatus.Draft; // draft | published
         public Guid VerifiedById { get; set; }
         public Guid UpdatedById { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

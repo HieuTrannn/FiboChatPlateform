@@ -54,6 +54,7 @@ namespace Authentication.Application.Services
                 ClassId = request.ClassId,
                 Name = request.Name,
                 Description = request.Description,
+                Status = StaticEnum.StatusEnum.Active,
             };
             await _unitOfWork.GetRepository<Group>().InsertAsync(group);
             await _unitOfWork.SaveChangeAsync();

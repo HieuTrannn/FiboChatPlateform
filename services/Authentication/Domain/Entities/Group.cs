@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Contracts.Common;
 
 namespace Authentication.Domain.Entities
 {
@@ -14,6 +15,7 @@ namespace Authentication.Domain.Entities
         [Required]
         [MaxLength(255)]
         public string Description { get; set; } = null!;
+        public StaticEnum.StatusEnum Status { get; set; } = StaticEnum.StatusEnum.Active; // active | disabled 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         // Navigation
