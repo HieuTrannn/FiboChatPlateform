@@ -188,23 +188,23 @@ namespace Authentication.API.Controllers
         /// </summary>
         /// <param name="request">Search query parameters</param>
         /// <returns></returns>
-        [HttpGet("search")]
-        public async Task<IActionResult> SearchClasses([FromQuery] ClassQueryRequest request)
-        {
-            try
-            {
-                var classes = await _classService.SearchAsync(request);
-                if (classes == null)
-                {
-                    return NotFound(ApiResponse<PaginatedResponse<ClassResponse>>.NotFound("No classes found"));
-                }
-                return Ok(ApiResponse<PaginatedResponse<ClassResponse>>.Ok(classes, "Search classes successfully", "200"));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(ClassController), ex.Message);
-                return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(ClassController)}: {ex.Message}"));
-            }
-        }
+        // [HttpGet("search")]
+        // public async Task<IActionResult> SearchClasses([FromQuery] ClassQueryRequest request)
+        // {
+        //     try
+        //     {
+        //         var classes = await _classService.SearchAsync(request);
+        //         if (classes == null)
+        //         {
+        //             return NotFound(ApiResponse<PaginatedResponse<ClassResponse>>.NotFound("No classes found"));
+        //         }
+        //         return Ok(ApiResponse<PaginatedResponse<ClassResponse>>.Ok(classes, "Search classes successfully", "200"));
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(ClassController), ex.Message);
+        //         return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(ClassController)}: {ex.Message}"));
+        //     }
+        // }
     }
 }
