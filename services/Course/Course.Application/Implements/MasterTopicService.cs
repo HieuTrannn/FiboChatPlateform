@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Logging;
 using Course.Infrastructure.Interfaces;
 using Course.Application.DTOs.MasterTopicDTOs;
-using Authentication.Domain.Exceptions;
+using Course.Domain.Exceptions;
 using Course.Domain.Entities;
 using Contracts.Common;
 

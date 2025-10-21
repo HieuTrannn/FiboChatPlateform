@@ -1,4 +1,4 @@
-using Authentication.Domain.Exceptions;
+using Course.Domain.Exceptions;
 using Contracts.Common;
 using Course.Application.DTOs.KeywordDTOs;
 using Course.Application.Interfaces;

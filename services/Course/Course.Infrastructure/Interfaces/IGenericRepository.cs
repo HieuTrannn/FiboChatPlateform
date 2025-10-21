@@ -1,5 +1,5 @@
 ﻿using System.Linq.Expressions;
-using Course.Domain.Abstractions;
+using Contracts.Common;
 
 namespace Course.Infrastructure.Interfaces
 {

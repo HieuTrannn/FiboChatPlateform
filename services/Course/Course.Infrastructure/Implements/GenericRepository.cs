@@ -1,5 +1,5 @@
 ﻿using System.Linq.Expressions;
-using Course.Domain.Abstractions;
+using Contracts.Common;
 using Course.Infrastructure.Interfaces;
 using Course.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
