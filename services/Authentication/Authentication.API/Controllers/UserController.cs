@@ -135,7 +135,7 @@ namespace Authentication.API.Controllers
             }
         }
 
-        [HttpGet("{userId}")]
+        [HttpGet("profile")]
         public async Task<IActionResult> GetUserById([FromForm] string userId)
         {
             try

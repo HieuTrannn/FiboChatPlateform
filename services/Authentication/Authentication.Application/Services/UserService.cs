@@ -169,6 +169,7 @@ namespace Authentication.Application.Services
                     {
                         Token = (string)GenerateJwtToken(account),
                         Message = "You must change your password before continuing.",
+                        IsVerifiled = account.IsVerified,
                     };
                 }
 
@@ -371,7 +372,7 @@ namespace Authentication.Application.Services
         }
         private async Task SendPasswordResetEmail(Account account, string token)
         {
-            string resetLink = $"https://fiboaichat.com/reset-password?token={token}";
+            string resetLink = $"http://fibo.io.vn/reset-password?token={token}";
 
             var templateData = new Dictionary<string, string>
               {
