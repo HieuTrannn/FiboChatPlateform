@@ -1,12 +1,6 @@
-﻿# =========================
-# FiboChat Platform - Docker Compose
-# Environment: Staging
-# =========================
+﻿version: "3.9"
 
 services:
-  # =========================
-  # 1️⃣ DATABASE CHO AUTH SERVICE
-  # =========================
   postgres-auth:
     image: postgres:16
     container_name: fibochat-auth-db
@@ -22,9 +16,6 @@ services:
     networks:
       - fibo-net
 
-  # =========================
-  # 2️⃣ DATABASE CHO COURSE SERVICE
-  # =========================
   postgres-course:
     image: postgres:16
     container_name: fibochat-course-db
@@ -40,9 +31,6 @@ services:
     networks:
       - fibo-net
 
-  # =========================
-  # 3️⃣ AUTHENTICATION SERVICE
-  # =========================
   authentication:
     build:
       context: .
@@ -54,16 +42,13 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: "Staging"
       ConnectionStrings__DbConnection: "Host=postgres-auth;Port=5432;Database=fibo_chat_auth;Username=postgres;Password=123456"
-      Authentication__Issuer: "http://fibochat-auth:8080"
-      Authentication__Audience: "http://fibochat-auth:8080"
+      Authentication__Issuer: "http://fibochat-auth:5001"
+      Authentication__Audience: "http://fibochat-auth:5001"
     ports:
       - "5001:5001"
     networks:
       - fibo-net
 
-  # =========================
-  # 4️⃣ COURSE SERVICE
-  # =========================
   course-api:
     build:
       context: .
@@ -76,15 +61,12 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: "Staging"
       ConnectionStrings__CourseDb: "Host=postgres-course;Port=5432;Database=fibo_chat_course;Username=postgres;Password=123456;SearchPath=course"
-      Services__AuthBaseUrl: "http://fibochat-auth:8080"
+      Services__AuthBaseUrl: "http://fibochat-auth:5001"
     ports:
       - "5002:5002"
     networks:
       - fibo-net
 
-  # =========================
-  # 5️⃣ GATEWAY SERVICE
-  # =========================
   gateway:
     build:
       context: .
@@ -96,14 +78,13 @@ services:
       - course-api
     environment:
       ASPNETCORE_ENVIRONMENT: "Staging"
+      Services__AuthBaseUrl: "http://fibochat-auth:5001"
+      Services__CourseBaseUrl: "http://fibochat-course:5002"
     ports:
       - "8000:8000"
     networks:
       - fibo-net
 
-  # =========================
-  # 6️⃣ REDIS CACHE (TÙY CHỌN)
-  # =========================
   redis:
     image: redis:7.2
     container_name: fibochat-redis
@@ -116,9 +97,6 @@ services:
     networks:
       - fibo-net
 
-# =========================
-# NETWORK & VOLUMES
-# =========================
 networks:
   fibo-net:
     driver: bridge
