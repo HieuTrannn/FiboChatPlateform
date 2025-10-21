@@ -61,11 +61,7 @@ namespace Authentication.API.Controllers
             }
         }
 
-        /// <summary>
-        /// Create a new class 
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
+     
         [HttpPost]
         public async Task<IActionResult> CreateClass(ClassCreateRequest request)
         {
