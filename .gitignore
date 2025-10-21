@@ -1,12 +1,44 @@
+# Build results
 bin/
 obj/
 *.user
 *.suo
 *.cache
+
+# Visual Studio
 .vs/
 *.log
 *.pdb
+
+# Database
 *.db
-*.git
-/MovieTheater.Infrastructure/Migrations
+
+# Logs
+*.log
+
+# SonarQube
 .sonarqube/
+
+# Firebase credentials (specific file)
+services/Course/Course.Api/fibochatplatform-firebase-adminsdk-fbsvc-0cd7e0bd98.json
+
+# All JSON files in Course API (to prevent future Firebase secrets)
+services/Course/Course.Api/*.json
+
+# Environment files
+.env
+.env.local
+.env.development
+.env.production
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp

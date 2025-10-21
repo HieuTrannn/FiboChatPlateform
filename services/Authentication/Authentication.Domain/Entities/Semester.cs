@@ -1,9 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Authentication.Domain.Enum;
+﻿using Authentication.Domain.Enum;
 
 namespace Authentication.Domain.Entities
 {
-    public class Semester : BaseEntity
+    public class Semester
     {
         public Guid Id { get; set; }
         public string Code { get; set; } = null!;            // Ex: SP25, SU25

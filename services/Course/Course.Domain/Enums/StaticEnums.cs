@@ -48,5 +48,29 @@ namespace Course.Domain.Enums
             [Description("Disabled")]
             Disabled = 0, // disabled by admin
         }
+
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public enum DocumentStatus
+        {
+            [Description("Draft")]
+            Draft = 1,
+            [Description("Published")]
+            Published = 2,
+            [Description("Archived")]
+            Archived = 3, //
+            [Description("Disabled")]
+            Disabled = 4,
+            [Description("Active")]
+            Active = 7,
+        }
+
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public enum DocumentTypeStatus
+        {
+            [Description("Active")]
+            Active = 1,
+            [Description("Disabled")]
+            Disabled = 0,
+        }
     }
 }

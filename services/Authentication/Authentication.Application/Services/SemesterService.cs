@@ -5,6 +5,7 @@ using Authentication.Domain.Exceptions;
 using Authentication.Domain.Abstraction;
 using Microsoft.Extensions.Logging;
 using Authentication.Domain.Enum;
+using Contracts.Common;
 
 namespace Authentication.Application.Services
 {
@@ -32,11 +33,11 @@ namespace Authentication.Application.Services
             return response;
         }
 
-        public async Task<List<SemesterResponse>> GetAllAsync()
+        public async Task<BasePaginatedList<SemesterResponse>> GetAllAsync(int page, int pageSize)
         {
-            var semesters = await _unitOfWork.GetRepository<Semester>().GetAllAsync(x => x.Where(x => x.Status == SemesterStatusEnum.Active));
-            var responses = await Task.WhenAll(semesters.Select(ToSemesterResponse));
-            return responses.ToList();
+            var semesters = await _unitOfWork.GetRepository<Semester>().GetAllAsync();
+            var response = await Task.WhenAll(semesters.Select(ToSemesterResponse));
+            return new BasePaginatedList<SemesterResponse>(response, semesters.Count, page, pageSize);
         }
 
         public async Task<SemesterResponse> CreateAsync(SemesterCreateRequest request)

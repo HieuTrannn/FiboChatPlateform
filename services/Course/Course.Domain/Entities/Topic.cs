@@ -1,14 +1,16 @@
-﻿namespace Course.Domain.Entities
+﻿using Contracts.Common;
+
+namespace Course.Domain.Entities
 {
     public class Topic
     {
         public Guid Id { get; set; }
         public string Name { get; set; } = null!;
         public string? Description { get; set; }
-        public string Status { get; set; } = "active"; // active | disabled
+        public StaticEnum.StatusEnum Status { get; set; } = StaticEnum.StatusEnum.Active; // active | disabled
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        // Navigation
-        public ICollection<TopicLecturer> TopicLecturers { get; set; } = new List<TopicLecturer>();
+        // navigation
+        public ICollection<Document> Documents { get; set; } = new List<Document>();
     }
 }
