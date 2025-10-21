@@ -1,33 +1,41 @@
-name: CI/CD Deploy to VPS
+name: 🚀 Deploy FiboChat to VPS
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: 🧾 Checkout code
+        uses: actions/checkout@v4
 
-    - name: Copy all project files to VPS
-      uses: appleboy/scp-action@v0.1.7
-      with:
-        host: ${{ secrets.VPS_HOST }}
-        username: ${{ secrets.VPS_USER }}
-        key: ${{ secrets.VPS_SSH_KEY }}
-        source: "."
-        target: "/root/FiboChatPlateform"
+      - name: ⚙️ Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
 
-    - name: Restart Docker Compose
-      uses: appleboy/ssh-action@v1.0.3
-      with:
-        host: ${{ secrets.VPS_HOST }}
-        username: ${{ secrets.VPS_USER }}
-        key: ${{ secrets.VPS_SSH_KEY }}
-        script: |
-          cd /root/FiboChatPlateform
-          docker compose down
-          docker compose up -d --build
+      - name: 🏗️ Build project
+        run: dotnet publish -c Release -o out
+
+      - name: 📦 Copy build to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          source: "out/*"
+          target: "/root/FiboChatPlateform/app"
+
+      - name: 🔁 Restart Docker Compose on VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd /root/FiboChatPlateform
+            docker compose down
+            docker compose up -d --build
