@@ -36,11 +36,9 @@ namespace Authentication.Application.DTOs
 
         public class AuthResponse
         {
-            //public string FullName { get; set; }
             public string? Token { get; set; }
-            public bool? Success { get; set; }
+            public bool Success { get; set; }
             public string? Message { get; set; }
-            public bool RequirePasswordChange { get; set; } = false;
         }
 
         public class GoogleUserInfo
