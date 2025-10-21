@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FirebaseAdmin" Version="3.4.0" />
+    <PackageReference Include="Google.Apis.Auth" Version="1.72.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -22,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Course.Domain\Course.Domain.csproj" />
+    <ProjectReference Include="..\..\..\cores\SharedLibrary\SharedLibrary.csproj" />
   </ItemGroup>
 
 </Project>

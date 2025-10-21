@@ -23,8 +23,8 @@ namespace Contracts.Common
 
         public ApiResponse(int statusCode, string code, string? message = null, T? data = default)
         {
-            StatusCode = statusCode;
             Code = code;
+            StatusCode = statusCode;
             Message = message;
             Data = data;
         }
@@ -33,6 +33,10 @@ namespace Contracts.Common
         public static ApiResponse<T> OkResponse(string? mess, string StatusCode)
         {
             return new ApiResponse<T>((int)HttpStatusCode.OK, StatusCodeHelper.OK.Name(), mess);
+        }
+        public static ApiResponse<T> CreateResponse(string? mess)
+        {
+            return new ApiResponse<T>((int)HttpStatusCode.Created, StatusCodeHelper.Created.Name(), mess);
         }
         public static ApiResponse<T> BadRequest(string message, T? data = default)
             => new((int)HttpStatusCode.BadRequest, nameof(HttpStatusCode.BadRequest), message, data);

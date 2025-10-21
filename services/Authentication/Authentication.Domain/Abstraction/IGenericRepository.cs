@@ -5,6 +5,7 @@ namespace Authentication.Domain.Abstraction;
 
 public interface IGenericRepository<T> where T : class
 {
+    IQueryable<T> GetQueryable(Expression<Func<T, bool>>? predicate = null, string? includeProperties = null);
     IQueryable<T> Entities { get; }
     Task<T?> FindByConditionAsync(Expression<Func<T, bool>> predicate);
     Task<IList<T>> GetAllAsync(Expression<Func<IQueryable<T>, IQueryable<T>>>? include);

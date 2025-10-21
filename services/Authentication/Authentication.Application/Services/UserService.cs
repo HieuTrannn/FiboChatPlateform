@@ -168,6 +168,7 @@ namespace Authentication.Application.Services
                 {
                     return new AuthResponse
                     {
+                        Token = (string)GenerateJwtToken(account),
                         Message = "You must change your password before continuing.",
                         RequirePasswordChange = true
                     };
@@ -265,7 +266,7 @@ namespace Authentication.Application.Services
         public async Task<RegisterResponse> ResetPasswordAsync(string token, string newPassword)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
+            var key = Encoding.UTF8.GetBytes(_configuration["Authentication:Key"]);
 
             try
             {
@@ -361,21 +362,18 @@ namespace Authentication.Application.Services
             try
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]);
+                var key = Encoding.UTF8.GetBytes(_configuration["Authentication:Key"]);
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(new[]
                     {
                     new Claim(ClaimTypes.NameIdentifier, account.Id.ToString()),
-                    //new Claim(ClaimTypes.Role, account.Role.RoleName.ToString()),
-                    //new Claim(ClaimTypes.Name, account.FullName.ToString()),
                     new Claim(ClaimTypes.Email, account.Email.ToString()),
-                    // new Claim("userId", account.Id.ToString()),
                     new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString())
                 }),
                     Expires = DateTime.UtcNow.AddHours(2),
-                    Issuer = "FIBO AI CHAT",
-                    Audience = "FIBOAICHAT.API",
+                    Issuer = _configuration["Authentication:Issuer"],
+                    Audience = _configuration["Authentication:Audience"],
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
                 };
 
@@ -418,7 +416,7 @@ namespace Authentication.Application.Services
         private string GenerateResetToken(string email)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]);
+            var key = Encoding.UTF8.GetBytes(_configuration["Authentication:Key"]);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {

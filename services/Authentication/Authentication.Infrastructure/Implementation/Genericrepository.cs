@@ -2,12 +2,7 @@
 using Authentication.Infrastructure.Data;
 using Contracts.Common;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Authentication.Infrastructure.Implementation
 {
@@ -23,6 +18,25 @@ namespace Authentication.Infrastructure.Implementation
         }
 
         public IQueryable<T> Entities => _context.Set<T>();
+        
+        public IQueryable<T> GetQueryable(Expression<Func<T, bool>>? predicate = null, string? includeProperties = null)
+        {
+            IQueryable<T> query = _context.Set<T>();
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
+        
+            if (!string.IsNullOrEmpty(includeProperties))
+            {
+                foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProperty.Trim());
+                }
+            }
+            return query;
+        }
+
         public async Task<T?> FindByConditionAsync(Expression<Func<T, bool>> predicate)
         {
             return await _context.Set<T>().FirstOrDefaultAsync(predicate);

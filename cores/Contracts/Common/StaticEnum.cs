@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 namespace Contracts.Common
 {
 
@@ -23,7 +24,7 @@ namespace Contracts.Common
             [CustomName("Lecturer")] Lecturer,
             [CustomName("User")] User,
         }
-
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public enum StatusEnum
         {
             [CustomName("active")] Active,

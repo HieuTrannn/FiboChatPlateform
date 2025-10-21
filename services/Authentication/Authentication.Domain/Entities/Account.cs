@@ -1,7 +1,6 @@
 ﻿using Authentication.Domain.Enum;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Reflection;
 
 namespace Authentication.Domain.Entities
 {
@@ -36,11 +35,10 @@ namespace Authentication.Domain.Entities
 
         [ForeignKey("ClassId")]
         public virtual Class? Class { get; set; }
-        public virtual Lecture? Lecture { get; set; }
+        public virtual Lecturer? Lecture { get; set; }
 
         //public bool IsEmailVerified { get; set; }
 
-        //public AccountStatus AccountStatus { get; set; }
-
+        //public AccountStatus AccountStatus { get; set; }\
     }
 }

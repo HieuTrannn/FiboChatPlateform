@@ -2,7 +2,7 @@
 
 namespace Authentication.Domain.Entities
 {
-    public class Class : BaseEntity
+    public class Class
     {
         public Guid Id { get; set; }
         public Guid SemesterId { get; set; }

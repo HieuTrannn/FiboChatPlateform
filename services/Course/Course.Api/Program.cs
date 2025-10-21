@@ -1,35 +1,47 @@
-﻿using Course.Infrastructure.Implements;
-using Course.Infrastructure.Interfaces;
+﻿using Course.Infrastructure.DependencyInjection;
 using Course.Infrastructure.Persistence;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // ====== 1) Connection string (appsettings.json hoặc ENV) ======
-var cs = builder.Configuration.GetConnectionString("CourseDb")
+var cs = builder.Configuration.GetConnectionString("DBConnection")
     ?? Environment.GetEnvironmentVariable("CONNECTION_STRING");
 
 // ====== 2) Infrastructure & DI ======
 builder.Services.AddDbContext<CourseDbContext>(opt => opt.UseNpgsql(cs));
 
-// Repository & Service DI
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+// Add services to the container.
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .CreateLogger();
 
-var authBase = builder.Configuration["Services:AuthBaseUrl"];
-
+builder.Host.UseSerilog();
 
 // ====== 3) API plumbing ======
+builder.Services.AddInfrastructureService(builder.Configuration);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// (tuỳ chọn) CORS dev
-builder.Services.AddCors(opt =>
+var firebaseConfig = builder.Configuration.GetSection("Firebase");
+
+// Replace lines 34-37 with:
+var firebaseProjectId = builder.Configuration["Firebase:ProjectId"];
+var firebasePrivateKey = builder.Configuration["Firebase:PrivateKey"];
+var firebaseClientEmail = builder.Configuration["Firebase:ClientEmail"];
+
+FirebaseApp.Create(new AppOptions
 {
-    opt.AddPolicy("dev", p => p
-        .AllowAnyOrigin()
-        .AllowAnyHeader()
-        .AllowAnyMethod());
+    Credential = GoogleCredential.FromServiceAccountCredential(new ServiceAccountCredential(new ServiceAccountCredential.Initializer(firebaseClientEmail)
+    {
+        ProjectId = firebaseProjectId
+    }.FromPrivateKey(firebasePrivateKey)))
 });
 
 var app = builder.Build();
@@ -41,10 +53,11 @@ using (var scope = app.Services.CreateScope())
 }
 
 // ====== 5) Middlewares ======
+app.UseInfrastructurePolicy();
 app.UseSwagger();
 app.UseSwaggerUI();
-app.UseCors("dev");
-
+app.UseSerilogRequestLogging();
+app.UseHttpsRedirection();
+app.UseCors("AllowAll");
 app.MapControllers();
-
 app.Run();
