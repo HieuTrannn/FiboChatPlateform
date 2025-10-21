@@ -40,7 +40,7 @@ FirebaseApp.Create(new AppOptions
 {
     Credential = GoogleCredential.FromServiceAccountCredential(new ServiceAccountCredential(new ServiceAccountCredential.Initializer(firebaseClientEmail)
     {
-        ProjectId = firebaseProjectId,
+        ProjectId = firebaseProjectId
     }.FromPrivateKey(firebasePrivateKey)))
 });
 
