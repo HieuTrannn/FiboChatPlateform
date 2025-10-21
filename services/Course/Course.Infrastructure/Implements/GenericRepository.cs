@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
-using Course.Domain.Abstractions;
-using Course.Infrastructure.Interfaces;
+using Contracts.Common;
+using Course.Domain.Abstraction;
 using Course.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 

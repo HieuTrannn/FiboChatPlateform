@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
-using Course.Domain.Abstractions;
+using Contracts.Common;
 
-namespace Course.Infrastructure.Interfaces
+namespace Course.Domain.Abstraction
 {
     public interface IGenericRepository<T> where T : class
     {

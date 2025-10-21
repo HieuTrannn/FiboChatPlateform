@@ -25,7 +25,7 @@ namespace Course.Api.Controllers
         /// <param name="pageSize"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> GetAllKeywords(int page = 1, int pageSize = 10)
+        public async Task<IActionResult> GetAllKeywords([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
             try
             {
@@ -45,7 +45,7 @@ namespace Course.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetKeywordById(Guid id)
+        public async Task<IActionResult> GetKeywordById([FromRoute] Guid id)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace Course.Api.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> CreateKeyword(KeywordCreateRequest request)
+        public async Task<IActionResult> CreateKeyword([FromForm] KeywordCreateRequest request)
         {
             try
             {
@@ -86,7 +86,7 @@ namespace Course.Api.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateKeyword(Guid id, KeywordUpdateRequest request)
+        public async Task<IActionResult> UpdateKeyword(Guid id, [FromForm] KeywordUpdateRequest request)
         {
             try
             {
@@ -106,7 +106,7 @@ namespace Course.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteKeyword(Guid id)
+        public async Task<IActionResult> DeleteKeyword([FromRoute] Guid id)
         {
             try
             {

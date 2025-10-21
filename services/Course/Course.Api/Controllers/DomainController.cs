@@ -25,7 +25,7 @@ namespace Course.Api.Controllers
         /// <param name="pageSize"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> GetAllDomains(int page = 1, int pageSize = 10)
+        public async Task<IActionResult> GetAllDomains([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
             try
             {
@@ -45,7 +45,7 @@ namespace Course.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetDomainById(Guid id)
+        public async Task<IActionResult> GetDomainById([FromRoute] Guid id)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace Course.Api.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> CreateDomain(DomainCreateRequest request)
+        public async Task<IActionResult> CreateDomain([FromForm] DomainCreateRequest request)
         {
             try
             {
@@ -86,7 +86,7 @@ namespace Course.Api.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateDomain(Guid id, DomainUpdateRequest request)
+        public async Task<IActionResult> UpdateDomain(Guid id, [FromForm] DomainUpdateRequest request)
         {
             try
             {
@@ -106,7 +106,7 @@ namespace Course.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteDomain(Guid id)
+        public async Task<IActionResult> DeleteDomain([FromRoute] Guid id)
         {
             try
             {

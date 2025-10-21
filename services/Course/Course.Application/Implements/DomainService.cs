@@ -1,6 +1,6 @@
 using Course.Application.Interfaces;
 using Course.Application.DTOs.DomainDTOs;
-using Course.Infrastructure.Interfaces;
+using Course.Domain.Abstraction;
 using Microsoft.Extensions.Logging;
 using Contracts.Common;
 using Course.Domain.Exceptions;
@@ -42,6 +42,7 @@ namespace Course.Application.Implements
             {
                 Name = request.Name,
                 Description = request.Description,
+                Status = StaticEnum.StatusEnum.Active.ToString(),
             };
             await _unitOfWork.GetRepository<Domain.Entities.Domain>().InsertAsync(domain);
             await _unitOfWork.SaveChangesAsync();
@@ -83,7 +84,7 @@ namespace Course.Application.Implements
                 Id = domain.Id,
                 Name = domain.Name,
                 Description = domain.Description,
-                Status = domain.Status,
+                Status = domain.Status == "active" ? StaticEnum.StatusEnum.Active : StaticEnum.StatusEnum.Inactive,
                 CreatedAt = domain.CreatedAt,
             };
             return await Task.FromResult(response);

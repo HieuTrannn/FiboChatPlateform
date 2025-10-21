@@ -1,3 +1,5 @@
+using Contracts.Common;
+
 namespace Course.Application.DTOs.DomainDTOs
 {
     public class DomainResponse
@@ -5,7 +7,7 @@ namespace Course.Application.DTOs.DomainDTOs
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public string Status { get; set; }
+        public StaticEnum.StatusEnum Status { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 }

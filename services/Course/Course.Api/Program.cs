@@ -1,18 +1,12 @@
-﻿using Course.Infrastructure.DependencyInjection;
+﻿using System.Reflection;
+using Course.Infrastructure.DependencyInjection;
 using Course.Infrastructure.Persistence;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// ====== 1) Connection string (appsettings.json hoặc ENV) ======
-var cs = builder.Configuration.GetConnectionString("DBConnection")
-    ?? Environment.GetEnvironmentVariable("CONNECTION_STRING");
-
-// ====== 2) Infrastructure & DI ======
-builder.Services.AddDbContext<CourseDbContext>(opt => opt.UseNpgsql(cs));
 
 // Add services to the container.
 Log.Logger = new LoggerConfiguration()
@@ -27,21 +21,54 @@ builder.Host.UseSerilog();
 builder.Services.AddInfrastructureService(builder.Configuration);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Authentication API",
+        Version = "v1",
+        Description = "API for Authentication Service"
+    });
+    
+    // Add JWT Bearer authentication to Swagger
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+    
+    // Include XML comments
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    if (File.Exists(xmlPath))
+    {
+        c.IncludeXmlComments(xmlPath);
+    }
+});
 
 var firebaseConfig = builder.Configuration.GetSection("Firebase");
 
-// Replace lines 34-37 with:
-var firebaseProjectId = builder.Configuration["Firebase:ProjectId"];
-var firebasePrivateKey = builder.Configuration["Firebase:PrivateKey"];
-var firebaseClientEmail = builder.Configuration["Firebase:ClientEmail"];
-
 FirebaseApp.Create(new AppOptions
 {
-    Credential = GoogleCredential.FromServiceAccountCredential(new ServiceAccountCredential(new ServiceAccountCredential.Initializer(firebaseClientEmail)
-    {
-        ProjectId = firebaseProjectId
-    }.FromPrivateKey(firebasePrivateKey)))
+    Credential = GoogleCredential.FromFile(firebaseConfig["PrivateKey"])
 });
 
 var app = builder.Build();
@@ -55,7 +82,11 @@ using (var scope = app.Services.CreateScope())
 // ====== 5) Middlewares ======
 app.UseInfrastructurePolicy();
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Course API v1");
+    c.RoutePrefix = string.Empty;
+});
 app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 app.UseCors("AllowAll");

@@ -1,9 +1,9 @@
-using Authentication.Domain.Exceptions;
+using Course.Domain.Exceptions;
 using Contracts.Common;
 using Course.Application.DTOs.KeywordDTOs;
 using Course.Application.Interfaces;
 using Course.Domain.Entities;
-using Course.Infrastructure.Interfaces;
+using Course.Domain.Abstraction;
 using Microsoft.Extensions.Logging;
 
 namespace Course.Application.Implements

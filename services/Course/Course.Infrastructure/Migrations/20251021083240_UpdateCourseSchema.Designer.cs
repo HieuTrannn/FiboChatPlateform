@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Course.Infrastructure.Migrations
 {
     [DbContext(typeof(CourseDbContext))]
-    [Migration("20251016123345_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20251021083240_UpdateCourseSchema")]
+    partial class UpdateCourseSchema
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,131 +25,6 @@ namespace Course.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("Authentication.Domain.Entities.Class", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("LecturerId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("SemesterId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SemesterId");
-
-                    b.ToTable("Class", "public");
-                });
-
-            modelBuilder.Entity("Authentication.Domain.Entities.ClassEnrollment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ClassId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("GroupId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("RoleInClass")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClassId");
-
-                    b.HasIndex("GroupId");
-
-                    b.ToTable("ClassEnrollment", "public");
-                });
-
-            modelBuilder.Entity("Authentication.Domain.Entities.Group", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ClassId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClassId");
-
-                    b.ToTable("Group", "public");
-                });
-
-            modelBuilder.Entity("Authentication.Domain.Entities.Semester", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime?>("EndDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime?>("StartDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Term")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Year")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Semester", "public");
-                });
 
             modelBuilder.Entity("Course.Domain.Entities.Document", b =>
                 {
@@ -166,9 +41,8 @@ namespace Course.Infrastructure.Migrations
                     b.Property<Guid>("FileId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -345,13 +219,15 @@ namespace Course.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -396,6 +272,9 @@ namespace Course.Infrastructure.Migrations
                     b.Property<Guid>("DomainId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("LecturerId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -403,15 +282,12 @@ namespace Course.Infrastructure.Migrations
                     b.Property<Guid>("SemesterId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DomainId");
-
-                    b.HasIndex("SemesterId");
 
                     b.ToTable("MasterTopics", "public");
                 });
@@ -453,9 +329,6 @@ namespace Course.Infrastructure.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("DocumentTypeId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid?>("MasterTopicId")
                         .HasColumnType("uuid");
 
@@ -463,58 +336,14 @@ namespace Course.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DocumentTypeId");
 
                     b.HasIndex("MasterTopicId");
 
                     b.ToTable("Topics", "public");
-                });
-
-            modelBuilder.Entity("Authentication.Domain.Entities.Class", b =>
-                {
-                    b.HasOne("Authentication.Domain.Entities.Semester", "Semester")
-                        .WithMany("Classes")
-                        .HasForeignKey("SemesterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Semester");
-                });
-
-            modelBuilder.Entity("Authentication.Domain.Entities.ClassEnrollment", b =>
-                {
-                    b.HasOne("Authentication.Domain.Entities.Class", "Class")
-                        .WithMany("Enrollments")
-                        .HasForeignKey("ClassId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Authentication.Domain.Entities.Group", "Group")
-                        .WithMany("Enrollments")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Class");
-
-                    b.Navigation("Group");
-                });
-
-            modelBuilder.Entity("Authentication.Domain.Entities.Group", b =>
-                {
-                    b.HasOne("Authentication.Domain.Entities.Class", "Class")
-                        .WithMany("Groups")
-                        .HasForeignKey("ClassId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Class");
                 });
 
             modelBuilder.Entity("Course.Domain.Entities.Document", b =>
@@ -573,15 +402,7 @@ namespace Course.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Authentication.Domain.Entities.Semester", "Semester")
-                        .WithMany()
-                        .HasForeignKey("SemesterId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("Domain");
-
-                    b.Navigation("Semester");
                 });
 
             modelBuilder.Entity("Course.Domain.Entities.MasterTopicKeyword", b =>
@@ -605,35 +426,10 @@ namespace Course.Infrastructure.Migrations
 
             modelBuilder.Entity("Course.Domain.Entities.Topic", b =>
                 {
-                    b.HasOne("Course.Domain.Entities.DocumentType", "DocumentType")
-                        .WithMany()
-                        .HasForeignKey("DocumentTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Course.Domain.Entities.MasterTopic", null)
                         .WithMany("Topics")
                         .HasForeignKey("MasterTopicId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("DocumentType");
-                });
-
-            modelBuilder.Entity("Authentication.Domain.Entities.Class", b =>
-                {
-                    b.Navigation("Enrollments");
-
-                    b.Navigation("Groups");
-                });
-
-            modelBuilder.Entity("Authentication.Domain.Entities.Group", b =>
-                {
-                    b.Navigation("Enrollments");
-                });
-
-            modelBuilder.Entity("Authentication.Domain.Entities.Semester", b =>
-                {
-                    b.Navigation("Classes");
                 });
 
             modelBuilder.Entity("Course.Domain.Entities.Document", b =>
