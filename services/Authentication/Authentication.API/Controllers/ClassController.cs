@@ -81,12 +81,6 @@ namespace Authentication.API.Controllers
             }
         }
 
-        /// <summary>
-        /// Update a class
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="request"></param>
-        /// <returns></returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateClass(Guid id, ClassUpdateRequest request)
         {
