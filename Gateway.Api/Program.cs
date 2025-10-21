@@ -15,7 +15,7 @@ builder.Services.AddSwaggerGen(c =>
 var app = builder.Build();
 
 // bật swagger
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
 {
     app.UseSwagger();
     app.UseSwaggerUI(c =>
@@ -25,6 +25,7 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/kb/swagger/v1/swagger.json", "Knowledge Base API");
     });
 }
+
 
 // health check
 app.MapGet("/healthz", () => Results.Ok(new { ok = true }));
