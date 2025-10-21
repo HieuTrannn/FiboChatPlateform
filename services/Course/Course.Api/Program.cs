@@ -2,17 +2,9 @@
 using Course.Infrastructure.Persistence;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
-using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// ====== 1) Connection string (appsettings.json hoặc ENV) ======
-var cs = builder.Configuration.GetConnectionString("DBConnection")
-    ?? Environment.GetEnvironmentVariable("CONNECTION_STRING");
-
-// ====== 2) Infrastructure & DI ======
-builder.Services.AddDbContext<CourseDbContext>(opt => opt.UseNpgsql(cs));
 
 // Add services to the container.
 Log.Logger = new LoggerConfiguration()

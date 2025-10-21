@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Course.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class UpdateCourseSchema : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -77,54 +77,12 @@ namespace Course.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    Status = table.Column<string>(type: "text", nullable: false)
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Keywords", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Semester",
-                schema: "public",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Code = table.Column<string>(type: "text", nullable: false),
-                    Term = table.Column<int>(type: "integer", nullable: false),
-                    Year = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<int>(type: "integer", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Semester", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Class",
-                schema: "public",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    SemesterId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Code = table.Column<string>(type: "text", nullable: false),
-                    Status = table.Column<int>(type: "integer", nullable: false),
-                    LecturerId = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Class", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Class_Semester_SemesterId",
-                        column: x => x.SemesterId,
-                        principalSchema: "public",
-                        principalTable: "Semester",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -135,9 +93,10 @@ namespace Course.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     DomainId = table.Column<Guid>(type: "uuid", nullable: false),
                     SemesterId = table.Column<Guid>(type: "uuid", nullable: false),
+                    LecturerId = table.Column<Guid>(type: "uuid", nullable: true),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
-                    Status = table.Column<string>(type: "text", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
@@ -150,36 +109,6 @@ namespace Course.Infrastructure.Migrations
                         principalTable: "Domains",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_MasterTopics_Semester_SemesterId",
-                        column: x => x.SemesterId,
-                        principalSchema: "public",
-                        principalTable: "Semester",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Group",
-                schema: "public",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ClassId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Group", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Group_Class_ClassId",
-                        column: x => x.ClassId,
-                        principalSchema: "public",
-                        principalTable: "Class",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -241,58 +170,18 @@ namespace Course.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
-                    Status = table.Column<string>(type: "text", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    DocumentTypeId = table.Column<Guid>(type: "uuid", nullable: false),
                     MasterTopicId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Topics", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Topics_DocumentTypes_DocumentTypeId",
-                        column: x => x.DocumentTypeId,
-                        principalSchema: "public",
-                        principalTable: "DocumentTypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Topics_MasterTopics_MasterTopicId",
                         column: x => x.MasterTopicId,
                         principalSchema: "public",
                         principalTable: "MasterTopics",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ClassEnrollment",
-                schema: "public",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ClassId = table.Column<Guid>(type: "uuid", nullable: false),
-                    GroupId = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Status = table.Column<int>(type: "integer", nullable: false),
-                    RoleInClass = table.Column<string>(type: "text", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ClassEnrollment", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ClassEnrollment_Class_ClassId",
-                        column: x => x.ClassId,
-                        principalSchema: "public",
-                        principalTable: "Class",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ClassEnrollment_Group_GroupId",
-                        column: x => x.GroupId,
-                        principalSchema: "public",
-                        principalTable: "Group",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -308,7 +197,7 @@ namespace Course.Infrastructure.Migrations
                     FileId = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: false),
                     version = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "text", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
                     VerifiedById = table.Column<Guid>(type: "uuid", nullable: false),
                     UpdatedById = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -366,24 +255,6 @@ namespace Course.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Class_SemesterId",
-                schema: "public",
-                table: "Class",
-                column: "SemesterId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ClassEnrollment_ClassId",
-                schema: "public",
-                table: "ClassEnrollment",
-                column: "ClassId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ClassEnrollment_GroupId",
-                schema: "public",
-                table: "ClassEnrollment",
-                column: "GroupId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Documents_DocumentTypeId",
                 schema: "public",
                 table: "Documents",
@@ -406,12 +277,6 @@ namespace Course.Infrastructure.Migrations
                 schema: "public",
                 table: "Embeddings",
                 column: "DocumentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Group_ClassId",
-                schema: "public",
-                table: "Group",
-                column: "ClassId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LecturerMasterTopics_MasterTopicId",
@@ -439,18 +304,6 @@ namespace Course.Infrastructure.Migrations
                 column: "DomainId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MasterTopics_SemesterId",
-                schema: "public",
-                table: "MasterTopics",
-                column: "SemesterId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Topics_DocumentTypeId",
-                schema: "public",
-                table: "Topics",
-                column: "DocumentTypeId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Topics_MasterTopicId",
                 schema: "public",
                 table: "Topics",
@@ -460,10 +313,6 @@ namespace Course.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "ClassEnrollment",
-                schema: "public");
-
             migrationBuilder.DropTable(
                 name: "Embeddings",
                 schema: "public");
@@ -477,10 +326,6 @@ namespace Course.Infrastructure.Migrations
                 schema: "public");
 
             migrationBuilder.DropTable(
-                name: "Group",
-                schema: "public");
-
-            migrationBuilder.DropTable(
                 name: "Documents",
                 schema: "public");
 
@@ -489,7 +334,7 @@ namespace Course.Infrastructure.Migrations
                 schema: "public");
 
             migrationBuilder.DropTable(
-                name: "Class",
+                name: "DocumentTypes",
                 schema: "public");
 
             migrationBuilder.DropTable(
@@ -501,19 +346,11 @@ namespace Course.Infrastructure.Migrations
                 schema: "public");
 
             migrationBuilder.DropTable(
-                name: "DocumentTypes",
-                schema: "public");
-
-            migrationBuilder.DropTable(
                 name: "MasterTopics",
                 schema: "public");
 
             migrationBuilder.DropTable(
                 name: "Domains",
-                schema: "public");
-
-            migrationBuilder.DropTable(
-                name: "Semester",
                 schema: "public");
         }
     }

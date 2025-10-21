@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Course.Domain\Course.Domain.csproj" />
-    <ProjectReference Include="..\Course.Infrastructure\Course.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,7 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Cloud.Storage.V1" Version="4.13.0" />
-  </ItemGroup>
+  <PackageReference Include="Google.Cloud.Storage.V1" Version="4.13.0" />
+  <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.0" />
+  <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
+</ItemGroup>
 
 </Project>

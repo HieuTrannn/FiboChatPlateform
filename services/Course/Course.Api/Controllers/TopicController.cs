@@ -26,7 +26,7 @@ namespace Course.Api.Controllers
         /// <param name="pageSize"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> GetAllTopics(int page = 1, int pageSize = 10)
+        public async Task<IActionResult> GetAllTopics([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
             try
             {
@@ -46,7 +46,7 @@ namespace Course.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetTopicById(Guid id)
+        public async Task<IActionResult> GetTopicById([FromRoute] Guid id)
         {
             try
             {
@@ -66,7 +66,7 @@ namespace Course.Api.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> CreateTopic(TopicCreateRequest request)
+        public async Task<IActionResult> CreateTopic([FromForm] TopicCreateRequest request)
         {
             try
             {
@@ -87,7 +87,7 @@ namespace Course.Api.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTopic(Guid id, TopicUpdateRequest request)
+        public async Task<IActionResult> UpdateTopic(Guid id, [FromForm] TopicUpdateRequest request)
         {
             try
             {
@@ -107,7 +107,7 @@ namespace Course.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTopic(Guid id)
+        public async Task<IActionResult> DeleteTopic([FromRoute] Guid id)
         {
             try
             {

@@ -1,13 +1,14 @@
 using Microsoft.Extensions.Logging;
-using Course.Infrastructure.Interfaces;
+using Course.Domain.Abstraction;
 using Course.Application.DTOs.MasterTopicDTOs;
 using Course.Domain.Exceptions;
 using Course.Domain.Entities;
 using Contracts.Common;
+using Course.Application.Interfaces;
 
 namespace Course.Application.Implements
 {
-    public class MasterTopicService
+    public class MasterTopicService : IMasterTopicService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<MasterTopicService> _logger;

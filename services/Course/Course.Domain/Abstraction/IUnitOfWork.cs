@@ -1,4 +1,4 @@
-namespace Course.Infrastructure.Interfaces
+namespace Course.Domain.Abstraction
 {
     public interface IUnitOfWork : IDisposable
     {

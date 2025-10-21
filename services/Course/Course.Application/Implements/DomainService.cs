@@ -1,6 +1,6 @@
 using Course.Application.Interfaces;
 using Course.Application.DTOs.DomainDTOs;
-using Course.Infrastructure.Interfaces;
+using Course.Domain.Abstraction;
 using Microsoft.Extensions.Logging;
 using Contracts.Common;
 using Course.Domain.Exceptions;

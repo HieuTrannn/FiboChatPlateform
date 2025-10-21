@@ -60,3 +60,201 @@
 2025-10-21 15:17:28.37 +07:00  [INF] 
 2025-10-21 15:17:32.29 +07:00  [INF] 
 2025-10-21 15:17:32.49 +07:00  [INF] 
+2025-10-21 15:28:10.61 +07:00  [INF] 
+2025-10-21 15:28:10.72 +07:00  [INF] 
+2025-10-21 15:28:10.72 +07:00  [INF] 
+2025-10-21 15:28:10.72 +07:00  [INF] 
+2025-10-21 15:28:10.72 +07:00  [INF] 
+2025-10-21 15:28:15.02 +07:00  [INF] 
+2025-10-21 15:28:15.32 +07:00  [INF] 
+2025-10-21 15:28:17.30 +07:00  [INF] 
+2025-10-21 15:28:17.51 +07:00  [INF] 
+2025-10-21 15:28:57.97 +07:00  [INF] 
+2025-10-21 15:28:57.99 +07:00  [WRN] 
+2025-10-21 15:28:58.01 +07:00  [INF] 
+2025-10-21 15:28:58.02 +07:00  [INF] 
+2025-10-21 15:28:58.06 +07:00  [INF] 
+2025-10-21 15:28:58.08 +07:00  [INF] 
+2025-10-21 15:28:58.08 +07:00  [INF] 
+2025-10-21 15:28:58.09 +07:00  [ERR] 
+System.InvalidOperationException: Unable to resolve service for type 'Course.Application.Interfaces.IDomainService' while attempting to activate 'Course.Api.Controllers.DomainController'.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.ThrowHelperUnableToResolveService(Type type, Type requiredBy)
+   at lambda_method20(Closure, IServiceProvider, Object[])
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+2025-10-21 15:28:58.12 +07:00  [ERR] 
+System.InvalidOperationException: Unable to resolve service for type 'Course.Application.Interfaces.IDomainService' while attempting to activate 'Course.Api.Controllers.DomainController'.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.ThrowHelperUnableToResolveService(Type type, Type requiredBy)
+   at lambda_method20(Closure, IServiceProvider, Object[])
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Project.SharedLibrary.MiddleWare.GlobalExceptionMiddleware.InvokeAsync(HttpContext context) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\cores\SharedLibrary\Middleware\GlobalExceptionMiddleware.cs:line 34
+2025-10-21 15:28:58.16 +07:00  [INF] 
+2025-10-21 15:30:08.70 +07:00  [INF] 
+2025-10-21 15:30:16.98 +07:00  [INF] 
+2025-10-21 15:30:17.10 +07:00  [INF] 
+2025-10-21 15:30:17.10 +07:00  [INF] 
+2025-10-21 15:30:17.11 +07:00  [INF] 
+2025-10-21 15:30:17.11 +07:00  [INF] 
+2025-10-21 15:30:20.13 +07:00  [INF] 
+2025-10-21 15:30:20.28 +07:00  [WRN] 
+2025-10-21 15:30:20.28 +07:00  [INF] 
+2025-10-21 15:30:20.29 +07:00  [INF] 
+2025-10-21 15:30:20.35 +07:00  [INF] 
+2025-10-21 15:30:20.36 +07:00  [INF] 
+2025-10-21 15:30:20.38 +07:00  [INF] 
+2025-10-21 15:30:20.39 +07:00  [ERR] 
+System.InvalidOperationException: Unable to resolve service for type 'Course.Application.Interfaces.IDomainService' while attempting to activate 'Course.Api.Controllers.DomainController'.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.ThrowHelperUnableToResolveService(Type type, Type requiredBy)
+   at lambda_method20(Closure, IServiceProvider, Object[])
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+2025-10-21 15:30:20.41 +07:00  [ERR] 
+System.InvalidOperationException: Unable to resolve service for type 'Course.Application.Interfaces.IDomainService' while attempting to activate 'Course.Api.Controllers.DomainController'.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.ThrowHelperUnableToResolveService(Type type, Type requiredBy)
+   at lambda_method20(Closure, IServiceProvider, Object[])
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Project.SharedLibrary.MiddleWare.GlobalExceptionMiddleware.InvokeAsync(HttpContext context) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\cores\SharedLibrary\Middleware\GlobalExceptionMiddleware.cs:line 34
+2025-10-21 15:30:20.46 +07:00  [INF] 
+2025-10-21 15:32:26.20 +07:00  [INF] 
+2025-10-21 15:33:21.38 +07:00  [INF] 
+2025-10-21 15:33:21.48 +07:00  [INF] 
+2025-10-21 15:33:21.49 +07:00  [INF] 
+2025-10-21 15:33:21.49 +07:00  [INF] 
+2025-10-21 15:33:21.49 +07:00  [INF] 
+2025-10-21 15:33:23.91 +07:00  [INF] 
+2025-10-21 15:33:24.04 +07:00  [WRN] 
+2025-10-21 15:33:24.05 +07:00  [INF] 
+2025-10-21 15:33:24.06 +07:00  [INF] 
+2025-10-21 15:33:24.12 +07:00  [INF] 
+2025-10-21 15:33:24.13 +07:00  [INF] 
+2025-10-21 15:33:24.16 +07:00  [INF] 
+2025-10-21 15:33:24.17 +07:00  [ERR] 
+System.InvalidOperationException: Unable to resolve service for type 'Course.Application.Interfaces.IDomainService' while attempting to activate 'Course.Api.Controllers.DomainController'.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.ThrowHelperUnableToResolveService(Type type, Type requiredBy)
+   at lambda_method20(Closure, IServiceProvider, Object[])
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+2025-10-21 15:33:24.19 +07:00  [ERR] 
+System.InvalidOperationException: Unable to resolve service for type 'Course.Application.Interfaces.IDomainService' while attempting to activate 'Course.Api.Controllers.DomainController'.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.ThrowHelperUnableToResolveService(Type type, Type requiredBy)
+   at lambda_method20(Closure, IServiceProvider, Object[])
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Project.SharedLibrary.MiddleWare.GlobalExceptionMiddleware.InvokeAsync(HttpContext context) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\cores\SharedLibrary\Middleware\GlobalExceptionMiddleware.cs:line 34
+2025-10-21 15:33:24.25 +07:00  [INF] 
+2025-10-21 15:35:01.94 +07:00  [INF] 
+2025-10-21 15:55:09.29 +07:00  [INF] 
+2025-10-21 15:55:09.39 +07:00  [INF] 
+2025-10-21 15:55:09.39 +07:00  [INF] 
+2025-10-21 15:55:09.39 +07:00  [INF] 
+2025-10-21 15:55:09.39 +07:00  [INF] 
+2025-10-21 15:55:11.00 +07:00  [INF] 
+2025-10-21 15:55:12.47 +07:00  [WRN] 
+2025-10-21 15:55:12.48 +07:00  [INF] 
+2025-10-21 15:55:12.53 +07:00  [INF] 
+2025-10-21 15:55:12.54 +07:00  [INF] 
+2025-10-21 15:55:16.06 +07:00  [INF] 
+2025-10-21 15:55:16.29 +07:00  [INF] 
+2025-10-21 15:55:30.32 +07:00  [INF] 
+2025-10-21 15:55:30.33 +07:00  [INF] 
+2025-10-21 15:55:30.33 +07:00  [INF] 
+2025-10-21 15:55:30.36 +07:00  [INF] 
+2025-10-21 15:55:31.56 +07:00  [INF] 
+2025-10-21 15:55:31.59 +07:00  [INF] 
+2025-10-21 15:55:31.61 +07:00  [INF] 
+2025-10-21 15:55:31.62 +07:00  [INF] 
+2025-10-21 15:55:31.62 +07:00  [INF] 
+2025-10-21 15:55:31.63 +07:00  [INF] 
+2025-10-21 15:55:55.74 +07:00  [INF] 
+2025-10-21 15:55:55.75 +07:00  [INF] 
+2025-10-21 15:55:55.75 +07:00  [INF] 
+2025-10-21 15:55:56.14 +07:00  [INF] 
+2025-10-21 15:55:56.17 +07:00  [INF] 
+2025-10-21 15:55:56.18 +07:00  [INF] 
+2025-10-21 15:55:56.18 +07:00  [INF] 
+2025-10-21 15:55:56.18 +07:00  [INF] 
+2025-10-21 15:55:56.18 +07:00  [INF] 
+2025-10-21 15:56:05.03 +07:00  [INF] 
+2025-10-21 15:56:05.03 +07:00  [INF] 
+2025-10-21 15:56:05.05 +07:00  [INF] 
+2025-10-21 15:56:05.13 +07:00  [INF] 
+2025-10-21 15:56:05.13 +07:00  [INF] 
+2025-10-21 15:56:05.14 +07:00  [INF] 
+2025-10-21 15:56:05.15 +07:00  [INF] 
+2025-10-21 15:56:05.15 +07:00  [INF] 
+2025-10-21 15:56:05.15 +07:00  [INF] 
+2025-10-21 15:58:59.31 +07:00  [INF] 
+2025-10-21 15:59:05.33 +07:00  [INF] 
+2025-10-21 15:59:05.42 +07:00  [INF] 
+2025-10-21 15:59:05.43 +07:00  [INF] 
+2025-10-21 15:59:05.43 +07:00  [INF] 
+2025-10-21 15:59:05.43 +07:00  [INF] 
+2025-10-21 15:59:06.93 +07:00  [INF] 
+2025-10-21 15:59:07.07 +07:00  [WRN] 
+2025-10-21 15:59:07.07 +07:00  [INF] 
+2025-10-21 15:59:07.14 +07:00  [INF] 
+2025-10-21 15:59:07.16 +07:00  [INF] 
+2025-10-21 15:59:10.95 +07:00  [INF] 
+2025-10-21 15:59:11.04 +07:00  [INF] 
+2025-10-21 15:59:12.35 +07:00  [INF] 
+2025-10-21 15:59:12.58 +07:00  [INF] 
+2025-10-21 15:59:23.44 +07:00  [INF] 
+2025-10-21 15:59:23.45 +07:00  [INF] 
+2025-10-21 15:59:23.47 +07:00  [INF] 
+2025-10-21 15:59:24.60 +07:00  [INF] 
+2025-10-21 15:59:24.73 +07:00  [INF] 
+2025-10-21 15:59:24.76 +07:00  [INF] 
+2025-10-21 15:59:24.77 +07:00  [INF] 
+2025-10-21 15:59:24.77 +07:00  [INF] 
+2025-10-21 15:59:24.78 +07:00  [INF] 
+2025-10-21 15:59:40.39 +07:00  [INF] 

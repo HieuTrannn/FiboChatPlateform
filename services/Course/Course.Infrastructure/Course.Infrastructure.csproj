@@ -25,6 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Course.Domain\Course.Domain.csproj" />
     <ProjectReference Include="..\..\..\cores\SharedLibrary\SharedLibrary.csproj" />
+    <ProjectReference Include="..\Course.Application\Course.Application.csproj" />
   </ItemGroup>
 
 </Project>

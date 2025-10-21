@@ -1,4 +1,4 @@
-using Course.Infrastructure.Interfaces;
+using Course.Domain.Abstraction;
 using Course.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore.Storage;
 

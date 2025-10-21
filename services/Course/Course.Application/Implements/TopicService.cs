@@ -2,12 +2,13 @@ using Course.Domain.Exceptions;
 using Contracts.Common;
 using Course.Application.DTOs.TopicDTOs;
 using Course.Domain.Entities;
-using Course.Infrastructure.Interfaces;
+using Course.Domain.Abstraction;
+using Course.Application.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace Course.Application.Implements
 {
-    public class TopicService
+    public class TopicService : ITopicService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<TopicService> _logger;

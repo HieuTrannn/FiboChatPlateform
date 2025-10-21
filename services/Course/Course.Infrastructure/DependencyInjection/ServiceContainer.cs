@@ -5,8 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SharedLibrary.DependencyInjection;
-using Course.Infrastructure.Interfaces;
+using Course.Domain.Abstraction;
 using Course.Infrastructure.Implements;
+using Course.Application.Interfaces;
+using Course.Application.Implements;
 
 namespace Course.Infrastructure.DependencyInjection
 {
@@ -19,6 +21,10 @@ namespace Course.Infrastructure.DependencyInjection
 
             services.AddHttpContextAccessor();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IDomainService, DomainService>();
+            services.AddScoped<IKeywordService, KeywordService>();
+            services.AddScoped<IMasterTopicService, MasterTopicService>();
+            services.AddScoped<ITopicService, TopicService>();
 
             services.Configure<ApiBehaviorOptions>(options =>
             {
