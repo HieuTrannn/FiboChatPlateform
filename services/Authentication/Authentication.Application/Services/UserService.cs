@@ -3,7 +3,6 @@ using Authentication.Application.Interfaces;
 using Authentication.Domain.Abstraction;
 using Authentication.Domain.Entities;
 using Contracts.Common;
-using FirebaseAdmin.Auth;
 using Mapster;
 using MapsterMapper;
 using Microsoft.AspNetCore.Authentication;
