@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using static Authentication.Application.DTOs.AuthenDTO;
+using static Authentication.Application.DTOs.UserDTO;
 
 namespace Authentication.API.Controllers
 {
@@ -41,7 +42,7 @@ namespace Authentication.API.Controllers
         }
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] AuthRequest request)
+        public async Task<IActionResult> Login([FromForm] AuthRequest request)
         {
             try
             {
@@ -57,7 +58,7 @@ namespace Authentication.API.Controllers
 
         [AllowAnonymous]
         [HttpPost("login-gg")]
-        public async Task<IActionResult> LoginWithGoogleAsync([FromBody] string idToken)
+        public async Task<IActionResult> LoginWithGoogleAsync([FromForm] string idToken)
         {
             try
             {
@@ -133,7 +134,25 @@ namespace Authentication.API.Controllers
                 return StatusCode(500, ApiResponse<string>.InternalError("Error in reset password: " + ex.Message));
             }
         }
-         
+
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> GetUserById([FromForm] string userId)
+        {
+            try
+            {
+                var user = await _userService.GetUserById(userId);
+                if (user == null)
+                {
+                    return NotFound(ApiResponse<UserInfo>.NotFound("User not found"));
+                }
+                return Ok(ApiResponse<UserInfo>.Ok(user, "Get user by id successfully", "200"));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(UserController), ex.Message);
+                return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(UserController)}: {ex.Message}"));
+            }
+        }
     }
 }
 
