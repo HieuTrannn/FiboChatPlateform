@@ -12,15 +12,23 @@ namespace Course.Application.Implements
         private readonly ILogger<FirebaseService> _logger;
         private const string BucketName = "fibochatplatform.firebasestorage.app";
 
+        // Replace the constructor (lines 15-26) with:
         public FirebaseService(IConfiguration configuration, ILogger<FirebaseService> logger)
         {
-            var privateKey = configuration["Firebase:PrivateKeyPath"];
-            if (string.IsNullOrWhiteSpace(privateKey) || !File.Exists(privateKey))
+            var projectId = configuration["Firebase:ProjectId"];
+            var privateKey = configuration["Firebase:PrivateKey"];
+            var clientEmail = configuration["Firebase:ClientEmail"];
+
+            if (string.IsNullOrWhiteSpace(projectId) || string.IsNullOrWhiteSpace(privateKey) || string.IsNullOrWhiteSpace(clientEmail))
             {
-                throw new FileNotFoundException("Firebase service account key file not found.", privateKey);
+                throw new InvalidOperationException("Firebase configuration is missing. Please set Firebase:ProjectId, Firebase:PrivateKey, and Firebase:ClientEmail in your configuration.");
             }
 
-            var credential = GoogleCredential.FromFile(privateKey);
+            var credential = GoogleCredential.FromServiceAccountCredential(new ServiceAccountCredential(new ServiceAccountCredential.Initializer(clientEmail)
+            {
+                ProjectId = projectId
+            }.FromPrivateKey(privateKey)));
+
             _storageClient = StorageClient.Create(credential);
             _logger = logger;
         }

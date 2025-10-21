@@ -31,9 +31,17 @@ builder.Services.AddSwaggerGen();
 
 var firebaseConfig = builder.Configuration.GetSection("Firebase");
 
+// Replace lines 34-37 with:
+var firebaseProjectId = builder.Configuration["Firebase:ProjectId"];
+var firebasePrivateKey = builder.Configuration["Firebase:PrivateKey"];
+var firebaseClientEmail = builder.Configuration["Firebase:ClientEmail"];
+
 FirebaseApp.Create(new AppOptions
 {
-    Credential = GoogleCredential.FromFile(firebaseConfig["PrivateKeyPath"])
+    Credential = GoogleCredential.FromServiceAccountCredential(new ServiceAccountCredential(new ServiceAccountCredential.Initializer(firebaseClientEmail)
+    {
+        ProjectId = firebaseProjectId,
+    }.FromPrivateKey(firebasePrivateKey)))
 });
 
 var app = builder.Build();
