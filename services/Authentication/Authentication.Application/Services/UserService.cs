@@ -169,7 +169,6 @@ namespace Authentication.Application.Services
                     {
                         Token = (string)GenerateJwtToken(account),
                         Message = "You must change your password before continuing.",
-                        RequirePasswordChange = true
                     };
                 }
 
@@ -262,14 +261,17 @@ namespace Authentication.Application.Services
             };
         }
 
-        public async Task<RegisterResponse> ResetPasswordAsync(string token, string newPassword)
+        public async Task<RegisterResponse> ResetPasswordAsync(ResetPasswordRequest request)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(_configuration["Authentication:Key"]);
 
             try
             {
-                var principal = tokenHandler.ValidateToken(token, new TokenValidationParameters
+                if (request.NewPassword != request.ConfirmPassword)
+                    return new RegisterResponse { Success = false, Message = "Password and Confirm Password do not match" };
+
+                var principal = tokenHandler.ValidateToken(request.Token, new TokenValidationParameters
                 {
                     ValidateIssuer = false,
                     ValidateAudience = false,
@@ -290,7 +292,7 @@ namespace Authentication.Application.Services
                 if (user == null)
                     return new RegisterResponse { Success = false, Message = "User not found" };
 
-                user.Password = _rsaService.Encrypt(newPassword);
+                user.Password = _rsaService.Encrypt(request.NewPassword);
                 user.UpdatedAt = DateTime.UtcNow;
                 await userRepository.UpdateAsync(user);
                 await _unitOfWork.SaveChangeAsync();
@@ -330,6 +332,41 @@ namespace Authentication.Application.Services
             finally
             {
                 _unitOfWork.Dispose();
+            }
+        }
+
+        public async Task<AuthResponse> ChangePasswordFirstTimeAsync(ChangePasswordFirstTimeRequest request)
+        {
+            try
+            {
+                var userEmail = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Email)?.Value;
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    _logger.LogWarning("User email not found in context");
+                    throw new UnauthorizedAccessException("User not authenticated");
+                }
+                var userRepo = _unitOfWork.GetRepository<Account>();
+                var user = await userRepo.FindByConditionAsync(u => u.Email == userEmail);
+                if (user == null)
+                {
+                    _logger.LogWarning("User not found with email: {Email}", userEmail);
+                    throw new KeyNotFoundException("User not found");
+                }
+                user.Password = _rsaService.Encrypt(request.NewPassword);
+                user.IsVerified = true;
+                await userRepo.UpdateAsync(user);
+                await _unitOfWork.SaveChangeAsync();
+                var token = GenerateJwtToken(user);
+                return new AuthResponse
+                {
+                    Token = (string)token,
+                    Message = "Password changed successfully"
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error changing password for first time");
+                throw;
             }
         }
         private async Task SendPasswordResetEmail(Account account, string token)

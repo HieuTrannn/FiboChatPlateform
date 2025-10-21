@@ -118,11 +118,11 @@ namespace Authentication.API.Controllers
         }
 
         [HttpPost("reset-password")]
-        public async Task<IActionResult> ResetPassword([FromForm] string token, [FromForm] string newPassword)
+        public async Task<IActionResult> ResetPassword([FromForm] ResetPasswordRequest request)
         {
             try
             {
-                var response = await _userService.ResetPasswordAsync(token, newPassword);
+                var response = await _userService.ResetPasswordAsync(request);
                 if (!response.Success)
                 {
                     return BadRequest(ApiResponse<RegisterResponse>.BadRequestResponse(response.Message));
@@ -151,6 +151,31 @@ namespace Authentication.API.Controllers
             {
                 _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(UserController), ex.Message);
                 return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(UserController)}: {ex.Message}"));
+            }
+        }
+
+        [Authorize]
+        [HttpPut("change-password-first-time")]
+        public async Task<IActionResult> ChangePasswordFirstTime([FromForm] ChangePasswordFirstTimeRequest request)
+        {
+            try
+            {
+                var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+                if (string.IsNullOrEmpty(email))
+                {
+                    _logger.LogWarning("No email claim found in JWT token");
+                    return Unauthorized(new RegisterResponse { Success = false, Message = "Invalid token: Email claim missing" });
+                }
+                var response = await _userService.ChangePasswordFirstTimeAsync(request);
+                if (!response.Success)
+                {
+                    return BadRequest(ApiResponse<RegisterResponse>.BadRequest(response.Message));
+                }
+                return Ok(ApiResponse<Account>.OkResponse(response.Message, StatusCode: "Success"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<string>.InternalError("Error at the " + nameof(UserController) + ": " + ex.Message));
             }
         }
     }
