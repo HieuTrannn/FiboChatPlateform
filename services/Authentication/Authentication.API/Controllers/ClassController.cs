@@ -61,11 +61,7 @@ namespace Authentication.API.Controllers
             }
         }
 
-        /// <summary>
-        /// Create a new class 
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
+     
         [HttpPost]
         public async Task<IActionResult> CreateClass([FromForm] ClassCreateRequest request)
         {
@@ -85,12 +81,6 @@ namespace Authentication.API.Controllers
             }
         }
 
-        /// <summary>
-        /// Update a class
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="request"></param>
-        /// <returns></returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateClass(Guid id, [FromForm] ClassUpdateRequest request)
         {
