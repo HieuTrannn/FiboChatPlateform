@@ -41,11 +41,7 @@ namespace Authentication.API.Controllers
             }
         }
 
-        /// <summary>
-        /// Get a class by id (active and pending only)
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+       
         [HttpGet("{id}")]
         public async Task<IActionResult> GetClassById(Guid id)
         {
