@@ -4,19 +4,13 @@ using Authentication.Domain.Abstraction;
 using Authentication.Domain.Entities;
 using Contracts.Common;
 using Mapster;
-using MapsterMapper;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Serilog.Core;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net;
 using System.Security.Claims;
-using System.Security.Principal;
 using System.Text;
 using static Authentication.Application.DTOs.AuthenDTO;
 using static Authentication.Application.DTOs.UserDTO;
@@ -338,6 +332,53 @@ namespace Authentication.Application.Services
             finally
             {
                 _unitOfWork.Dispose();
+            }
+        }
+
+        public async Task<UserInfo> UpdateUserProfileAsync(string userId, UserInfo userInfo)
+        {
+            try
+            {
+                var userRepo = _unitOfWork.GetRepository<Account>();
+                var user = await userRepo.GetByIdAsync(userId);
+                if (user == null)
+                {
+                    _logger.LogWarning("User not found with ID: {UserId}", userId);
+                    throw new KeyNotFoundException("User not found");
+                }
+                user.Firstname = userInfo.Firstname;
+                user.Lastname = userInfo.Lastname;
+                user.PhoneNumber = userInfo.PhoneNumber;
+                user.StudentID = userInfo.StudentID;
+                await userRepo.UpdateAsync(user);
+                await _unitOfWork.SaveChangeAsync();
+                return user.Adapt<UserInfo>();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating user profile");
+                throw;
+            }
+        }
+
+        public async Task<UserInfo> DeleteUserAsync(string userId)
+        {
+            try
+            {
+                var user = await _unitOfWork.GetRepository<Account>().GetByIdAsync(userId);
+                if (user == null)
+                {
+                    _logger.LogWarning("User not found with ID: {UserId}", userId);
+                    throw new KeyNotFoundException("User not found");
+                }
+                await _unitOfWork.GetRepository<Account>().SoftDeleteAsync(user.Id);
+                await _unitOfWork.SaveChangeAsync();
+                return user.Adapt<UserInfo>();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting user");
+                throw;
             }
         }
 
