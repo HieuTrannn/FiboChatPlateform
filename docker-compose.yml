@@ -1,9 +1,9 @@
 ﻿version: "3.9"
 
 services:
-  # ==============================
-  # AUTH DATABASE
-  # ==============================
+  # =============================
+  # POSTGRES DATABASES
+  # =============================
   postgres-auth:
     image: postgres:16
     container_name: fibochat-auth-db
@@ -12,16 +12,13 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123456
       POSTGRES_DB: fibo_chat_auth
+    ports:
+      - "5433:5432"
     volumes:
       - postgres_auth_data:/var/lib/postgresql/data
-    expose:
-      - "5432"
     networks:
       - fibo-net
 
-  # ==============================
-  # COURSE DATABASE
-  # ==============================
   postgres-course:
     image: postgres:16
     container_name: fibochat-course-db
@@ -30,16 +27,16 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123456
       POSTGRES_DB: fibo_chat_course
+    ports:
+      - "5434:5432"
     volumes:
       - postgres_course_data:/var/lib/postgresql/data
-    expose:
-      - "5432"
     networks:
       - fibo-net
 
-  # ==============================
-  # AUTH SERVICE
-  # ==============================
+  # =============================
+  # AUTHENTICATION SERVICE
+  # =============================
   authentication:
     build:
       context: .
@@ -53,14 +50,14 @@ services:
       ConnectionStrings__DbConnection: "Host=postgres-auth;Port=5432;Database=fibo_chat_auth;Username=postgres;Password=123456"
       Authentication__Issuer: "http://fibochat-auth:5001"
       Authentication__Audience: "http://fibochat-auth:5001"
-    expose:
-      - "5001"
+    ports:
+      - "5001:5001"
     networks:
       - fibo-net
 
-  # ==============================
+  # =============================
   # COURSE SERVICE
-  # ==============================
+  # =============================
   course-api:
     build:
       context: .
@@ -74,14 +71,14 @@ services:
       ASPNETCORE_ENVIRONMENT: "Staging"
       ConnectionStrings__CourseDb: "Host=postgres-course;Port=5432;Database=fibo_chat_course;Username=postgres;Password=123456;SearchPath=course"
       Services__AuthBaseUrl: "http://fibochat-auth:5001"
-    expose:
-      - "5002"
+    ports:
+      - "5002:5002"
     networks:
       - fibo-net
 
-  # ==============================
-  # API GATEWAY
-  # ==============================
+  # =============================
+  # GATEWAY SERVICE
+  # =============================
   gateway:
     build:
       context: .
@@ -100,24 +97,24 @@ services:
     networks:
       - fibo-net
 
-  # ==============================
+  # =============================
   # REDIS
-  # ==============================
+  # =============================
   redis:
     image: redis:7.2
     container_name: fibochat-redis
     restart: always
+    ports:
+      - "6379:6379"
     volumes:
       - redis_data:/data
     command: [ "redis-server", "--appendonly", "yes" ]
-    expose:
-      - "6379"
     networks:
       - fibo-net
 
-# ==============================
-# NETWORK & VOLUME
-# ==============================
+# =============================
+# NETWORKS & VOLUMES
+# =============================
 networks:
   fibo-net:
     driver: bridge
