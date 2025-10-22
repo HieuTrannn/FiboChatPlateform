@@ -14,23 +14,24 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-// bật swagger
+// Bật swagger (chỉ trong dev và staging)
 if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
 {
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Gateway API");
-        c.SwaggerEndpoint("/identity/swagger/v1/swagger.json", "Identity API");
-        c.SwaggerEndpoint("/kb/swagger/v1/swagger.json", "Knowledge Base API");
+        // 👇 Swagger JSON thật vẫn ở /swagger/v1/swagger.json
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Gateway API v1");
+
+        // 👇 Nhưng Swagger UI hiển thị tại /gateway/swagger
+        c.RoutePrefix = "gateway/swagger";
     });
 }
 
-
-// health check
+// Health check
 app.MapGet("/healthz", () => Results.Ok(new { ok = true }));
 
-// map reverse proxy
+// Reverse proxy
 app.MapReverseProxy();
 
 app.Run();
