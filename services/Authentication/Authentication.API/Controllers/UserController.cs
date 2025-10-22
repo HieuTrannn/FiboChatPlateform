@@ -57,7 +57,7 @@ namespace Authentication.API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("login-gg")]
+        [HttpPost("login-google")]
         public async Task<IActionResult> LoginWithGoogleAsync([FromForm] string idToken)
         {
             try
@@ -146,6 +146,47 @@ namespace Authentication.API.Controllers
                     return NotFound(ApiResponse<UserInfo>.NotFound("User not found"));
                 }
                 return Ok(ApiResponse<UserInfo>.Ok(user, "Get user by id successfully", "200"));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(UserController), ex.Message);
+                return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(UserController)}: {ex.Message}"));
+            }
+        }
+
+        [Authorize]
+        [HttpPut("update-profile")]
+        public async Task<IActionResult> UpdateUserProfileAsync([FromRoute] string userId, [FromForm] UserInfo userInfo)
+        {
+            try
+            {
+                var user = await _userService.GetUserById(userId);
+                if (user == null)
+                {
+                    return NotFound(ApiResponse<UserInfo>.NotFound("User not found"));
+                }
+                var response = await _userService.UpdateUserProfileAsync(userId, userInfo);
+                return Ok(ApiResponse<UserInfo>.Ok(response, "Update user profile successfully", "200"));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(UserController), ex.Message);
+                return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(UserController)}: {ex.Message}"));
+            }
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteUserAsync([FromRoute] string userId)
+        {
+            try
+            {
+                var user = await _userService.GetUserById(userId);
+                if (user == null)
+                {
+                    return NotFound(ApiResponse<UserInfo>.NotFound("User not found"));
+                }
+                var response = await _userService.DeleteUserAsync(userId);
+                return Ok(ApiResponse<UserInfo>.Ok(response, "Delete user successfully", "200"));
             }
             catch (Exception ex)
             {
