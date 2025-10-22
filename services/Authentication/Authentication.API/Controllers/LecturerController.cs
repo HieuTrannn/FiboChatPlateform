@@ -1,14 +1,12 @@
 ﻿using Authentication.Application.Interfaces;
 using Contracts.Common;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 using static Authentication.Application.DTOs.AuthenDTO;
 using static Authentication.Application.DTOs.LecturerDTO;
 
 namespace Authentication.API.Controllers
 {
-    [Route("api/lecturer")]
+    [Route("api/lecturers")]
     [ApiController]
     public class LecturerController : ControllerBase
     {
@@ -69,23 +67,28 @@ namespace Authentication.API.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetLecturerById(string id)
+        public async Task<IActionResult> GetLecturerById([FromRoute] Guid id)
         {
             try
             {
                 _logger.LogInformation("Retrieving lecturer with ID: {Id}", id);
                 var response = await _lecturerService.GetLecturerById(id);
-                return Ok(ApiResponse<RegisterResponse>.Ok(
-                  null, // không có data
-                 "Lecturer deleted successfully",
-                nameof(HttpStatusCode.OK)
- ));
 
+                return Ok(ApiResponse<LecturerResponse>.Ok(
+                    response,
+                    "Lecturer retrieved successfully",
+                    "200"
+                ));
+            }
+            catch (KeyNotFoundException ex)
+            {
+                _logger.LogWarning("Lecturer with ID: {Id} not found.", id);
+                return NotFound(ApiResponse<string>.NotFound($"Lecturer with ID: {id} not found."));
             }
             catch (Exception ex)
             {
-                _logger.LogError("{Classname} - Error at get lecturer by id async cause by {}", nameof(LecturerController), ex.Message);
-                return BadRequest(ex);
+                _logger.LogError(ex, "Error at get lecturer by id async cause by {}", ex.Message);
+                return StatusCode(500, ApiResponse<string>.InternalError($"Error retrieving lecturer: {ex.Message}"));
             }
         }
 
@@ -95,13 +98,13 @@ namespace Authentication.API.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteLecturerById(Guid id)
+        public async Task<IActionResult> DeleteLecturerById([FromRoute] Guid id)
         {
             try
             {
                 _logger.LogInformation("Deleting lecturer with ID: {Id}", id);
                 var response = await _lecturerService.DeleteLecturerById(id);
-                return Ok(ApiResponse<RegisterResponse>.Ok(response,"Lecturer deleted successfully", "200"));
+                return Ok(ApiResponse<RegisterResponse>.Ok(response, "Lecturer deleted successfully", "200"));
             }
             catch (Exception ex)
             {
@@ -117,13 +120,13 @@ namespace Authentication.API.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateLecturerById(Guid id, [FromForm] LecturerRequest request)
+        public async Task<IActionResult> UpdateLecturerById([FromRoute] Guid id, [FromForm] LecturerRequest request)
         {
             try
             {
                 _logger.LogInformation("Updating lecturer with ID: {Id}", id);
                 var response = await _lecturerService.UpdateLecturerById(id, request);
-                return Ok(ApiResponse<RegisterResponse>.Ok(response,"Lecturer updated successfully", "200"));
+                return Ok(ApiResponse<RegisterResponse>.Ok(response, "Lecturer updated successfully", "200"));
 
             }
             catch (Exception ex)

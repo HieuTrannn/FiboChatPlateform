@@ -8,7 +8,7 @@ namespace Authentication.Application.Interfaces
     {
         Task<ApiResponse<RegisterResponse>> CreateLecturer(LecturerRequest request);
         Task<List<LecturerResponse>> GetAllLecturers();
-        Task<LecturerResponse> GetLecturerById(string id);
+        Task<LecturerResponse> GetLecturerById(Guid id);
         Task<RegisterResponse> DeleteLecturerById(Guid id);
 
         Task<RegisterResponse> UpdateLecturerById(Guid id, LecturerRequest request);

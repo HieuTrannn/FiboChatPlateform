@@ -23,7 +23,7 @@ namespace Authentication.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> GetAllSemesters(int page = 1, int pageSize = 10)
+        public async Task<IActionResult> GetAllSemesters([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
             try {
                 var semesters = await _semesterService.GetAllAsync(page, pageSize);
@@ -42,7 +42,7 @@ namespace Authentication.API.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetSemesterById(Guid id)
+        public async Task<IActionResult> GetSemesterById([FromRoute] Guid id)
         {
             try {
                 var semester = await _semesterService.GetByIdAsync(id);
@@ -89,7 +89,7 @@ namespace Authentication.API.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateSemester(Guid id, [FromForm] SemesterUpdateRequest request)
+        public async Task<IActionResult> UpdateSemester([FromRoute] Guid id, [FromForm] SemesterUpdateRequest request)
         {
             try {
                 var semester = await _semesterService.UpdateAsync(id, request);
@@ -112,7 +112,7 @@ namespace Authentication.API.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteSemester(Guid id)
+        public async Task<IActionResult> DeleteSemester([FromRoute] Guid id)
         {
             try {
                 var semester = await _semesterService.DeleteAsync(id);

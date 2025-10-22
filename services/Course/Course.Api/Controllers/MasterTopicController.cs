@@ -69,8 +69,24 @@ namespace Course.Api.Controllers
         {
             try
             {
+                // Validate request
+                if (request == null)
+                {
+                    return BadRequest(ApiResponse<string>.BadRequest("Request body is required."));
+                }
+
+                if (string.IsNullOrWhiteSpace(request.Name))
+                {
+                    return BadRequest(ApiResponse<string>.BadRequest("Name is required."));
+                }
+
                 var masterTopic = await _masterTopicService.CreateAsync(request);
                 return Ok(ApiResponse<MasterTopicResponse>.Ok(masterTopic, "Create master topic successfully", "200"));
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogError(ex, "Validation error in {Controller}: {Message}", nameof(MasterTopicController), ex.Message);
+                return BadRequest(ApiResponse<string>.BadRequest(ex.Message));
             }
             catch (Exception ex)
             {

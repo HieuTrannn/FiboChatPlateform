@@ -1,0 +1,619 @@
+2025-10-22 00:31:34.05 +07:00  [INF] 
+2025-10-22 00:31:34.29 +07:00  [INF] 
+2025-10-22 00:31:34.31 +07:00  [INF] 
+2025-10-22 00:31:34.31 +07:00  [INF] 
+2025-10-22 00:31:34.32 +07:00  [INF] 
+2025-10-22 00:33:23.17 +07:00  [INF] 
+2025-10-22 00:33:23.37 +07:00  [WRN] 
+2025-10-22 00:33:23.38 +07:00  [INF] 
+2025-10-22 00:33:23.39 +07:00  [INF] 
+2025-10-22 00:33:23.43 +07:00  [INF] 
+2025-10-22 00:33:24.81 +07:00  [INF] 
+2025-10-22 00:33:24.92 +07:00  [INF] 
+2025-10-22 00:33:24.93 +07:00  [INF] 
+2025-10-22 00:33:24.99 +07:00  [ERR] 
+System.Net.Http.HttpRequestException: An error occurred while sending the request.
+ ---> System.IO.IOException: Unable to read data from the transport connection: An established connection was aborted by the software in your host machine..
+ ---> System.Net.Sockets.SocketException (10053): An established connection was aborted by the software in your host machine.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.CreateException(SocketError error, Boolean forAsyncThrow)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ReceiveAsync(Socket socket, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.ReceiveAsync(Memory`1 buffer, SocketFlags socketFlags, Boolean fromNetworkStream, CancellationToken cancellationToken)
+   at System.Net.Sockets.NetworkStream.ReadAsync(Memory`1 buffer, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnection.InitialFillAsync(Boolean async)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at System.Net.Http.HttpConnection.InitialFillAsync(Boolean async)
+   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)
+   at System.Threading.ExecutionContext.RunFromThreadPoolDispatchLoop(Thread threadPoolThread, ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecuteFromThreadPool(Thread threadPoolThread)
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading.PortableThreadPool.WorkerThread.WorkerThreadStart()
+--- End of stack trace from previous location ---
+
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnection.InitialFillAsync(Boolean async)
+   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.DiagnosticsHandler.SendAsyncCore(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.Logging.LoggingHttpMessageHandler.<SendCoreAsync>g__Core|4_0(HttpRequestMessage request, Boolean useAsync, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.Logging.LoggingScopeHttpMessageHandler.<SendCoreAsync>g__Core|4_0(HttpRequestMessage request, Boolean useAsync, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Course.Application.Implements.ExternalApiService.GetSemesterByIdAsync(String semesterId) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Application\Implements\ExternalApiService.cs:line 27
+2025-10-22 00:33:25.02 +07:00  [WRN] 
+2025-10-22 00:33:25.03 +07:00  [INF] 
+2025-10-22 00:33:25.03 +07:00  [INF] 
+2025-10-22 00:33:25.05 +07:00  [ERR] 
+System.Net.Http.HttpRequestException: An error occurred while sending the request.
+ ---> System.Net.Http.HttpIOException: The response ended prematurely. (ResponseEnded)
+   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.DiagnosticsHandler.SendAsyncCore(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.Logging.LoggingHttpMessageHandler.<SendCoreAsync>g__Core|4_0(HttpRequestMessage request, Boolean useAsync, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.Logging.LoggingScopeHttpMessageHandler.<SendCoreAsync>g__Core|4_0(HttpRequestMessage request, Boolean useAsync, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Course.Application.Implements.ExternalApiService.GetLecturerByIdAsync(String lecturerId) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Application\Implements\ExternalApiService.cs:line 54
+2025-10-22 00:33:25.06 +07:00  [WRN] 
+2025-10-22 00:33:25.50 +07:00  [ERR] 
+2025-10-22 00:33:25.63 +07:00  [ERR] 
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 23503: insert or update on table "MasterTopics" violates foreign key constraint "FK_MasterTopics_Semester_SemesterId"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: ERROR
+    SqlState: 23503
+    MessageText: insert or update on table "MasterTopics" violates foreign key constraint "FK_MasterTopics_Semester_SemesterId"
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    SchemaName: public
+    TableName: MasterTopics
+    ConstraintName: FK_MasterTopics_Semester_SemesterId
+    File: ri_triggers.c
+    Line: 2610
+    Routine: ri_ReportViolation
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+2025-10-22 00:33:25.68 +07:00  [ERR] 
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 23503: insert or update on table "MasterTopics" violates foreign key constraint "FK_MasterTopics_Semester_SemesterId"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: ERROR
+    SqlState: 23503
+    MessageText: insert or update on table "MasterTopics" violates foreign key constraint "FK_MasterTopics_Semester_SemesterId"
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    SchemaName: public
+    TableName: MasterTopics
+    ConstraintName: FK_MasterTopics_Semester_SemesterId
+    File: ri_triggers.c
+    Line: 2610
+    Routine: ri_ReportViolation
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Course.Infrastructure.Implements.GenericRepository`1.InsertAsync(T entity) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Infrastructure\Implements\GenericRepository.cs:line 68
+   at Course.Application.Implements.MasterTopicService.CreateAsync(MasterTopicCreateRequest request) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Application\Implements\MasterTopicService.cs:line 121
+   at Course.Api.Controllers.MasterTopicController.CreateMasterTopic(MasterTopicCreateRequest request) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Api\Controllers\MasterTopicController.cs:line 83
+2025-10-22 00:33:25.76 +07:00  [INF] 
+2025-10-22 00:33:25.81 +07:00  [INF] 
+2025-10-22 00:33:25.82 +07:00  [INF] 
+2025-10-22 00:33:25.82 +07:00  [ERR] 
+2025-10-22 00:33:25.84 +07:00  [INF] 
+2025-10-22 00:43:57.43 +07:00  [INF] 
+2025-10-22 00:44:04.24 +07:00  [INF] 
+2025-10-22 00:44:04.40 +07:00  [INF] 
+2025-10-22 00:44:04.41 +07:00  [INF] 
+2025-10-22 00:44:04.41 +07:00  [INF] 
+2025-10-22 00:44:04.41 +07:00  [INF] 
+2025-10-22 00:44:13.12 +07:00  [INF] 
+2025-10-22 00:44:13.23 +07:00  [WRN] 
+2025-10-22 00:44:13.24 +07:00  [INF] 
+2025-10-22 00:44:13.24 +07:00  [INF] 
+2025-10-22 00:44:13.28 +07:00  [INF] 
+2025-10-22 00:44:14.72 +07:00  [INF] 
+2025-10-22 00:44:14.83 +07:00  [INF] 
+2025-10-22 00:44:14.84 +07:00  [INF] 
+2025-10-22 00:44:15.09 +07:00  [INF] 
+2025-10-22 00:44:15.10 +07:00  [INF] 
+2025-10-22 00:44:15.10 +07:00  [WRN] 
+2025-10-22 00:44:15.10 +07:00  [WRN] 
+2025-10-22 00:44:15.11 +07:00  [INF] 
+2025-10-22 00:44:15.11 +07:00  [INF] 
+2025-10-22 00:44:15.12 +07:00  [INF] 
+2025-10-22 00:44:15.12 +07:00  [INF] 
+2025-10-22 00:44:15.12 +07:00  [WRN] 
+2025-10-22 00:44:15.13 +07:00  [WRN] 
+2025-10-22 00:44:15.47 +07:00  [ERR] 
+2025-10-22 00:44:15.51 +07:00  [ERR] 
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 23503: insert or update on table "MasterTopics" violates foreign key constraint "FK_MasterTopics_Semester_SemesterId"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: ERROR
+    SqlState: 23503
+    MessageText: insert or update on table "MasterTopics" violates foreign key constraint "FK_MasterTopics_Semester_SemesterId"
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    SchemaName: public
+    TableName: MasterTopics
+    ConstraintName: FK_MasterTopics_Semester_SemesterId
+    File: ri_triggers.c
+    Line: 2610
+    Routine: ri_ReportViolation
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+2025-10-22 00:44:15.56 +07:00  [ERR] 
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 23503: insert or update on table "MasterTopics" violates foreign key constraint "FK_MasterTopics_Semester_SemesterId"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: ERROR
+    SqlState: 23503
+    MessageText: insert or update on table "MasterTopics" violates foreign key constraint "FK_MasterTopics_Semester_SemesterId"
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    SchemaName: public
+    TableName: MasterTopics
+    ConstraintName: FK_MasterTopics_Semester_SemesterId
+    File: ri_triggers.c
+    Line: 2610
+    Routine: ri_ReportViolation
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Course.Infrastructure.Implements.GenericRepository`1.InsertAsync(T entity) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Infrastructure\Implements\GenericRepository.cs:line 68
+   at Course.Application.Implements.MasterTopicService.CreateAsync(MasterTopicCreateRequest request) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Application\Implements\MasterTopicService.cs:line 121
+   at Course.Api.Controllers.MasterTopicController.CreateMasterTopic(MasterTopicCreateRequest request) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Api\Controllers\MasterTopicController.cs:line 83
+2025-10-22 00:44:15.62 +07:00  [INF] 
+2025-10-22 00:44:15.68 +07:00  [INF] 
+2025-10-22 00:44:15.69 +07:00  [INF] 
+2025-10-22 00:44:15.69 +07:00  [ERR] 
+2025-10-22 00:44:15.70 +07:00  [INF] 
+2025-10-22 00:52:15.80 +07:00  [INF] 
+2025-10-22 00:53:14.50 +07:00  [INF] 
+2025-10-22 00:53:14.68 +07:00  [INF] 
+2025-10-22 00:53:14.68 +07:00  [INF] 
+2025-10-22 00:53:14.68 +07:00  [INF] 
+2025-10-22 00:53:14.69 +07:00  [INF] 
+2025-10-22 00:53:32.22 +07:00  [INF] 
+2025-10-22 00:53:32.38 +07:00  [WRN] 
+2025-10-22 00:53:32.38 +07:00  [INF] 
+2025-10-22 00:53:32.39 +07:00  [INF] 
+2025-10-22 00:53:32.44 +07:00  [INF] 
+2025-10-22 00:53:33.71 +07:00  [INF] 
+2025-10-22 00:53:33.82 +07:00  [INF] 
+2025-10-22 00:53:33.82 +07:00  [INF] 
+2025-10-22 00:53:34.04 +07:00  [INF] 
+2025-10-22 00:53:34.04 +07:00  [INF] 
+2025-10-22 00:53:34.05 +07:00  [WRN] 
+2025-10-22 00:53:34.05 +07:00  [WRN] 
+2025-10-22 00:53:34.05 +07:00  [INF] 
+2025-10-22 00:53:34.05 +07:00  [INF] 
+2025-10-22 00:53:34.07 +07:00  [INF] 
+2025-10-22 00:53:34.07 +07:00  [INF] 
+2025-10-22 00:53:34.08 +07:00  [WRN] 
+2025-10-22 00:53:34.08 +07:00  [WRN] 
+2025-10-22 00:53:34.29 +07:00  [ERR] 
+2025-10-22 00:53:34.33 +07:00  [ERR] 
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 23503: insert or update on table "MasterTopics" violates foreign key constraint "FK_MasterTopics_Semester_SemesterId"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: ERROR
+    SqlState: 23503
+    MessageText: insert or update on table "MasterTopics" violates foreign key constraint "FK_MasterTopics_Semester_SemesterId"
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    SchemaName: public
+    TableName: MasterTopics
+    ConstraintName: FK_MasterTopics_Semester_SemesterId
+    File: ri_triggers.c
+    Line: 2610
+    Routine: ri_ReportViolation
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+2025-10-22 00:53:34.37 +07:00  [ERR] 
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 23503: insert or update on table "MasterTopics" violates foreign key constraint "FK_MasterTopics_Semester_SemesterId"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: ERROR
+    SqlState: 23503
+    MessageText: insert or update on table "MasterTopics" violates foreign key constraint "FK_MasterTopics_Semester_SemesterId"
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    SchemaName: public
+    TableName: MasterTopics
+    ConstraintName: FK_MasterTopics_Semester_SemesterId
+    File: ri_triggers.c
+    Line: 2610
+    Routine: ri_ReportViolation
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Course.Infrastructure.Implements.GenericRepository`1.InsertAsync(T entity) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Infrastructure\Implements\GenericRepository.cs:line 68
+   at Course.Application.Implements.MasterTopicService.CreateAsync(MasterTopicCreateRequest request) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Application\Implements\MasterTopicService.cs:line 121
+   at Course.Api.Controllers.MasterTopicController.CreateMasterTopic(MasterTopicCreateRequest request) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Api\Controllers\MasterTopicController.cs:line 83
+2025-10-22 00:53:34.45 +07:00  [INF] 
+2025-10-22 00:53:34.48 +07:00  [INF] 
+2025-10-22 00:53:34.48 +07:00  [INF] 
+2025-10-22 00:53:34.48 +07:00  [ERR] 
+2025-10-22 00:53:34.49 +07:00  [INF] 
+2025-10-22 00:54:12.92 +07:00  [INF] 
+2025-10-22 00:57:49.90 +07:00  [INF] 
+2025-10-22 00:57:50.04 +07:00  [INF] 
+2025-10-22 00:57:50.05 +07:00  [INF] 
+2025-10-22 00:57:50.05 +07:00  [INF] 
+2025-10-22 00:57:50.05 +07:00  [INF] 
+2025-10-22 01:01:43.00 +07:00  [INF] 
+2025-10-22 01:01:53.30 +07:00  [INF] 
+2025-10-22 01:01:53.47 +07:00  [INF] 
+2025-10-22 01:01:53.48 +07:00  [INF] 
+2025-10-22 01:01:53.48 +07:00  [INF] 
+2025-10-22 01:01:53.48 +07:00  [INF] 
+2025-10-22 01:04:31.38 +07:00  [INF] 
+2025-10-22 01:04:31.52 +07:00  [WRN] 
+2025-10-22 01:04:31.52 +07:00  [INF] 
+2025-10-22 01:04:31.53 +07:00  [INF] 
+2025-10-22 01:04:31.60 +07:00  [INF] 
+2025-10-22 01:04:32.93 +07:00  [INF] 
+2025-10-22 01:04:32.97 +07:00  [ERR] 
+2025-10-22 01:04:32.97 +07:00  [ERR] 
+Course.Domain.Exceptions.CustomExceptions+NoDataFoundException: Domain not found
+   at Course.Application.Implements.MasterTopicService.CreateAsync(MasterTopicCreateRequest request) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Application\Implements\MasterTopicService.cs:line 51
+   at Course.Api.Controllers.MasterTopicController.CreateMasterTopic(MasterTopicCreateRequest request) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Api\Controllers\MasterTopicController.cs:line 83
+2025-10-22 01:04:33.00 +07:00  [INF] 
+2025-10-22 01:04:33.04 +07:00  [INF] 
+2025-10-22 01:04:33.05 +07:00  [INF] 
+2025-10-22 01:04:33.05 +07:00  [ERR] 
+2025-10-22 01:04:33.06 +07:00  [INF] 
+2025-10-22 01:05:12.54 +07:00  [INF] 
+2025-10-22 01:05:12.54 +07:00  [INF] 
+2025-10-22 01:05:12.55 +07:00  [INF] 
+2025-10-22 01:05:12.55 +07:00  [INF] 
+2025-10-22 01:05:12.79 +07:00  [INF] 
+2025-10-22 01:05:12.81 +07:00  [INF] 
+2025-10-22 01:05:12.83 +07:00  [INF] 
+2025-10-22 01:05:12.83 +07:00  [INF] 
+2025-10-22 01:05:12.83 +07:00  [INF] 
+2025-10-22 01:05:12.83 +07:00  [INF] 
+2025-10-22 01:05:20.42 +07:00  [INF] 
+2025-10-22 01:05:20.44 +07:00  [INF] 
+2025-10-22 01:05:20.46 +07:00  [INF] 
+2025-10-22 01:05:20.46 +07:00  [INF] 
+2025-10-22 01:05:20.53 +07:00  [INF] 
+2025-10-22 01:05:20.55 +07:00  [INF] 
+2025-10-22 01:05:20.56 +07:00  [INF] 
+2025-10-22 01:05:20.78 +07:00  [INF] 
+2025-10-22 01:05:20.78 +07:00  [INF] 
+2025-10-22 01:05:20.78 +07:00  [WRN] 
+2025-10-22 01:05:20.79 +07:00  [WRN] 
+2025-10-22 01:05:20.79 +07:00  [INF] 
+2025-10-22 01:05:20.79 +07:00  [INF] 
+2025-10-22 01:05:20.82 +07:00  [INF] 
+2025-10-22 01:05:20.83 +07:00  [INF] 
+2025-10-22 01:05:20.83 +07:00  [WRN] 
+2025-10-22 01:05:20.83 +07:00  [WRN] 
+2025-10-22 01:05:20.96 +07:00  [INF] 
+2025-10-22 01:05:20.99 +07:00  [INF] 
+2025-10-22 01:05:21.00 +07:00  [INF] 
+2025-10-22 01:05:21.00 +07:00  [INF] 
+2025-10-22 01:05:21.02 +07:00  [INF] 
+2025-10-22 01:05:21.02 +07:00  [INF] 
+2025-10-22 01:05:21.02 +07:00  [WRN] 
+2025-10-22 01:05:21.07 +07:00  [INF] 
+2025-10-22 01:05:21.08 +07:00  [INF] 
+2025-10-22 01:05:21.09 +07:00  [INF] 
+2025-10-22 01:05:21.15 +07:00  [INF] 
+2025-10-22 01:05:21.17 +07:00  [INF] 
+2025-10-22 01:05:21.18 +07:00  [WRN] 
+2025-10-22 01:05:21.20 +07:00  [INF] 
+2025-10-22 01:05:21.32 +07:00  [INF] 
+2025-10-22 01:05:21.35 +07:00  [INF] 
+2025-10-22 01:05:21.37 +07:00  [INF] 
+2025-10-22 01:05:21.40 +07:00  [INF] 
+2025-10-22 01:06:44.87 +07:00  [INF] 
+2025-10-22 01:06:44.88 +07:00  [INF] 
+2025-10-22 01:06:44.88 +07:00  [INF] 
+2025-10-22 01:06:44.91 +07:00  [INF] 
+2025-10-22 01:06:44.91 +07:00  [INF] 
+2025-10-22 01:06:44.92 +07:00  [INF] 
+2025-10-22 01:06:44.92 +07:00  [INF] 
+2025-10-22 01:06:44.93 +07:00  [INF] 
+2025-10-22 01:06:44.94 +07:00  [INF] 
+2025-10-22 01:06:44.94 +07:00  [WRN] 
+2025-10-22 01:06:44.94 +07:00  [INF] 
+2025-10-22 01:06:44.94 +07:00  [INF] 
+2025-10-22 01:06:44.94 +07:00  [INF] 
+2025-10-22 01:06:44.96 +07:00  [INF] 
+2025-10-22 01:06:44.96 +07:00  [INF] 
+2025-10-22 01:06:44.96 +07:00  [WRN] 
+2025-10-22 01:06:44.97 +07:00  [INF] 
+2025-10-22 01:06:44.98 +07:00  [INF] 
+2025-10-22 01:06:44.98 +07:00  [INF] 
+2025-10-22 01:06:44.98 +07:00  [INF] 
+2025-10-22 01:06:44.99 +07:00  [INF] 
+2025-10-22 01:13:43.35 +07:00  [INF] 
+2025-10-22 01:15:54.85 +07:00  [INF] 
+2025-10-22 01:15:54.99 +07:00  [INF] 
+2025-10-22 01:15:54.99 +07:00  [INF] 
+2025-10-22 01:15:54.99 +07:00  [INF] 
+2025-10-22 01:15:54.99 +07:00  [INF] 
+2025-10-22 01:16:07.43 +07:00  [INF] 
+2025-10-22 01:16:07.52 +07:00  [WRN] 
+2025-10-22 01:16:07.53 +07:00  [INF] 
+2025-10-22 01:16:07.57 +07:00  [INF] 
+2025-10-22 01:16:08.95 +07:00  [INF] 
+2025-10-22 01:16:09.20 +07:00  [INF] 
+2025-10-22 01:16:09.24 +07:00  [INF] 
+2025-10-22 01:16:09.24 +07:00  [INF] 
+2025-10-22 01:16:09.35 +07:00  [INF] 
+2025-10-22 01:16:09.36 +07:00  [INF] 
+2025-10-22 01:16:09.37 +07:00  [WRN] 
+2025-10-22 01:16:09.37 +07:00  [WRN] 
+2025-10-22 01:16:09.39 +07:00  [INF] 
+2025-10-22 01:16:09.42 +07:00  [INF] 
+2025-10-22 01:16:09.43 +07:00  [INF] 
+2025-10-22 01:16:09.44 +07:00  [INF] 
+2025-10-22 01:16:09.44 +07:00  [INF] 
+2025-10-22 01:16:09.44 +07:00  [WRN] 
+2025-10-22 01:16:09.45 +07:00  [INF] 
+2025-10-22 01:16:09.53 +07:00  [INF] 
+2025-10-22 01:16:09.53 +07:00  [INF] 
+2025-10-22 01:16:09.53 +07:00  [INF] 
+2025-10-22 01:16:09.55 +07:00  [INF] 
+2025-10-22 01:34:30.34 +07:00  [INF] 
+2025-10-22 01:34:43.33 +07:00  [INF] 
+2025-10-22 01:34:43.49 +07:00  [INF] 
+2025-10-22 01:34:43.49 +07:00  [INF] 
+2025-10-22 01:34:43.49 +07:00  [INF] 
+2025-10-22 01:34:43.49 +07:00  [INF] 
+2025-10-22 01:34:48.95 +07:00  [INF] 
+2025-10-22 01:34:49.09 +07:00  [WRN] 
+2025-10-22 01:34:49.09 +07:00  [INF] 
+2025-10-22 01:34:49.14 +07:00  [INF] 
+2025-10-22 01:34:50.23 +07:00  [INF] 
+2025-10-22 01:34:50.45 +07:00  [INF] 
+2025-10-22 01:34:50.47 +07:00  [INF] 
+2025-10-22 01:34:50.48 +07:00  [INF] 
+2025-10-22 01:34:50.48 +07:00  [INF] 
+2025-10-22 01:34:50.52 +07:00  [INF] 
+2025-10-22 01:34:50.53 +07:00  [INF] 
+2025-10-22 01:34:50.53 +07:00  [INF] 
+2025-10-22 01:34:50.53 +07:00  [WRN] 
+2025-10-22 01:34:50.53 +07:00  [WRN] 
+2025-10-22 01:34:50.54 +07:00  [INF] 
+2025-10-22 01:34:50.56 +07:00  [INF] 
+2025-10-22 01:34:50.57 +07:00  [INF] 
+2025-10-22 01:34:50.58 +07:00  [INF] 
+2025-10-22 01:34:50.58 +07:00  [INF] 
+2025-10-22 01:34:50.58 +07:00  [WRN] 
+2025-10-22 01:34:50.59 +07:00  [INF] 
+2025-10-22 01:34:50.66 +07:00  [INF] 
+2025-10-22 01:34:50.66 +07:00  [INF] 
+2025-10-22 01:34:50.66 +07:00  [INF] 
+2025-10-22 01:34:50.67 +07:00  [INF] 
+2025-10-22 01:44:15.91 +07:00  [INF] 
+2025-10-22 01:44:52.07 +07:00  [INF] 
+2025-10-22 01:44:52.19 +07:00  [INF] 
+2025-10-22 01:44:52.19 +07:00  [INF] 
+2025-10-22 01:44:52.19 +07:00  [INF] 
+2025-10-22 01:44:52.19 +07:00  [INF] 
+2025-10-22 01:45:04.98 +07:00  [INF] 
+2025-10-22 01:45:05.08 +07:00  [WRN] 
+2025-10-22 01:45:05.08 +07:00  [INF] 
+2025-10-22 01:45:05.11 +07:00  [INF] 
+2025-10-22 01:45:06.38 +07:00  [INF] 
+2025-10-22 01:45:06.61 +07:00  [INF] 
+2025-10-22 01:45:06.63 +07:00  [INF] 
+2025-10-22 01:45:06.64 +07:00  [INF] 
+2025-10-22 01:45:06.64 +07:00  [INF] 
+2025-10-22 01:45:06.69 +07:00  [INF] 
+2025-10-22 01:45:06.69 +07:00  [INF] 
+2025-10-22 01:45:06.70 +07:00  [INF] 
+2025-10-22 01:45:06.70 +07:00  [WRN] 
+2025-10-22 01:45:06.70 +07:00  [WRN] 
+2025-10-22 01:45:06.70 +07:00  [INF] 
+2025-10-22 01:45:06.70 +07:00  [ERR] 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at Course.Application.Implements.MasterTopicService.ToMasterTopicResponse(MasterTopic masterTopic) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Application\Implements\MasterTopicService.cs:line 238
+   at Course.Application.Implements.MasterTopicService.GetAllAsync(Int32 page, Int32 pageSize) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Application\Implements\MasterTopicService.cs:line 49
+   at Course.Api.Controllers.MasterTopicController.GetAllMasterTopics(Int32 page, Int32 pageSize) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Api\Controllers\MasterTopicController.cs:line 32
+2025-10-22 01:45:06.74 +07:00  [INF] 
+2025-10-22 01:45:06.77 +07:00  [INF] 
+2025-10-22 01:45:06.77 +07:00  [INF] 
+2025-10-22 01:45:06.77 +07:00  [ERR] 
+2025-10-22 01:45:06.78 +07:00  [INF] 
+2025-10-22 01:45:30.22 +07:00  [INF] 
+2025-10-22 01:45:30.23 +07:00  [INF] 
+2025-10-22 01:45:30.25 +07:00  [INF] 
+2025-10-22 01:45:30.35 +07:00  [INF] 
+2025-10-22 01:45:30.37 +07:00  [INF] 
+2025-10-22 01:45:30.44 +07:00  [INF] 
+2025-10-22 01:45:30.44 +07:00  [INF] 
+2025-10-22 01:45:30.46 +07:00  [INF] 
+2025-10-22 01:45:30.46 +07:00  [INF] 
+2025-10-22 01:45:30.46 +07:00  [WRN] 
+2025-10-22 01:45:30.48 +07:00  [INF] 
+2025-10-22 01:45:30.48 +07:00  [INF] 
+2025-10-22 01:45:30.48 +07:00  [INF] 
+2025-10-22 01:45:30.49 +07:00  [INF] 
+2025-10-22 01:45:30.50 +07:00  [INF] 
+2025-10-22 01:45:30.50 +07:00  [INF] 
+2025-10-22 01:45:30.51 +07:00  [INF] 
+2025-10-22 01:45:30.51 +07:00  [WRN] 
+2025-10-22 01:45:30.51 +07:00  [WRN] 
+2025-10-22 01:45:30.51 +07:00  [INF] 
+2025-10-22 01:45:30.52 +07:00  [INF] 
+2025-10-22 01:45:30.53 +07:00  [INF] 
+2025-10-22 01:45:30.54 +07:00  [INF] 
+2025-10-22 01:45:30.54 +07:00  [WRN] 
+2025-10-22 01:45:30.54 +07:00  [WRN] 
+2025-10-22 01:45:30.55 +07:00  [ERR] 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at Course.Application.Implements.MasterTopicService.ToMasterTopicResponse(MasterTopic masterTopic) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Application\Implements\MasterTopicService.cs:line 238
+   at Course.Application.Implements.MasterTopicService.GetByIdAsync(Guid id) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Application\Implements\MasterTopicService.cs:line 43
+   at Course.Api.Controllers.MasterTopicController.GetMasterTopicById(Guid id) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Api\Controllers\MasterTopicController.cs:line 52
+2025-10-22 01:45:30.55 +07:00  [INF] 
+2025-10-22 01:45:30.56 +07:00  [INF] 
+2025-10-22 01:45:30.56 +07:00  [INF] 
+2025-10-22 01:45:30.56 +07:00  [ERR] 
+2025-10-22 01:45:30.57 +07:00  [INF] 
+2025-10-22 01:46:56.87 +07:00  [INF] 
+2025-10-22 01:47:05.41 +07:00  [INF] 
+2025-10-22 01:47:05.55 +07:00  [INF] 
+2025-10-22 01:47:05.55 +07:00  [INF] 
+2025-10-22 01:47:05.56 +07:00  [INF] 
+2025-10-22 01:47:05.56 +07:00  [INF] 
+2025-10-22 01:59:01.81 +07:00  [INF] 

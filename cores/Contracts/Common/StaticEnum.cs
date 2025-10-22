@@ -31,6 +31,29 @@ namespace Contracts.Common
             [CustomName("inactive")] Inactive
         }
 
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public enum SemesterTermEnum
+        {
+            [CustomName("Spring")] Spring,
+            [CustomName("Summer")] Summer,
+            [CustomName("Fall")] Fall,
+        }
+
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public enum SemesterStatusEnum
+        {
+            [CustomName("Active")] Active,
+            [CustomName("Disabled")] Disabled,
+            [CustomName("Pending")] Pending,
+        }
+
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public enum GenderEnum
+        {
+            [CustomName("Male")] Male,
+            [CustomName("Female")] Female,
+        }
+
         //public enum PaymentStatusEnum
         //{
         //    [CustomName("pending")] Pending,
