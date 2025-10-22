@@ -63,7 +63,10 @@ namespace Authentication.Application.Services
                 // Tạo tài khoản
                 var rawPassword = GenerateRandomPassword();
                 var account = request.Adapt<Account>();
-                account.Password = _rsaService.Encrypt(rawPassword);
+
+                //account.Password = _rsaService.Encrypt(rawPassword);
+                account.Password = BCrypt.Net.BCrypt.HashPassword(rawPassword);
+
                 account.CreatedAt = DateTime.UtcNow;
                 account.IsVerified = false;
 
@@ -180,6 +183,8 @@ namespace Authentication.Application.Services
                 var token = GenerateJwtToken(account);
                 var response = request.Adapt<AuthResponse>();
                 response.Token = (string?)token;
+                response.Success = true;
+
 
                 return response;
             }
@@ -216,7 +221,7 @@ namespace Authentication.Application.Services
                     _logger.LogWarning("New password and confirm password do not match for user: {email}", email);
                     return new RegisterResponse { Success = false, Message = "New password and confirm password do not match" };
                 }
-                user.Password = _rsaService.Encrypt(changePasswordRequest.NewPassword);
+                user.Password = BCrypt.Net.BCrypt.HashPassword(changePasswordRequest.NewPassword);
                 user.IsVerified = true;
                 await userRepo.UpdateAsync(user);
                 await _unitOfWork.SaveChangeAsync();
@@ -293,7 +298,7 @@ namespace Authentication.Application.Services
                 if (user == null)
                     return new RegisterResponse { Success = false, Message = "User not found" };
 
-                user.Password = _rsaService.Encrypt(request.NewPassword);
+                user.Password = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
                 user.UpdatedAt = DateTime.UtcNow;
                 await userRepository.UpdateAsync(user);
                 await _unitOfWork.SaveChangeAsync();
@@ -353,7 +358,17 @@ namespace Authentication.Application.Services
                     _logger.LogWarning("User not found with email: {Email}", userEmail);
                     throw new KeyNotFoundException("User not found");
                 }
-                user.Password = _rsaService.Encrypt(request.NewPassword);
+
+                if(user.IsVerified == true)
+                {
+                    return new AuthResponse
+                    {
+                        Success = false,
+                        Message = "User has already changed password"
+                    };
+                }
+               
+                user.Password = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
                 user.IsVerified = true;
                 await userRepo.UpdateAsync(user);
                 await _unitOfWork.SaveChangeAsync();
@@ -361,15 +376,17 @@ namespace Authentication.Application.Services
                 return new AuthResponse
                 {
                     Token = (string)token,
-                    Message = "Password changed successfully"
+                    Message = "Password changed successfully",
+                    Success = true
                 };
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error changing password for first time");
-                throw;
+                return new AuthResponse { Success = false, Message = "Fail to change password" };
             }
         }
+        
         private async Task SendPasswordResetEmail(Account account, string token)
         {
             string resetLink = $"http://fibo.io.vn/reset-password?token={token}";
@@ -391,8 +408,7 @@ namespace Authentication.Application.Services
 
         private bool VerifyPassword(string inputPassword, string encryptedPassword)
         {
-            string decryptedPassword = _rsaService.Decrypt(encryptedPassword);
-            return decryptedPassword != null && inputPassword == decryptedPassword;
+            return BCrypt.Net.BCrypt.Verify(inputPassword, encryptedPassword);
         }
         private object GenerateJwtToken(Account account)
         {
@@ -406,8 +422,10 @@ namespace Authentication.Application.Services
                     {
                     new Claim(ClaimTypes.NameIdentifier, account.Id.ToString()),
                     new Claim(ClaimTypes.Email, account.Email.ToString()),
-                    new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString())
-                }),
+                    new Claim(JwtRegisteredClaimNames.Iat,
+                    new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString(),
+                     ClaimValueTypes.Integer64)
+                         }),
                     Expires = DateTime.UtcNow.AddHours(2),
                     Issuer = _configuration["Authentication:Issuer"],
                     Audience = _configuration["Authentication:Audience"],
