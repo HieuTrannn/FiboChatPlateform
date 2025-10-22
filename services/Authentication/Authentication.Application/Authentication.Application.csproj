@@ -1,20 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\cores\SharedLibrary\SharedLibrary.csproj" />
-    <ProjectReference Include="..\Authentication.Domain\Authentication.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="FirebaseAdmin" Version="3.4.0" />
-    <PackageReference Include="Mapster" Version="7.4.0" />
-    <PackageReference Include="Mapster.DependencyInjection" Version="1.0.1" />
-  </ItemGroup>
-
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Authentication.Application</RootNamespace>
+        <AssemblyName>Authentication.Application</AssemblyName>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\cores\SharedLibrary\SharedLibrary.csproj" />
+        <ProjectReference Include="..\Authentication.Domain\Authentication.Domain.csproj" />
+        <ProjectReference Include="..\Authentication.Core\Authentication.Core.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+        <PackageReference Include="FirebaseAdmin" Version="3.4.0" />
+        <PackageReference Include="Mapster" Version="7.4.0" />
+        <PackageReference Include="Mapster.DependencyInjection" Version="1.0.1" />
+    </ItemGroup>
 </Project>

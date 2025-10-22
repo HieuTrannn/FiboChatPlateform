@@ -1,6 +1,7 @@
 ﻿using Authentication.Application.DTOs;
 using Contracts.Common;
 using static Authentication.Application.DTOs.AuthenDTO;
+using static Authentication.Application.DTOs.UserDTO;
 
 namespace Authentication.Application.Interfaces
 {
@@ -10,7 +11,9 @@ namespace Authentication.Application.Interfaces
         Task<AuthResponse> Login(AuthRequest request);
         Task<RegisterResponse> ChangePasswordAsync(string email, ChangePasswordRequest changePasswordRequest);
         Task<RegisterResponse> ForgotPasswordAsync(string email);
-        Task<RegisterResponse> ResetPasswordAsync(string token, string newPassword);
+        Task<RegisterResponse> ResetPasswordAsync(ResetPasswordRequest request);
         Task<AuthResponse> LoginWithGoogleAsync(string idToken);
-    }
+        Task<UserInfo> GetUserById(string userId);
+        Task<AuthResponse> ChangePasswordFirstTimeAsync(ChangePasswordFirstTimeRequest request);
+        }
 }
