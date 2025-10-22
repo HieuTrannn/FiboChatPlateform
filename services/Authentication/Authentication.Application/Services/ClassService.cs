@@ -24,8 +24,14 @@ namespace Authentication.Application.Services
         public async Task<BasePaginatedList<ClassResponse>> GetAllAsync(int page, int pageSize)
         {
             var classes = await _unitOfWork.GetRepository<Class>().GetAllAsync();
-            var response = await Task.WhenAll(classes.Select(ToClassResponse));
-            return new BasePaginatedList<ClassResponse>(response.ToList(), classes.Count, page, pageSize);
+
+            var items = new List<ClassResponse>(classes.Count);
+            foreach (var c in classes)
+            {
+                items.Add(await ToClassResponse(c)); // sequential awaits => no concurrent DbContext ops
+            }
+
+            return new BasePaginatedList<ClassResponse>(items, classes.Count, page, pageSize);
         }
 
         public async Task<ClassResponse> GetByIdAsync(Guid id)
