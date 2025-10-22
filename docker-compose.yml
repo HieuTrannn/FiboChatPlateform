@@ -93,7 +93,7 @@ services:
       Services__AuthBaseUrl: "http://fibochat-auth:5001"
       Services__CourseBaseUrl: "http://fibochat-course:5002"
     ports:
-      - "5045:8080"
+      - "5045:8000"
     networks:
       - fibo-net
 
