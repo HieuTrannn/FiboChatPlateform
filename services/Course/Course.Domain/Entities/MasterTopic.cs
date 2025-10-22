@@ -8,7 +8,6 @@ namespace Course.Domain.Entities
         public Guid Id { get; set; }
         public Guid DomainId { get; set; }
         public Guid SemesterId { get; set; }
-        public Guid? LecturerId { get; set; }
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;
         public StaticEnum.StatusEnum Status { get; set; } = StaticEnum.StatusEnum.Active; // active | disabled

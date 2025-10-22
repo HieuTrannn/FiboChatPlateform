@@ -1,4 +1,5 @@
 ﻿using Course.Domain.Entities;
+using Contracts.Common;
 using Microsoft.EntityFrameworkCore;
 
 namespace Course.Infrastructure.Persistence
@@ -81,6 +82,11 @@ namespace Course.Infrastructure.Persistence
                 e.HasKey(x => x.Id);
                 e.Property(x => x.Name).IsRequired();
                 e.Property(x => x.Description).IsRequired();
+                e.Property(x => x.Status)
+                    .HasConversion(
+                        v => v.ToString(),
+                        v => (StaticEnum.StatusEnum)Enum.Parse(typeof(StaticEnum.StatusEnum), v))
+                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<MasterTopic>(e =>
@@ -89,10 +95,23 @@ namespace Course.Infrastructure.Persistence
                 e.Property(x => x.Name).IsRequired();
                 e.Property(x => x.Description).IsRequired();
 
+                // Configure Status enum to be stored as string
+                e.Property(x => x.Status)
+                    .HasConversion(
+                        v => v.ToString(),
+                        v => (StaticEnum.StatusEnum)Enum.Parse(typeof(StaticEnum.StatusEnum), v))
+                    .HasMaxLength(50);
+
                 e.HasOne(x => x.Domain)
                  .WithMany()
                  .HasForeignKey(x => x.DomainId)
                  .OnDelete(DeleteBehavior.Restrict);
+
+                // Remove Semester foreign key constraint - SemesterId is just a reference
+                // e.HasOne(x => x.Semester)  // Remove this if it exists
+                //  .WithMany()
+                //  .HasForeignKey(x => x.SemesterId)
+                //  .OnDelete(DeleteBehavior.Restrict);
 
                 e.HasMany(x => x.Topics)
                  .WithOne()
@@ -103,14 +122,17 @@ namespace Course.Infrastructure.Persistence
                  .HasForeignKey(mtk => mtk.MasterTopicId)
                  .OnDelete(DeleteBehavior.Cascade);
             });
-
             modelBuilder.Entity<LecturerMasterTopic>(e =>
             {
                 e.HasKey(x => x.Id);
+
+                e.Property(x => x.LecturerId)
+                      .IsRequired();
+
                 e.HasOne(x => x.MasterTopic)
-                 .WithMany(mt => mt.LecturerMasterTopics)
-                 .HasForeignKey(x => x.MasterTopicId)
-                 .OnDelete(DeleteBehavior.Cascade);
+                      .WithMany(mt => mt.LecturerMasterTopics)
+                      .HasForeignKey(x => x.MasterTopicId)
+                      .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<Keyword>(e =>
@@ -130,14 +152,11 @@ namespace Course.Infrastructure.Persistence
             });
         }
 
-        
-        /// dotnet ef migrations add InitialCreate `
-        ///   -p services/Course/Course.Infrastructure `
-        ///   -s services/Course/Course.Api
-        ///
-        /// # Apply to database
-        /// dotnet ef database update `
-        ///   -p services/Course/Course.Infrastructure `
-        ///   -s services/Course/Course.Api
+
+        // // # Từ thư mục gốc FiboChatPlatform
+        // dotnet ef migrations add UpdateCourseModel -p services/Course/Course.Infrastructure -s services/Course/Course.Api
+
+        // // Apply migration
+        // dotnet ef database update -p services/Course/Course.Infrastructure -s services/Course/Course.Api
     }
 }
