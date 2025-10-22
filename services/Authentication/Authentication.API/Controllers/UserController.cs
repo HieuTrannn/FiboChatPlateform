@@ -26,7 +26,7 @@ namespace Authentication.API.Controllers
         }
         [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterReq request)
+        public async Task<IActionResult> Register([FromForm] RegisterReq request)
         {
             try
             {
@@ -135,7 +135,7 @@ namespace Authentication.API.Controllers
             }
         }
 
-        [HttpGet("{userId}")]
+        [HttpGet("profile")]
         public async Task<IActionResult> GetUserById([FromForm] string userId)
         {
             try

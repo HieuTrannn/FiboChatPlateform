@@ -81,7 +81,7 @@ app.UseInfrastructurePolicy();
 app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 app.UseCors("AllowAll");
-app.UseAuthentication();  // Add this
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 

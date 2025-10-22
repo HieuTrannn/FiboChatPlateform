@@ -39,6 +39,8 @@ namespace Authentication.Application.DTOs
             public string? Token { get; set; }
             public bool Success { get; set; }
             public string? Message { get; set; }
+
+            public bool? IsVerifiled { get; set; }
         }
 
         public class GoogleUserInfo

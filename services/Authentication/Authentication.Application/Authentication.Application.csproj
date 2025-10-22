@@ -12,6 +12,7 @@
         <ProjectReference Include="..\Authentication.Core\Authentication.Core.csproj" />
     </ItemGroup>
     <ItemGroup>
+        <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
         <PackageReference Include="FirebaseAdmin" Version="3.4.0" />
         <PackageReference Include="Mapster" Version="7.4.0" />
         <PackageReference Include="Mapster.DependencyInjection" Version="1.0.1" />
