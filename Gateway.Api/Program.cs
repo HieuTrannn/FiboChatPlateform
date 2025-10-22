@@ -6,12 +6,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddReverseProxy()
     .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new() { Title = "Gateway API", Version = "v1" });
-});
-
 var app = builder.Build();
 
 // bật swagger
@@ -32,7 +26,7 @@ if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
 // health check
 app.MapGet("/healthz", () => Results.Ok(new { ok = true }));
 
-// map reverse proxy
+// Reverse proxy - Forward TẤT CẢ requests
 app.MapReverseProxy();
 
 app.Run();

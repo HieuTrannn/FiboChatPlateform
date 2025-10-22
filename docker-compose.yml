@@ -1,6 +1,9 @@
 ﻿version: "3.9"
 
 services:
+  # =============================
+  # POSTGRES DATABASES
+  # =============================
   postgres-auth:
     image: postgres:16
     container_name: fibochat-auth-db
@@ -31,6 +34,9 @@ services:
     networks:
       - fibo-net
 
+  # =============================
+  # AUTHENTICATION SERVICE
+  # =============================
   authentication:
     build:
       context: .
@@ -49,6 +55,9 @@ services:
     networks:
       - fibo-net
 
+  # =============================
+  # COURSE SERVICE
+  # =============================
   course-api:
     build:
       context: .
@@ -67,6 +76,9 @@ services:
     networks:
       - fibo-net
 
+  # =============================
+  # GATEWAY SERVICE
+  # =============================
   gateway:
     build:
       context: .
@@ -85,6 +97,9 @@ services:
     networks:
       - fibo-net
 
+  # =============================
+  # REDIS
+  # =============================
   redis:
     image: redis:7.2
     container_name: fibochat-redis
@@ -97,6 +112,9 @@ services:
     networks:
       - fibo-net
 
+# =============================
+# NETWORKS & VOLUMES
+# =============================
 networks:
   fibo-net:
     driver: bridge
