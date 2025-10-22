@@ -38,8 +38,12 @@ namespace Course.Application.Implements
         public async Task<BasePaginatedList<MasterTopicResponse>> GetAllAsync(int page, int pageSize)
         {
             var masterTopics = await _unitOfWork.GetRepository<MasterTopic>().GetAllAsync();
-            var response = await Task.WhenAll(masterTopics.Select(ToMasterTopicResponse));
-            return new BasePaginatedList<MasterTopicResponse>(response, masterTopics.Count, page, pageSize);
+            var items = new List<MasterTopicResponse>(masterTopics.Count);
+            foreach (var masterTopic in masterTopics)
+            {
+                items.Add(await ToMasterTopicResponse(masterTopic));
+            }
+            return new BasePaginatedList<MasterTopicResponse>(items, masterTopics.Count, page, pageSize);
         }
 
         public async Task<MasterTopicResponse> CreateAsync(MasterTopicCreateRequest request)
