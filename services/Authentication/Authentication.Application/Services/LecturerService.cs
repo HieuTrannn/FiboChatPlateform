@@ -8,6 +8,7 @@ using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Net;
+using System.Security.Principal;
 using static Authentication.Application.DTOs.AuthenDTO;
 using static Authentication.Application.DTOs.LecturerDTO;
 
@@ -48,7 +49,9 @@ namespace Authentication.Application.Services
                 var lecture = request.Adapt<Account>();
                 lecture.Firstname = "null";
                 lecture.Lastname = "null";
-                lecture.Password = _rsaService.Encrypt(rawPassword);
+
+                lecture.Password = BCrypt.Net.BCrypt.HashPassword(rawPassword);
+
                 lecture.CreatedAt = DateTime.UtcNow;
                 lecture.IsVerified = true; // Lectures are verified by default
 
