@@ -1,4 +1,4 @@
-using Authentication.Infrastructure.DependencyInjection;
+﻿using Authentication.Infrastructure.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Project.SharedLibrary.MiddleWare;
 using Serilog;
@@ -66,12 +66,14 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
+// ===== PathBase: để Swagger và endpoint biết prefix /auth =====
+app.UsePathBase("/auth");
 // Configure the HTTP request pipeline.
 app.MapOpenApi();
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Authentication API v1");
+    c.SwaggerEndpoint("./v1/swagger.json", "Authentication API v1");
     c.RoutePrefix = "swagger";
 });
 
