@@ -23,6 +23,8 @@ if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Gateway API");
         c.SwaggerEndpoint("/identity/swagger/v1/swagger.json", "Identity API");
         c.SwaggerEndpoint("/kb/swagger/v1/swagger.json", "Knowledge Base API");
+
+        c.RoutePrefix = string.Empty;
     });
 }
 

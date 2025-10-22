@@ -125,10 +125,14 @@ namespace Course.Infrastructure.Persistence
             modelBuilder.Entity<LecturerMasterTopic>(e =>
             {
                 e.HasKey(x => x.Id);
+
+                e.Property(x => x.LecturerId)
+                      .IsRequired();
+
                 e.HasOne(x => x.MasterTopic)
-                 .WithMany(mt => mt.LecturerMasterTopics)
-                 .HasForeignKey(x => x.MasterTopicId)
-                 .OnDelete(DeleteBehavior.Cascade);
+                      .WithMany(mt => mt.LecturerMasterTopics)
+                      .HasForeignKey(x => x.MasterTopicId)
+                      .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<Keyword>(e =>
@@ -149,13 +153,10 @@ namespace Course.Infrastructure.Persistence
         }
 
 
-        /// dotnet ef migrations add InitialCreate `
-        ///   -p services/Course/Course.Infrastructure `
-        ///   -s services/Course/Course.Api
-        ///
-        /// # Apply to database
-        /// dotnet ef database update `
-        ///   -p services/Course/Course.Infrastructure `
-        ///   -s services/Course/Course.Api
+        // // # Từ thư mục gốc FiboChatPlatform
+        // dotnet ef migrations add UpdateCourseModel -p services/Course/Course.Infrastructure -s services/Course/Course.Api
+
+        // // Apply migration
+        // dotnet ef database update -p services/Course/Course.Infrastructure -s services/Course/Course.Api
     }
 }

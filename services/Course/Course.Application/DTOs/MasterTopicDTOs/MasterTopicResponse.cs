@@ -37,7 +37,7 @@ namespace Course.Application.DTOs.MasterTopicDTOs
 
     public class LecturerResponse
     {
-        public Guid Id { get; set; }
+        public Guid LecturerId { get; set; }
         public string? FullName { get; set; }
         public StaticEnum.GenderEnum Gender { get; set; }
         public StaticEnum.StatusEnum Status { get; set; }

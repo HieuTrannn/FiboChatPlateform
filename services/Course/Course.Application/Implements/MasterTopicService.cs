@@ -23,21 +23,41 @@ namespace Course.Application.Implements
 
         public async Task<MasterTopicResponse> GetByIdAsync(Guid id)
         {
-            // Include LecturerMasterTopics relationship
-            var masterTopic = await _unitOfWork.GetRepository<MasterTopic>()
-                .GetByIdAsync(id);
+            if (id == Guid.Empty)
+            {
+                _logger.LogWarning("GetByIdAsync called with empty id");
+                throw new ArgumentException("Id must not be empty.", nameof(id));
+            }
+
+            // Eager-load LecturerMasterTopics using expression overload (correct signature)
+            var repo = _unitOfWork.GetRepository<MasterTopic>();
+            var masterTopic = await repo.GetByIdWithIncludeAsync(
+                id,
+                mt => mt.LecturerMasterTopics
+            );
+
+            // Fallback: try no-tracking fetch if needed
+            if (masterTopic == null)
+            {
+                _logger.LogInformation("MasterTopic {Id} not found with include. Trying no-tracking fetch.", id);
+                masterTopic = await repo.GetByIdAsync(id);
+            }
 
             if (masterTopic == null)
             {
                 _logger.LogError("Master topic not found with id: {Id}", id);
                 throw new CustomExceptions.NoDataFoundException("Master topic not found");
             }
+
+            // Build rich response (includes external API lookups inside)
             return await ToMasterTopicResponse(masterTopic);
         }
 
         public async Task<BasePaginatedList<MasterTopicResponse>> GetAllAsync(int page, int pageSize)
         {
-            var masterTopics = await _unitOfWork.GetRepository<MasterTopic>().GetAllAsync();
+            var masterTopics = await _unitOfWork.GetRepository<MasterTopic>()
+                .GetAllAsync(includeProperties: "LecturerMasterTopics");
+
             var items = new List<MasterTopicResponse>(masterTopics.Count);
             foreach (var masterTopic in masterTopics)
             {
@@ -56,51 +76,28 @@ namespace Course.Application.Implements
                 throw new CustomExceptions.NoDataFoundException("Domain not found");
             }
 
-            // Validate semester exists via external API (N:1 relationship) - Make it optional
-            SemesterResponse? semesterResponse = null;
+            // Optional semester validation via external API (non-blocking on failure)
             if (request.SemesterId != Guid.Empty)
             {
                 try
                 {
-                    semesterResponse = await _externalApiService.GetSemesterByIdAsync(request.SemesterId.ToString());
-                    if (semesterResponse == null)
+                    var semester = await _externalApiService.GetSemesterByIdAsync(request.SemesterId.ToString());
+                    if (semester == null)
                     {
-                        _logger.LogWarning("Semester not found with id: {SemesterId}, but continuing with creation", request.SemesterId);
-                        // Don't throw exception, just log warning and continue
+                        _logger.LogWarning("Semester {SemesterId} not found, continuing creation.", request.SemesterId);
                     }
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogWarning(ex, "Failed to validate semester {SemesterId}, but continuing with creation", request.SemesterId);
-                    // Don't throw exception, just log warning and continue
+                    _logger.LogWarning(ex, "Semester validation failed for {SemesterId}, continuing creation.", request.SemesterId);
                 }
             }
 
-            // Validate lecturers exist via external API (N:N relationship) - Make it optional
-            if (request.LecturerIds != null && request.LecturerIds.Any())
-            {
-                var lecturerValidationTasks = request.LecturerIds.Select(async lecturerId =>
-                {
-                    try
-                    {
-                        var lecturer = await _externalApiService.GetLecturerByIdAsync(lecturerId.ToString());
-                        if (lecturer == null)
-                        {
-                            _logger.LogWarning("Lecturer not found with id: {LecturerId}, but continuing with creation", lecturerId);
-                            // Don't throw exception, just log warning and continue
-                        }
-                        return lecturer;
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogWarning(ex, "Failed to validate lecturer {LecturerId}, but continuing with creation", lecturerId);
-                        // Don't throw exception, just log warning and continue
-                        return null;
-                    }
-                });
-
-                await Task.WhenAll(lecturerValidationTasks);
-            }
+            // Normalize lecturer list: distinct, remove empty Guids
+            var lecturerIds = request.LecturerIds?
+                .Where(id => id != Guid.Empty)
+                .Distinct()
+                .ToList();
 
             var masterTopic = new MasterTopic
             {
@@ -110,10 +107,9 @@ namespace Course.Application.Implements
                 Description = request.Description,
             };
 
-            // Add lecturer relationships (N:N)
-            if (request.LecturerIds != null)
+            if (lecturerIds != null && lecturerIds.Count > 0)
             {
-                foreach (var lecturerId in request.LecturerIds)
+                foreach (var lecturerId in lecturerIds)
                 {
                     masterTopic.LecturerMasterTopics.Add(new LecturerMasterTopic
                     {
@@ -123,12 +119,15 @@ namespace Course.Application.Implements
                 }
             }
 
+            // repository.InsertAsync already saves; avoid double SaveChanges
             await _unitOfWork.GetRepository<MasterTopic>().InsertAsync(masterTopic);
-            await _unitOfWork.SaveChangesAsync();
 
-            _logger.LogInformation("Master topic created successfully with id: {Id}, Semester: {SemesterId}, Lecturers: {LecturerCount}",
-                masterTopic.Id, masterTopic.SemesterId, request.LecturerIds?.Count ?? 0);
-            return await ToMasterTopicResponse(masterTopic);
+            // Reload with includes to ensure navigation data is populated
+            var reloaded = await _unitOfWork
+                .GetRepository<MasterTopic>()
+                .GetByIdWithIncludeAsync(masterTopic.Id, mt => mt.LecturerMasterTopics);
+
+            return await ToMasterTopicResponse(reloaded ?? masterTopic);
         }
 
         public async Task<MasterTopicResponse> UpdateAsync(Guid id, MasterTopicUpdateRequest request)
@@ -172,6 +171,12 @@ namespace Course.Application.Implements
         {
             // Get Domain information (N:1 relationship)
             var domain = await _unitOfWork.GetRepository<Domain.Entities.Domain>().GetByIdAsync(masterTopic.DomainId);
+            if (domain == null)
+            {
+                _logger.LogError("Domain not found with id: {DomainId}", masterTopic.DomainId);
+                throw new CustomExceptions.NoDataFoundException("Domain not found");
+            }
+
             var domainResponse = new DomainResponse
             {
                 Id = domain.Id,
@@ -199,12 +204,11 @@ namespace Course.Application.Implements
                 }
             }
 
-            // Get ALL lecturers from N:N relationship - Sử dụng navigation property
+            // Get ALL lecturers from N:N relationship
             var lecturerResponses = new List<LecturerResponse>();
 
             if (masterTopic.LecturerMasterTopics != null && masterTopic.LecturerMasterTopics.Any())
             {
-                // Fetch lecturer details for each lecturer ID
                 var lecturerTasks = masterTopic.LecturerMasterTopics.Select(async lmt =>
                 {
                     try
@@ -236,7 +240,7 @@ namespace Course.Application.Implements
                 Id = masterTopic.Id,
                 Domain = domainResponse,
                 Name = masterTopic.Name,
-                Semester = new SemesterResponse
+                Semester = semesterResponse != null ? new SemesterResponse
                 {
                     Id = masterTopic.SemesterId,
                     Code = semesterResponse.Code,
@@ -245,15 +249,14 @@ namespace Course.Application.Implements
                     Status = semesterResponse.Status,
                     StartDate = semesterResponse.StartDate,
                     EndDate = semesterResponse.EndDate,
-                },
-                Lecturers = new List<LecturerResponse> {
-                    new LecturerResponse {
-                        Id = lecturerResponses.First().Id,
-                        FullName = lecturerResponses.First().FullName,
-                        Gender = lecturerResponses.First().Gender,
-                        Status = lecturerResponses.First().Status,
-                    },
-                }, // N:N relationship
+                } : null,
+                Lecturers = lecturerResponses.Select(l => new LecturerResponse
+                {
+                    LecturerId = l.LecturerId,
+                    FullName = l.FullName,
+                    Gender = l.Gender,
+                    Status = l.Status,
+                }).ToList(),
                 Description = masterTopic.Description,
                 Status = masterTopic.Status,
                 CreatedAt = masterTopic.CreatedAt,

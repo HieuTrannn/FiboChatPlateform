@@ -13,6 +13,7 @@ namespace Course.Domain.Abstraction
         Task<BasePaginatedList<T>> GetPagging(IQueryable<T> query, int index, int pageSize);
         Task<T?> GetByIdNoTracking(object id);
         Task<T?> GetByIdAsync(object id);
+        Task<T?> GetByIdWithIncludeAsync(Guid id, params Expression<Func<T, object>>[] includes);
         Task<T> InsertAsync(T entity);
         Task UpdateAsync(T entity);
         Task DeleteAsync(object id);

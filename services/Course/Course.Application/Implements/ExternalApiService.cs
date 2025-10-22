@@ -24,8 +24,8 @@ namespace Course.Application.Implements
         {
             try
             {
-                _logger.LogInformation("Calling semester API: {Url}", $"{_gatewayBaseUrl}/api/semesters/{semesterId}");
-                var response = await _httpClient.GetAsync($"{_gatewayBaseUrl}/api/semesters/{semesterId}");
+                _logger.LogInformation("Calling semester API: {Url}", $"{_gatewayBaseUrl}/auth/api/semesters/{semesterId}");
+                var response = await _httpClient.GetAsync($"{_gatewayBaseUrl}/auth/api/semesters/{semesterId}");
                 
                 _logger.LogInformation("Semester API response status: {StatusCode}", response.StatusCode);
                 if (response.IsSuccessStatusCode)
@@ -55,7 +55,7 @@ namespace Course.Application.Implements
         {
             try
             {
-                var response = await _httpClient.GetAsync($"{_gatewayBaseUrl}/api/lecturers/{lecturerId}");
+                var response = await _httpClient.GetAsync($"{_gatewayBaseUrl}/auth/api/lecturers/{lecturerId}");
                 
                 if (response.IsSuccessStatusCode)
                 {
