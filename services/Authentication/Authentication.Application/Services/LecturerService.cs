@@ -4,7 +4,6 @@ using Authentication.Domain.Abstraction;
 using Authentication.Domain.Entities;
 using Contracts.Common;
 using Mapster;
-using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Net;
@@ -30,7 +29,7 @@ namespace Authentication.Application.Services
             _emailService = service;
             _accountRepository = _unitOfWork.GetRepository<Account>();
         }
-        
+
         public async Task<ApiResponse<RegisterResponse>> CreateLecturer(LecturerRequest request)
         {
             try
@@ -124,19 +123,18 @@ namespace Authentication.Application.Services
             }
         }
 
-        public async Task<LecturerResponse> GetLecturerById(string id)
+        public async Task<LecturerResponse> GetLecturerById(Guid id)
         {
             try
             {
                 _logger.LogInformation("Retrieving lecturer with ID: {Id}", id);
                 var lectureRepository = _unitOfWork.GetRepository<Lecturer>();
-                var lecture = await lectureRepository.Entities
-                    .Include(l => l.Account)
-                    .FirstOrDefaultAsync(l => l.LecturerId.ToString() == id);
+                var lecture = await lectureRepository.GetByIdAsync(id);
+
                 if (lecture == null)
                 {
                     _logger.LogWarning("Lecturer with ID: {Id} not found.", id);
-                    return null;
+                    throw new KeyNotFoundException($"Lecturer with ID: {id} not found.");
                 }
 
                 return lecture.Adapt<LecturerResponse>();
@@ -144,7 +142,7 @@ namespace Authentication.Application.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error occurred while retrieving lecturer with ID: {Id}", id);
-                throw; // Rethrow or handle as needed
+                throw new InvalidOperationException($"Error retrieving lecturer: {ex.Message}", ex);
             }
         }
 

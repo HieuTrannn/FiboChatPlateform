@@ -8,7 +8,22 @@ builder.Services.AddReverseProxy()
 
 var app = builder.Build();
 
-// Health check
+// bật swagger
+if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Gateway API");
+        c.SwaggerEndpoint("/identity/swagger/v1/swagger.json", "Identity API");
+        c.SwaggerEndpoint("/kb/swagger/v1/swagger.json", "Knowledge Base API");
+
+        c.RoutePrefix = string.Empty;
+    });
+}
+
+
+// health check
 app.MapGet("/healthz", () => Results.Ok(new { ok = true }));
 
 // Reverse proxy - Forward TẤT CẢ requests

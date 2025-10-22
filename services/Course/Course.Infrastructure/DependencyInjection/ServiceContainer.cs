@@ -25,6 +25,8 @@ namespace Course.Infrastructure.DependencyInjection
             services.AddScoped<IKeywordService, KeywordService>();
             services.AddScoped<IMasterTopicService, MasterTopicService>();
             services.AddScoped<ITopicService, TopicService>();
+            services.AddHttpClient<IExternalApiService, ExternalApiService>();
+            services.AddScoped<IExternalApiService, ExternalApiService>();
 
             services.Configure<ApiBehaviorOptions>(options =>
             {

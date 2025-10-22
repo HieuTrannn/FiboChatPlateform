@@ -1,0 +1,1443 @@
+2025-10-22 00:31:34.05 +07:00  [INF] 
+2025-10-22 00:31:34.29 +07:00  [INF] 
+2025-10-22 00:31:34.31 +07:00  [INF] 
+2025-10-22 00:31:34.31 +07:00  [INF] 
+2025-10-22 00:31:34.32 +07:00  [INF] 
+2025-10-22 00:33:23.17 +07:00  [INF] 
+2025-10-22 00:33:23.37 +07:00  [WRN] 
+2025-10-22 00:33:23.38 +07:00  [INF] 
+2025-10-22 00:33:23.39 +07:00  [INF] 
+2025-10-22 00:33:23.43 +07:00  [INF] 
+2025-10-22 00:33:24.81 +07:00  [INF] 
+2025-10-22 00:33:24.92 +07:00  [INF] 
+2025-10-22 00:33:24.93 +07:00  [INF] 
+2025-10-22 00:33:24.99 +07:00  [ERR] 
+System.Net.Http.HttpRequestException: An error occurred while sending the request.
+ ---> System.IO.IOException: Unable to read data from the transport connection: An established connection was aborted by the software in your host machine..
+ ---> System.Net.Sockets.SocketException (10053): An established connection was aborted by the software in your host machine.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.CreateException(SocketError error, Boolean forAsyncThrow)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ReceiveAsync(Socket socket, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.ReceiveAsync(Memory`1 buffer, SocketFlags socketFlags, Boolean fromNetworkStream, CancellationToken cancellationToken)
+   at System.Net.Sockets.NetworkStream.ReadAsync(Memory`1 buffer, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnection.InitialFillAsync(Boolean async)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at System.Net.Http.HttpConnection.InitialFillAsync(Boolean async)
+   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)
+   at System.Threading.ExecutionContext.RunFromThreadPoolDispatchLoop(Thread threadPoolThread, ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecuteFromThreadPool(Thread threadPoolThread)
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading.PortableThreadPool.WorkerThread.WorkerThreadStart()
+--- End of stack trace from previous location ---
+
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnection.InitialFillAsync(Boolean async)
+   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.DiagnosticsHandler.SendAsyncCore(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.Logging.LoggingHttpMessageHandler.<SendCoreAsync>g__Core|4_0(HttpRequestMessage request, Boolean useAsync, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.Logging.LoggingScopeHttpMessageHandler.<SendCoreAsync>g__Core|4_0(HttpRequestMessage request, Boolean useAsync, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Course.Application.Implements.ExternalApiService.GetSemesterByIdAsync(String semesterId) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Application\Implements\ExternalApiService.cs:line 27
+2025-10-22 00:33:25.02 +07:00  [WRN] 
+2025-10-22 00:33:25.03 +07:00  [INF] 
+2025-10-22 00:33:25.03 +07:00  [INF] 
+2025-10-22 00:33:25.05 +07:00  [ERR] 
+System.Net.Http.HttpRequestException: An error occurred while sending the request.
+ ---> System.Net.Http.HttpIOException: The response ended prematurely. (ResponseEnded)
+   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.DiagnosticsHandler.SendAsyncCore(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.Logging.LoggingHttpMessageHandler.<SendCoreAsync>g__Core|4_0(HttpRequestMessage request, Boolean useAsync, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.Logging.LoggingScopeHttpMessageHandler.<SendCoreAsync>g__Core|4_0(HttpRequestMessage request, Boolean useAsync, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Course.Application.Implements.ExternalApiService.GetLecturerByIdAsync(String lecturerId) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Application\Implements\ExternalApiService.cs:line 54
+2025-10-22 00:33:25.06 +07:00  [WRN] 
+2025-10-22 00:33:25.50 +07:00  [ERR] 
+2025-10-22 00:33:25.63 +07:00  [ERR] 
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 23503: insert or update on table "MasterTopics" violates foreign key constraint "FK_MasterTopics_Semester_SemesterId"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: ERROR
+    SqlState: 23503
+    MessageText: insert or update on table "MasterTopics" violates foreign key constraint "FK_MasterTopics_Semester_SemesterId"
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    SchemaName: public
+    TableName: MasterTopics
+    ConstraintName: FK_MasterTopics_Semester_SemesterId
+    File: ri_triggers.c
+    Line: 2610
+    Routine: ri_ReportViolation
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+2025-10-22 00:33:25.68 +07:00  [ERR] 
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 23503: insert or update on table "MasterTopics" violates foreign key constraint "FK_MasterTopics_Semester_SemesterId"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: ERROR
+    SqlState: 23503
+    MessageText: insert or update on table "MasterTopics" violates foreign key constraint "FK_MasterTopics_Semester_SemesterId"
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    SchemaName: public
+    TableName: MasterTopics
+    ConstraintName: FK_MasterTopics_Semester_SemesterId
+    File: ri_triggers.c
+    Line: 2610
+    Routine: ri_ReportViolation
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Course.Infrastructure.Implements.GenericRepository`1.InsertAsync(T entity) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Infrastructure\Implements\GenericRepository.cs:line 68
+   at Course.Application.Implements.MasterTopicService.CreateAsync(MasterTopicCreateRequest request) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Application\Implements\MasterTopicService.cs:line 121
+   at Course.Api.Controllers.MasterTopicController.CreateMasterTopic(MasterTopicCreateRequest request) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Api\Controllers\MasterTopicController.cs:line 83
+2025-10-22 00:33:25.76 +07:00  [INF] 
+2025-10-22 00:33:25.81 +07:00  [INF] 
+2025-10-22 00:33:25.82 +07:00  [INF] 
+2025-10-22 00:33:25.82 +07:00  [ERR] 
+2025-10-22 00:33:25.84 +07:00  [INF] 
+2025-10-22 00:43:57.43 +07:00  [INF] 
+2025-10-22 00:44:04.24 +07:00  [INF] 
+2025-10-22 00:44:04.40 +07:00  [INF] 
+2025-10-22 00:44:04.41 +07:00  [INF] 
+2025-10-22 00:44:04.41 +07:00  [INF] 
+2025-10-22 00:44:04.41 +07:00  [INF] 
+2025-10-22 00:44:13.12 +07:00  [INF] 
+2025-10-22 00:44:13.23 +07:00  [WRN] 
+2025-10-22 00:44:13.24 +07:00  [INF] 
+2025-10-22 00:44:13.24 +07:00  [INF] 
+2025-10-22 00:44:13.28 +07:00  [INF] 
+2025-10-22 00:44:14.72 +07:00  [INF] 
+2025-10-22 00:44:14.83 +07:00  [INF] 
+2025-10-22 00:44:14.84 +07:00  [INF] 
+2025-10-22 00:44:15.09 +07:00  [INF] 
+2025-10-22 00:44:15.10 +07:00  [INF] 
+2025-10-22 00:44:15.10 +07:00  [WRN] 
+2025-10-22 00:44:15.10 +07:00  [WRN] 
+2025-10-22 00:44:15.11 +07:00  [INF] 
+2025-10-22 00:44:15.11 +07:00  [INF] 
+2025-10-22 00:44:15.12 +07:00  [INF] 
+2025-10-22 00:44:15.12 +07:00  [INF] 
+2025-10-22 00:44:15.12 +07:00  [WRN] 
+2025-10-22 00:44:15.13 +07:00  [WRN] 
+2025-10-22 00:44:15.47 +07:00  [ERR] 
+2025-10-22 00:44:15.51 +07:00  [ERR] 
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 23503: insert or update on table "MasterTopics" violates foreign key constraint "FK_MasterTopics_Semester_SemesterId"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: ERROR
+    SqlState: 23503
+    MessageText: insert or update on table "MasterTopics" violates foreign key constraint "FK_MasterTopics_Semester_SemesterId"
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    SchemaName: public
+    TableName: MasterTopics
+    ConstraintName: FK_MasterTopics_Semester_SemesterId
+    File: ri_triggers.c
+    Line: 2610
+    Routine: ri_ReportViolation
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+2025-10-22 00:44:15.56 +07:00  [ERR] 
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 23503: insert or update on table "MasterTopics" violates foreign key constraint "FK_MasterTopics_Semester_SemesterId"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: ERROR
+    SqlState: 23503
+    MessageText: insert or update on table "MasterTopics" violates foreign key constraint "FK_MasterTopics_Semester_SemesterId"
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    SchemaName: public
+    TableName: MasterTopics
+    ConstraintName: FK_MasterTopics_Semester_SemesterId
+    File: ri_triggers.c
+    Line: 2610
+    Routine: ri_ReportViolation
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Course.Infrastructure.Implements.GenericRepository`1.InsertAsync(T entity) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Infrastructure\Implements\GenericRepository.cs:line 68
+   at Course.Application.Implements.MasterTopicService.CreateAsync(MasterTopicCreateRequest request) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Application\Implements\MasterTopicService.cs:line 121
+   at Course.Api.Controllers.MasterTopicController.CreateMasterTopic(MasterTopicCreateRequest request) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Api\Controllers\MasterTopicController.cs:line 83
+2025-10-22 00:44:15.62 +07:00  [INF] 
+2025-10-22 00:44:15.68 +07:00  [INF] 
+2025-10-22 00:44:15.69 +07:00  [INF] 
+2025-10-22 00:44:15.69 +07:00  [ERR] 
+2025-10-22 00:44:15.70 +07:00  [INF] 
+2025-10-22 00:52:15.80 +07:00  [INF] 
+2025-10-22 00:53:14.50 +07:00  [INF] 
+2025-10-22 00:53:14.68 +07:00  [INF] 
+2025-10-22 00:53:14.68 +07:00  [INF] 
+2025-10-22 00:53:14.68 +07:00  [INF] 
+2025-10-22 00:53:14.69 +07:00  [INF] 
+2025-10-22 00:53:32.22 +07:00  [INF] 
+2025-10-22 00:53:32.38 +07:00  [WRN] 
+2025-10-22 00:53:32.38 +07:00  [INF] 
+2025-10-22 00:53:32.39 +07:00  [INF] 
+2025-10-22 00:53:32.44 +07:00  [INF] 
+2025-10-22 00:53:33.71 +07:00  [INF] 
+2025-10-22 00:53:33.82 +07:00  [INF] 
+2025-10-22 00:53:33.82 +07:00  [INF] 
+2025-10-22 00:53:34.04 +07:00  [INF] 
+2025-10-22 00:53:34.04 +07:00  [INF] 
+2025-10-22 00:53:34.05 +07:00  [WRN] 
+2025-10-22 00:53:34.05 +07:00  [WRN] 
+2025-10-22 00:53:34.05 +07:00  [INF] 
+2025-10-22 00:53:34.05 +07:00  [INF] 
+2025-10-22 00:53:34.07 +07:00  [INF] 
+2025-10-22 00:53:34.07 +07:00  [INF] 
+2025-10-22 00:53:34.08 +07:00  [WRN] 
+2025-10-22 00:53:34.08 +07:00  [WRN] 
+2025-10-22 00:53:34.29 +07:00  [ERR] 
+2025-10-22 00:53:34.33 +07:00  [ERR] 
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 23503: insert or update on table "MasterTopics" violates foreign key constraint "FK_MasterTopics_Semester_SemesterId"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: ERROR
+    SqlState: 23503
+    MessageText: insert or update on table "MasterTopics" violates foreign key constraint "FK_MasterTopics_Semester_SemesterId"
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    SchemaName: public
+    TableName: MasterTopics
+    ConstraintName: FK_MasterTopics_Semester_SemesterId
+    File: ri_triggers.c
+    Line: 2610
+    Routine: ri_ReportViolation
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+2025-10-22 00:53:34.37 +07:00  [ERR] 
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 23503: insert or update on table "MasterTopics" violates foreign key constraint "FK_MasterTopics_Semester_SemesterId"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: ERROR
+    SqlState: 23503
+    MessageText: insert or update on table "MasterTopics" violates foreign key constraint "FK_MasterTopics_Semester_SemesterId"
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    SchemaName: public
+    TableName: MasterTopics
+    ConstraintName: FK_MasterTopics_Semester_SemesterId
+    File: ri_triggers.c
+    Line: 2610
+    Routine: ri_ReportViolation
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Course.Infrastructure.Implements.GenericRepository`1.InsertAsync(T entity) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Infrastructure\Implements\GenericRepository.cs:line 68
+   at Course.Application.Implements.MasterTopicService.CreateAsync(MasterTopicCreateRequest request) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Application\Implements\MasterTopicService.cs:line 121
+   at Course.Api.Controllers.MasterTopicController.CreateMasterTopic(MasterTopicCreateRequest request) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Api\Controllers\MasterTopicController.cs:line 83
+2025-10-22 00:53:34.45 +07:00  [INF] 
+2025-10-22 00:53:34.48 +07:00  [INF] 
+2025-10-22 00:53:34.48 +07:00  [INF] 
+2025-10-22 00:53:34.48 +07:00  [ERR] 
+2025-10-22 00:53:34.49 +07:00  [INF] 
+2025-10-22 00:54:12.92 +07:00  [INF] 
+2025-10-22 00:57:49.90 +07:00  [INF] 
+2025-10-22 00:57:50.04 +07:00  [INF] 
+2025-10-22 00:57:50.05 +07:00  [INF] 
+2025-10-22 00:57:50.05 +07:00  [INF] 
+2025-10-22 00:57:50.05 +07:00  [INF] 
+2025-10-22 01:01:43.00 +07:00  [INF] 
+2025-10-22 01:01:53.30 +07:00  [INF] 
+2025-10-22 01:01:53.47 +07:00  [INF] 
+2025-10-22 01:01:53.48 +07:00  [INF] 
+2025-10-22 01:01:53.48 +07:00  [INF] 
+2025-10-22 01:01:53.48 +07:00  [INF] 
+2025-10-22 01:04:31.38 +07:00  [INF] 
+2025-10-22 01:04:31.52 +07:00  [WRN] 
+2025-10-22 01:04:31.52 +07:00  [INF] 
+2025-10-22 01:04:31.53 +07:00  [INF] 
+2025-10-22 01:04:31.60 +07:00  [INF] 
+2025-10-22 01:04:32.93 +07:00  [INF] 
+2025-10-22 01:04:32.97 +07:00  [ERR] 
+2025-10-22 01:04:32.97 +07:00  [ERR] 
+Course.Domain.Exceptions.CustomExceptions+NoDataFoundException: Domain not found
+   at Course.Application.Implements.MasterTopicService.CreateAsync(MasterTopicCreateRequest request) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Application\Implements\MasterTopicService.cs:line 51
+   at Course.Api.Controllers.MasterTopicController.CreateMasterTopic(MasterTopicCreateRequest request) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Api\Controllers\MasterTopicController.cs:line 83
+2025-10-22 01:04:33.00 +07:00  [INF] 
+2025-10-22 01:04:33.04 +07:00  [INF] 
+2025-10-22 01:04:33.05 +07:00  [INF] 
+2025-10-22 01:04:33.05 +07:00  [ERR] 
+2025-10-22 01:04:33.06 +07:00  [INF] 
+2025-10-22 01:05:12.54 +07:00  [INF] 
+2025-10-22 01:05:12.54 +07:00  [INF] 
+2025-10-22 01:05:12.55 +07:00  [INF] 
+2025-10-22 01:05:12.55 +07:00  [INF] 
+2025-10-22 01:05:12.79 +07:00  [INF] 
+2025-10-22 01:05:12.81 +07:00  [INF] 
+2025-10-22 01:05:12.83 +07:00  [INF] 
+2025-10-22 01:05:12.83 +07:00  [INF] 
+2025-10-22 01:05:12.83 +07:00  [INF] 
+2025-10-22 01:05:12.83 +07:00  [INF] 
+2025-10-22 01:05:20.42 +07:00  [INF] 
+2025-10-22 01:05:20.44 +07:00  [INF] 
+2025-10-22 01:05:20.46 +07:00  [INF] 
+2025-10-22 01:05:20.46 +07:00  [INF] 
+2025-10-22 01:05:20.53 +07:00  [INF] 
+2025-10-22 01:05:20.55 +07:00  [INF] 
+2025-10-22 01:05:20.56 +07:00  [INF] 
+2025-10-22 01:05:20.78 +07:00  [INF] 
+2025-10-22 01:05:20.78 +07:00  [INF] 
+2025-10-22 01:05:20.78 +07:00  [WRN] 
+2025-10-22 01:05:20.79 +07:00  [WRN] 
+2025-10-22 01:05:20.79 +07:00  [INF] 
+2025-10-22 01:05:20.79 +07:00  [INF] 
+2025-10-22 01:05:20.82 +07:00  [INF] 
+2025-10-22 01:05:20.83 +07:00  [INF] 
+2025-10-22 01:05:20.83 +07:00  [WRN] 
+2025-10-22 01:05:20.83 +07:00  [WRN] 
+2025-10-22 01:05:20.96 +07:00  [INF] 
+2025-10-22 01:05:20.99 +07:00  [INF] 
+2025-10-22 01:05:21.00 +07:00  [INF] 
+2025-10-22 01:05:21.00 +07:00  [INF] 
+2025-10-22 01:05:21.02 +07:00  [INF] 
+2025-10-22 01:05:21.02 +07:00  [INF] 
+2025-10-22 01:05:21.02 +07:00  [WRN] 
+2025-10-22 01:05:21.07 +07:00  [INF] 
+2025-10-22 01:05:21.08 +07:00  [INF] 
+2025-10-22 01:05:21.09 +07:00  [INF] 
+2025-10-22 01:05:21.15 +07:00  [INF] 
+2025-10-22 01:05:21.17 +07:00  [INF] 
+2025-10-22 01:05:21.18 +07:00  [WRN] 
+2025-10-22 01:05:21.20 +07:00  [INF] 
+2025-10-22 01:05:21.32 +07:00  [INF] 
+2025-10-22 01:05:21.35 +07:00  [INF] 
+2025-10-22 01:05:21.37 +07:00  [INF] 
+2025-10-22 01:05:21.40 +07:00  [INF] 
+2025-10-22 01:06:44.87 +07:00  [INF] 
+2025-10-22 01:06:44.88 +07:00  [INF] 
+2025-10-22 01:06:44.88 +07:00  [INF] 
+2025-10-22 01:06:44.91 +07:00  [INF] 
+2025-10-22 01:06:44.91 +07:00  [INF] 
+2025-10-22 01:06:44.92 +07:00  [INF] 
+2025-10-22 01:06:44.92 +07:00  [INF] 
+2025-10-22 01:06:44.93 +07:00  [INF] 
+2025-10-22 01:06:44.94 +07:00  [INF] 
+2025-10-22 01:06:44.94 +07:00  [WRN] 
+2025-10-22 01:06:44.94 +07:00  [INF] 
+2025-10-22 01:06:44.94 +07:00  [INF] 
+2025-10-22 01:06:44.94 +07:00  [INF] 
+2025-10-22 01:06:44.96 +07:00  [INF] 
+2025-10-22 01:06:44.96 +07:00  [INF] 
+2025-10-22 01:06:44.96 +07:00  [WRN] 
+2025-10-22 01:06:44.97 +07:00  [INF] 
+2025-10-22 01:06:44.98 +07:00  [INF] 
+2025-10-22 01:06:44.98 +07:00  [INF] 
+2025-10-22 01:06:44.98 +07:00  [INF] 
+2025-10-22 01:06:44.99 +07:00  [INF] 
+2025-10-22 01:13:43.35 +07:00  [INF] 
+2025-10-22 01:15:54.85 +07:00  [INF] 
+2025-10-22 01:15:54.99 +07:00  [INF] 
+2025-10-22 01:15:54.99 +07:00  [INF] 
+2025-10-22 01:15:54.99 +07:00  [INF] 
+2025-10-22 01:15:54.99 +07:00  [INF] 
+2025-10-22 01:16:07.43 +07:00  [INF] 
+2025-10-22 01:16:07.52 +07:00  [WRN] 
+2025-10-22 01:16:07.53 +07:00  [INF] 
+2025-10-22 01:16:07.57 +07:00  [INF] 
+2025-10-22 01:16:08.95 +07:00  [INF] 
+2025-10-22 01:16:09.20 +07:00  [INF] 
+2025-10-22 01:16:09.24 +07:00  [INF] 
+2025-10-22 01:16:09.24 +07:00  [INF] 
+2025-10-22 01:16:09.35 +07:00  [INF] 
+2025-10-22 01:16:09.36 +07:00  [INF] 
+2025-10-22 01:16:09.37 +07:00  [WRN] 
+2025-10-22 01:16:09.37 +07:00  [WRN] 
+2025-10-22 01:16:09.39 +07:00  [INF] 
+2025-10-22 01:16:09.42 +07:00  [INF] 
+2025-10-22 01:16:09.43 +07:00  [INF] 
+2025-10-22 01:16:09.44 +07:00  [INF] 
+2025-10-22 01:16:09.44 +07:00  [INF] 
+2025-10-22 01:16:09.44 +07:00  [WRN] 
+2025-10-22 01:16:09.45 +07:00  [INF] 
+2025-10-22 01:16:09.53 +07:00  [INF] 
+2025-10-22 01:16:09.53 +07:00  [INF] 
+2025-10-22 01:16:09.53 +07:00  [INF] 
+2025-10-22 01:16:09.55 +07:00  [INF] 
+2025-10-22 01:34:30.34 +07:00  [INF] 
+2025-10-22 01:34:43.33 +07:00  [INF] 
+2025-10-22 01:34:43.49 +07:00  [INF] 
+2025-10-22 01:34:43.49 +07:00  [INF] 
+2025-10-22 01:34:43.49 +07:00  [INF] 
+2025-10-22 01:34:43.49 +07:00  [INF] 
+2025-10-22 01:34:48.95 +07:00  [INF] 
+2025-10-22 01:34:49.09 +07:00  [WRN] 
+2025-10-22 01:34:49.09 +07:00  [INF] 
+2025-10-22 01:34:49.14 +07:00  [INF] 
+2025-10-22 01:34:50.23 +07:00  [INF] 
+2025-10-22 01:34:50.45 +07:00  [INF] 
+2025-10-22 01:34:50.47 +07:00  [INF] 
+2025-10-22 01:34:50.48 +07:00  [INF] 
+2025-10-22 01:34:50.48 +07:00  [INF] 
+2025-10-22 01:34:50.52 +07:00  [INF] 
+2025-10-22 01:34:50.53 +07:00  [INF] 
+2025-10-22 01:34:50.53 +07:00  [INF] 
+2025-10-22 01:34:50.53 +07:00  [WRN] 
+2025-10-22 01:34:50.53 +07:00  [WRN] 
+2025-10-22 01:34:50.54 +07:00  [INF] 
+2025-10-22 01:34:50.56 +07:00  [INF] 
+2025-10-22 01:34:50.57 +07:00  [INF] 
+2025-10-22 01:34:50.58 +07:00  [INF] 
+2025-10-22 01:34:50.58 +07:00  [INF] 
+2025-10-22 01:34:50.58 +07:00  [WRN] 
+2025-10-22 01:34:50.59 +07:00  [INF] 
+2025-10-22 01:34:50.66 +07:00  [INF] 
+2025-10-22 01:34:50.66 +07:00  [INF] 
+2025-10-22 01:34:50.66 +07:00  [INF] 
+2025-10-22 01:34:50.67 +07:00  [INF] 
+2025-10-22 01:44:15.91 +07:00  [INF] 
+2025-10-22 01:44:52.07 +07:00  [INF] 
+2025-10-22 01:44:52.19 +07:00  [INF] 
+2025-10-22 01:44:52.19 +07:00  [INF] 
+2025-10-22 01:44:52.19 +07:00  [INF] 
+2025-10-22 01:44:52.19 +07:00  [INF] 
+2025-10-22 01:45:04.98 +07:00  [INF] 
+2025-10-22 01:45:05.08 +07:00  [WRN] 
+2025-10-22 01:45:05.08 +07:00  [INF] 
+2025-10-22 01:45:05.11 +07:00  [INF] 
+2025-10-22 01:45:06.38 +07:00  [INF] 
+2025-10-22 01:45:06.61 +07:00  [INF] 
+2025-10-22 01:45:06.63 +07:00  [INF] 
+2025-10-22 01:45:06.64 +07:00  [INF] 
+2025-10-22 01:45:06.64 +07:00  [INF] 
+2025-10-22 01:45:06.69 +07:00  [INF] 
+2025-10-22 01:45:06.69 +07:00  [INF] 
+2025-10-22 01:45:06.70 +07:00  [INF] 
+2025-10-22 01:45:06.70 +07:00  [WRN] 
+2025-10-22 01:45:06.70 +07:00  [WRN] 
+2025-10-22 01:45:06.70 +07:00  [INF] 
+2025-10-22 01:45:06.70 +07:00  [ERR] 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at Course.Application.Implements.MasterTopicService.ToMasterTopicResponse(MasterTopic masterTopic) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Application\Implements\MasterTopicService.cs:line 238
+   at Course.Application.Implements.MasterTopicService.GetAllAsync(Int32 page, Int32 pageSize) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Application\Implements\MasterTopicService.cs:line 49
+   at Course.Api.Controllers.MasterTopicController.GetAllMasterTopics(Int32 page, Int32 pageSize) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Api\Controllers\MasterTopicController.cs:line 32
+2025-10-22 01:45:06.74 +07:00  [INF] 
+2025-10-22 01:45:06.77 +07:00  [INF] 
+2025-10-22 01:45:06.77 +07:00  [INF] 
+2025-10-22 01:45:06.77 +07:00  [ERR] 
+2025-10-22 01:45:06.78 +07:00  [INF] 
+2025-10-22 01:45:30.22 +07:00  [INF] 
+2025-10-22 01:45:30.23 +07:00  [INF] 
+2025-10-22 01:45:30.25 +07:00  [INF] 
+2025-10-22 01:45:30.35 +07:00  [INF] 
+2025-10-22 01:45:30.37 +07:00  [INF] 
+2025-10-22 01:45:30.44 +07:00  [INF] 
+2025-10-22 01:45:30.44 +07:00  [INF] 
+2025-10-22 01:45:30.46 +07:00  [INF] 
+2025-10-22 01:45:30.46 +07:00  [INF] 
+2025-10-22 01:45:30.46 +07:00  [WRN] 
+2025-10-22 01:45:30.48 +07:00  [INF] 
+2025-10-22 01:45:30.48 +07:00  [INF] 
+2025-10-22 01:45:30.48 +07:00  [INF] 
+2025-10-22 01:45:30.49 +07:00  [INF] 
+2025-10-22 01:45:30.50 +07:00  [INF] 
+2025-10-22 01:45:30.50 +07:00  [INF] 
+2025-10-22 01:45:30.51 +07:00  [INF] 
+2025-10-22 01:45:30.51 +07:00  [WRN] 
+2025-10-22 01:45:30.51 +07:00  [WRN] 
+2025-10-22 01:45:30.51 +07:00  [INF] 
+2025-10-22 01:45:30.52 +07:00  [INF] 
+2025-10-22 01:45:30.53 +07:00  [INF] 
+2025-10-22 01:45:30.54 +07:00  [INF] 
+2025-10-22 01:45:30.54 +07:00  [WRN] 
+2025-10-22 01:45:30.54 +07:00  [WRN] 
+2025-10-22 01:45:30.55 +07:00  [ERR] 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at Course.Application.Implements.MasterTopicService.ToMasterTopicResponse(MasterTopic masterTopic) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Application\Implements\MasterTopicService.cs:line 238
+   at Course.Application.Implements.MasterTopicService.GetByIdAsync(Guid id) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Application\Implements\MasterTopicService.cs:line 43
+   at Course.Api.Controllers.MasterTopicController.GetMasterTopicById(Guid id) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Api\Controllers\MasterTopicController.cs:line 52
+2025-10-22 01:45:30.55 +07:00  [INF] 
+2025-10-22 01:45:30.56 +07:00  [INF] 
+2025-10-22 01:45:30.56 +07:00  [INF] 
+2025-10-22 01:45:30.56 +07:00  [ERR] 
+2025-10-22 01:45:30.57 +07:00  [INF] 
+2025-10-22 01:46:56.87 +07:00  [INF] 
+2025-10-22 01:47:05.41 +07:00  [INF] 
+2025-10-22 01:47:05.55 +07:00  [INF] 
+2025-10-22 01:47:05.55 +07:00  [INF] 
+2025-10-22 01:47:05.56 +07:00  [INF] 
+2025-10-22 01:47:05.56 +07:00  [INF] 
+2025-10-22 01:59:01.81 +07:00  [INF] 
+2025-10-22 17:53:58.96 +07:00  [INF] 
+2025-10-22 17:53:59.07 +07:00  [INF] 
+2025-10-22 17:53:59.07 +07:00  [INF] 
+2025-10-22 17:53:59.07 +07:00  [INF] 
+2025-10-22 17:53:59.07 +07:00  [INF] 
+2025-10-22 17:54:04.09 +07:00  [INF] 
+2025-10-22 17:54:05.51 +07:00  [INF] 
+2025-10-22 17:58:46.62 +07:00  [INF] 
+2025-10-22 17:58:46.64 +07:00  [WRN] 
+2025-10-22 17:58:46.64 +07:00  [INF] 
+2025-10-22 17:58:46.69 +07:00  [INF] 
+2025-10-22 17:58:48.26 +07:00  [INF] 
+2025-10-22 17:58:48.60 +07:00  [INF] 
+2025-10-22 17:58:48.64 +07:00  [INF] 
+2025-10-22 17:58:48.65 +07:00  [INF] 
+2025-10-22 17:58:48.65 +07:00  [INF] 
+2025-10-22 17:58:48.90 +07:00  [INF] 
+2025-10-22 17:58:48.90 +07:00  [INF] 
+2025-10-22 17:58:48.91 +07:00  [INF] 
+2025-10-22 17:58:48.91 +07:00  [WRN] 
+2025-10-22 17:58:48.91 +07:00  [WRN] 
+2025-10-22 17:58:48.91 +07:00  [INF] 
+2025-10-22 17:58:48.91 +07:00  [ERR] 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at Course.Application.Implements.MasterTopicService.ToMasterTopicResponse(MasterTopic masterTopic) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Application\Implements\MasterTopicService.cs:line 230
+   at Course.Application.Implements.MasterTopicService.GetAllAsync(Int32 page, Int32 pageSize) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Application\Implements\MasterTopicService.cs:line 41
+   at Course.Api.Controllers.MasterTopicController.GetAllMasterTopics(Int32 page, Int32 pageSize) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Api\Controllers\MasterTopicController.cs:line 32
+2025-10-22 17:58:48.96 +07:00  [INF] 
+2025-10-22 17:58:48.98 +07:00  [INF] 
+2025-10-22 17:58:48.99 +07:00  [INF] 
+2025-10-22 17:58:48.99 +07:00  [ERR] 
+2025-10-22 17:58:49.00 +07:00  [INF] 
+2025-10-22 17:59:03.70 +07:00  [INF] 
+2025-10-22 17:59:03.72 +07:00  [INF] 
+2025-10-22 17:59:03.75 +07:00  [INF] 
+2025-10-22 17:59:03.91 +07:00  [INF] 
+2025-10-22 17:59:03.92 +07:00  [INF] 
+2025-10-22 17:59:03.95 +07:00  [INF] 
+2025-10-22 17:59:03.95 +07:00  [INF] 
+2025-10-22 17:59:03.95 +07:00  [INF] 
+2025-10-22 17:59:03.95 +07:00  [INF] 
+2025-10-22 17:59:08.30 +07:00  [INF] 
+2025-10-22 17:59:08.30 +07:00  [INF] 
+2025-10-22 17:59:08.31 +07:00  [INF] 
+2025-10-22 17:59:08.40 +07:00  [INF] 
+2025-10-22 17:59:08.41 +07:00  [INF] 
+2025-10-22 17:59:08.44 +07:00  [INF] 
+2025-10-22 17:59:08.45 +07:00  [INF] 
+2025-10-22 17:59:08.45 +07:00  [INF] 
+2025-10-22 17:59:08.45 +07:00  [INF] 
+2025-10-22 18:11:34.39 +07:00  [INF] 
+2025-10-22 18:21:12.70 +07:00  [INF] 
+2025-10-22 18:21:12.85 +07:00  [INF] 
+2025-10-22 18:21:12.85 +07:00  [INF] 
+2025-10-22 18:21:12.86 +07:00  [INF] 
+2025-10-22 18:21:12.86 +07:00  [INF] 
+2025-10-22 18:22:40.82 +07:00  [INF] 
+2025-10-22 18:22:40.91 +07:00  [WRN] 
+2025-10-22 18:22:40.91 +07:00  [INF] 
+2025-10-22 18:22:40.95 +07:00  [INF] 
+2025-10-22 18:22:42.14 +07:00  [INF] 
+2025-10-22 18:22:42.37 +07:00  [INF] 
+2025-10-22 18:22:42.40 +07:00  [INF] 
+2025-10-22 18:22:42.40 +07:00  [INF] 
+2025-10-22 18:22:42.41 +07:00  [INF] 
+2025-10-22 18:22:42.62 +07:00  [INF] 
+2025-10-22 18:22:42.62 +07:00  [INF] 
+2025-10-22 18:22:42.62 +07:00  [INF] 
+2025-10-22 18:22:42.62 +07:00  [WRN] 
+2025-10-22 18:22:42.63 +07:00  [WRN] 
+2025-10-22 18:22:42.63 +07:00  [INF] 
+2025-10-22 18:22:42.63 +07:00  [ERR] 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at Course.Application.Implements.MasterTopicService.ToMasterTopicResponse(MasterTopic masterTopic) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Application\Implements\MasterTopicService.cs:line 234
+   at Course.Application.Implements.MasterTopicService.GetAllAsync(Int32 page, Int32 pageSize) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Application\Implements\MasterTopicService.cs:line 44
+   at Course.Api.Controllers.MasterTopicController.GetAllMasterTopics(Int32 page, Int32 pageSize) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Api\Controllers\MasterTopicController.cs:line 32
+2025-10-22 18:22:42.66 +07:00  [INF] 
+2025-10-22 18:22:42.69 +07:00  [INF] 
+2025-10-22 18:22:42.69 +07:00  [INF] 
+2025-10-22 18:22:42.70 +07:00  [ERR] 
+2025-10-22 18:22:42.70 +07:00  [INF] 
+2025-10-22 18:22:50.41 +07:00  [INF] 
+2025-10-22 18:22:50.49 +07:00  [INF] 
+2025-10-22 18:22:52.09 +07:00  [INF] 
+2025-10-22 18:22:52.22 +07:00  [INF] 
+2025-10-22 18:27:29.21 +07:00  [INF] 
+2025-10-22 18:27:29.22 +07:00  [INF] 
+2025-10-22 18:27:29.23 +07:00  [INF] 
+2025-10-22 18:27:29.32 +07:00  [INF] 
+2025-10-22 18:27:29.32 +07:00  [INF] 
+2025-10-22 18:27:29.36 +07:00  [INF] 
+2025-10-22 18:27:29.36 +07:00  [INF] 
+2025-10-22 18:27:29.36 +07:00  [INF] 
+2025-10-22 18:27:29.37 +07:00  [INF] 
+2025-10-22 18:27:33.79 +07:00  [INF] 
+2025-10-22 18:27:33.80 +07:00  [INF] 
+2025-10-22 18:27:33.80 +07:00  [INF] 
+2025-10-22 18:27:33.84 +07:00  [INF] 
+2025-10-22 18:27:33.85 +07:00  [INF] 
+2025-10-22 18:27:33.86 +07:00  [INF] 
+2025-10-22 18:27:33.86 +07:00  [INF] 
+2025-10-22 18:27:33.86 +07:00  [INF] 
+2025-10-22 18:27:33.89 +07:00  [INF] 
+2025-10-22 18:27:33.89 +07:00  [INF] 
+2025-10-22 18:27:33.89 +07:00  [INF] 
+2025-10-22 18:27:33.89 +07:00  [WRN] 
+2025-10-22 18:27:33.89 +07:00  [WRN] 
+2025-10-22 18:27:33.90 +07:00  [INF] 
+2025-10-22 18:27:33.90 +07:00  [ERR] 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at Course.Application.Implements.MasterTopicService.ToMasterTopicResponse(MasterTopic masterTopic) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Application\Implements\MasterTopicService.cs:line 234
+   at Course.Application.Implements.MasterTopicService.GetAllAsync(Int32 page, Int32 pageSize) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Application\Implements\MasterTopicService.cs:line 44
+   at Course.Api.Controllers.MasterTopicController.GetAllMasterTopics(Int32 page, Int32 pageSize) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Api\Controllers\MasterTopicController.cs:line 32
+2025-10-22 18:27:33.90 +07:00  [INF] 
+2025-10-22 18:27:33.91 +07:00  [INF] 
+2025-10-22 18:27:33.91 +07:00  [INF] 
+2025-10-22 18:27:33.91 +07:00  [ERR] 
+2025-10-22 18:27:33.91 +07:00  [INF] 
+2025-10-22 18:32:37.49 +07:00  [INF] 
+2025-10-22 18:32:37.49 +07:00  [INF] 
+2025-10-22 18:32:37.50 +07:00  [INF] 
+2025-10-22 18:32:37.51 +07:00  [INF] 
+2025-10-22 18:32:37.61 +07:00  [INF] 
+2025-10-22 18:32:37.61 +07:00  [INF] 
+2025-10-22 18:32:37.61 +07:00  [INF] 
+2025-10-22 18:32:37.62 +07:00  [INF] 
+2025-10-22 18:32:37.63 +07:00  [INF] 
+2025-10-22 18:32:37.64 +07:00  [INF] 
+2025-10-22 18:32:37.64 +07:00  [INF] 
+2025-10-22 18:32:37.64 +07:00  [WRN] 
+2025-10-22 18:32:37.64 +07:00  [WRN] 
+2025-10-22 18:32:37.65 +07:00  [INF] 
+2025-10-22 18:32:37.65 +07:00  [INF] 
+2025-10-22 18:32:37.65 +07:00  [INF] 
+2025-10-22 18:32:37.65 +07:00  [INF] 
+2025-10-22 18:32:37.66 +07:00  [INF] 
+2025-10-22 18:32:37.66 +07:00  [INF] 
+2025-10-22 18:32:37.66 +07:00  [WRN] 
+2025-10-22 18:32:37.66 +07:00  [WRN] 
+2025-10-22 18:32:37.66 +07:00  [INF] 
+2025-10-22 18:32:37.67 +07:00  [INF] 
+2025-10-22 18:32:37.67 +07:00  [WRN] 
+2025-10-22 18:32:37.67 +07:00  [WRN] 
+2025-10-22 18:32:37.85 +07:00  [INF] 
+2025-10-22 18:32:37.88 +07:00  [INF] 
+2025-10-22 18:32:37.88 +07:00  [INF] 
+2025-10-22 18:32:37.89 +07:00  [INF] 
+2025-10-22 18:32:37.89 +07:00  [INF] 
+2025-10-22 18:32:37.90 +07:00  [INF] 
+2025-10-22 18:32:37.90 +07:00  [INF] 
+2025-10-22 18:32:37.90 +07:00  [INF] 
+2025-10-22 18:32:37.90 +07:00  [WRN] 
+2025-10-22 18:32:37.90 +07:00  [WRN] 
+2025-10-22 18:32:37.91 +07:00  [INF] 
+2025-10-22 18:32:37.91 +07:00  [INF] 
+2025-10-22 18:32:37.91 +07:00  [INF] 
+2025-10-22 18:32:37.91 +07:00  [INF] 
+2025-10-22 18:32:37.92 +07:00  [INF] 
+2025-10-22 18:32:37.92 +07:00  [INF] 
+2025-10-22 18:32:37.92 +07:00  [INF] 
+2025-10-22 18:32:37.92 +07:00  [WRN] 
+2025-10-22 18:32:37.92 +07:00  [INF] 
+2025-10-22 18:32:37.92 +07:00  [WRN] 
+2025-10-22 18:32:37.92 +07:00  [WRN] 
+2025-10-22 18:32:37.93 +07:00  [WRN] 
+2025-10-22 18:32:37.93 +07:00  [ERR] 
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at Course.Application.Implements.MasterTopicService.ToMasterTopicResponse(MasterTopic masterTopic) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Application\Implements\MasterTopicService.cs:line 234
+   at Course.Application.Implements.MasterTopicService.CreateAsync(MasterTopicCreateRequest request) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Application\Implements\MasterTopicService.cs:line 131
+   at Course.Api.Controllers.MasterTopicController.CreateMasterTopic(MasterTopicCreateRequest request) in D:\LEARNING\S7FA25\SWD392\FiboChatPlatform\services\Course\Course.Api\Controllers\MasterTopicController.cs:line 83
+2025-10-22 18:32:37.93 +07:00  [INF] 
+2025-10-22 18:32:37.93 +07:00  [INF] 
+2025-10-22 18:32:37.94 +07:00  [INF] 
+2025-10-22 18:32:37.94 +07:00  [ERR] 
+2025-10-22 18:32:37.94 +07:00  [INF] 
+2025-10-22 18:34:56.11 +07:00  [INF] 
+2025-10-22 18:35:06.70 +07:00  [INF] 
+2025-10-22 18:35:06.82 +07:00  [INF] 
+2025-10-22 18:35:06.82 +07:00  [INF] 
+2025-10-22 18:35:06.82 +07:00  [INF] 
+2025-10-22 18:35:06.82 +07:00  [INF] 
+2025-10-22 18:35:10.35 +07:00  [INF] 
+2025-10-22 18:35:10.47 +07:00  [WRN] 
+2025-10-22 18:35:10.47 +07:00  [INF] 
+2025-10-22 18:35:10.48 +07:00  [INF] 
+2025-10-22 18:35:10.51 +07:00  [INF] 
+2025-10-22 18:35:11.83 +07:00  [INF] 
+2025-10-22 18:35:11.94 +07:00  [INF] 
+2025-10-22 18:35:11.95 +07:00  [INF] 
+2025-10-22 18:35:11.95 +07:00  [INF] 
+2025-10-22 18:35:12.02 +07:00  [INF] 
+2025-10-22 18:35:12.03 +07:00  [INF] 
+2025-10-22 18:35:12.03 +07:00  [INF] 
+2025-10-22 18:35:12.03 +07:00  [WRN] 
+2025-10-22 18:35:12.03 +07:00  [WRN] 
+2025-10-22 18:35:12.04 +07:00  [INF] 
+2025-10-22 18:35:12.04 +07:00  [INF] 
+2025-10-22 18:35:12.04 +07:00  [INF] 
+2025-10-22 18:35:12.05 +07:00  [INF] 
+2025-10-22 18:35:12.05 +07:00  [INF] 
+2025-10-22 18:35:12.05 +07:00  [INF] 
+2025-10-22 18:35:12.06 +07:00  [WRN] 
+2025-10-22 18:35:12.06 +07:00  [WRN] 
+2025-10-22 18:35:12.06 +07:00  [INF] 
+2025-10-22 18:35:12.06 +07:00  [INF] 
+2025-10-22 18:35:12.06 +07:00  [WRN] 
+2025-10-22 18:35:12.06 +07:00  [WRN] 
+2025-10-22 18:35:12.24 +07:00  [INF] 
+2025-10-22 18:35:12.26 +07:00  [INF] 
+2025-10-22 18:35:12.27 +07:00  [INF] 
+2025-10-22 18:35:12.27 +07:00  [INF] 
+2025-10-22 18:35:12.27 +07:00  [INF] 
+2025-10-22 18:35:12.28 +07:00  [INF] 
+2025-10-22 18:35:12.29 +07:00  [INF] 
+2025-10-22 18:35:12.29 +07:00  [INF] 
+2025-10-22 18:35:12.29 +07:00  [WRN] 
+2025-10-22 18:35:12.29 +07:00  [WRN] 
+2025-10-22 18:35:12.29 +07:00  [INF] 
+2025-10-22 18:35:12.30 +07:00  [INF] 
+2025-10-22 18:35:12.30 +07:00  [INF] 
+2025-10-22 18:35:12.30 +07:00  [INF] 
+2025-10-22 18:35:12.31 +07:00  [INF] 
+2025-10-22 18:35:12.31 +07:00  [INF] 
+2025-10-22 18:35:12.31 +07:00  [WRN] 
+2025-10-22 18:35:12.31 +07:00  [INF] 
+2025-10-22 18:35:12.31 +07:00  [WRN] 
+2025-10-22 18:35:12.31 +07:00  [INF] 
+2025-10-22 18:35:12.32 +07:00  [WRN] 
+2025-10-22 18:35:12.32 +07:00  [WRN] 
+2025-10-22 18:35:12.33 +07:00  [INF] 
+2025-10-22 18:35:12.41 +07:00  [INF] 
+2025-10-22 18:35:12.41 +07:00  [INF] 
+2025-10-22 18:35:12.42 +07:00  [INF] 
+2025-10-22 18:35:12.43 +07:00  [INF] 
+2025-10-22 18:37:00.69 +07:00  [INF] 
+2025-10-22 18:37:00.70 +07:00  [INF] 
+2025-10-22 18:37:00.70 +07:00  [INF] 
+2025-10-22 18:37:00.70 +07:00  [INF] 
+2025-10-22 18:37:00.86 +07:00  [INF] 
+2025-10-22 18:37:00.87 +07:00  [INF] 
+2025-10-22 18:37:00.87 +07:00  [INF] 
+2025-10-22 18:37:00.87 +07:00  [INF] 
+2025-10-22 18:37:00.89 +07:00  [INF] 
+2025-10-22 18:37:00.89 +07:00  [INF] 
+2025-10-22 18:37:00.89 +07:00  [INF] 
+2025-10-22 18:37:00.90 +07:00  [WRN] 
+2025-10-22 18:37:00.90 +07:00  [WRN] 
+2025-10-22 18:37:00.90 +07:00  [INF] 
+2025-10-22 18:37:00.90 +07:00  [INF] 
+2025-10-22 18:37:00.91 +07:00  [INF] 
+2025-10-22 18:37:00.91 +07:00  [INF] 
+2025-10-22 18:37:00.93 +07:00  [INF] 
+2025-10-22 18:37:00.93 +07:00  [INF] 
+2025-10-22 18:37:00.93 +07:00  [INF] 
+2025-10-22 18:37:00.94 +07:00  [INF] 
+2025-10-22 18:37:00.94 +07:00  [WRN] 
+2025-10-22 18:37:00.94 +07:00  [WRN] 
+2025-10-22 18:37:00.94 +07:00  [WRN] 
+2025-10-22 18:37:00.94 +07:00  [WRN] 
+2025-10-22 18:37:00.96 +07:00  [INF] 
+2025-10-22 18:37:00.98 +07:00  [INF] 
+2025-10-22 18:37:00.99 +07:00  [INF] 
+2025-10-22 18:37:00.99 +07:00  [INF] 
+2025-10-22 18:37:00.99 +07:00  [INF] 
+2025-10-22 18:37:01.02 +07:00  [INF] 
+2025-10-22 18:37:01.02 +07:00  [INF] 
+2025-10-22 18:37:01.02 +07:00  [INF] 
+2025-10-22 18:37:01.02 +07:00  [WRN] 
+2025-10-22 18:37:01.02 +07:00  [WRN] 
+2025-10-22 18:37:01.03 +07:00  [INF] 
+2025-10-22 18:37:01.03 +07:00  [INF] 
+2025-10-22 18:37:01.03 +07:00  [INF] 
+2025-10-22 18:37:01.04 +07:00  [INF] 
+2025-10-22 18:37:01.05 +07:00  [INF] 
+2025-10-22 18:37:01.06 +07:00  [INF] 
+2025-10-22 18:37:01.06 +07:00  [WRN] 
+2025-10-22 18:37:01.06 +07:00  [INF] 
+2025-10-22 18:37:01.06 +07:00  [WRN] 
+2025-10-22 18:37:01.07 +07:00  [INF] 
+2025-10-22 18:37:01.07 +07:00  [WRN] 
+2025-10-22 18:37:01.07 +07:00  [WRN] 
+2025-10-22 18:37:01.08 +07:00  [INF] 
+2025-10-22 18:37:01.08 +07:00  [INF] 
+2025-10-22 18:37:01.09 +07:00  [INF] 
+2025-10-22 18:37:01.10 +07:00  [INF] 
+2025-10-22 18:37:01.10 +07:00  [INF] 
+2025-10-22 18:44:40.20 +07:00  [INF] 
+2025-10-22 18:44:49.50 +07:00  [INF] 
+2025-10-22 18:44:49.61 +07:00  [INF] 
+2025-10-22 18:44:49.61 +07:00  [INF] 
+2025-10-22 18:44:49.61 +07:00  [INF] 
+2025-10-22 18:44:49.62 +07:00  [INF] 
+2025-10-22 18:45:09.60 +07:00  [INF] 
+2025-10-22 18:45:09.71 +07:00  [WRN] 
+2025-10-22 18:45:09.72 +07:00  [INF] 
+2025-10-22 18:45:09.76 +07:00  [INF] 
+2025-10-22 18:45:10.94 +07:00  [INF] 
+2025-10-22 18:45:11.18 +07:00  [INF] 
+2025-10-22 18:45:11.20 +07:00  [INF] 
+2025-10-22 18:45:11.21 +07:00  [INF] 
+2025-10-22 18:45:11.21 +07:00  [INF] 
+2025-10-22 18:45:11.26 +07:00  [INF] 
+2025-10-22 18:45:11.27 +07:00  [INF] 
+2025-10-22 18:45:11.27 +07:00  [INF] 
+2025-10-22 18:45:11.27 +07:00  [WRN] 
+2025-10-22 18:45:11.27 +07:00  [WRN] 
+2025-10-22 18:45:11.28 +07:00  [INF] 
+2025-10-22 18:45:11.28 +07:00  [INF] 
+2025-10-22 18:45:11.35 +07:00  [INF] 
+2025-10-22 18:45:11.35 +07:00  [INF] 
+2025-10-22 18:45:11.35 +07:00  [INF] 
+2025-10-22 18:45:11.36 +07:00  [INF] 
+2025-10-22 18:45:19.05 +07:00  [INF] 
+2025-10-22 18:45:24.89 +07:00  [INF] 
+2025-10-22 18:45:25.01 +07:00  [INF] 
+2025-10-22 18:45:25.02 +07:00  [INF] 
+2025-10-22 18:45:25.02 +07:00  [INF] 
+2025-10-22 18:45:25.02 +07:00  [INF] 
+2025-10-22 18:45:25.18 +07:00  [INF] 
+2025-10-22 18:45:25.31 +07:00  [INF] 
+2025-10-22 18:45:26.98 +07:00  [INF] 
+2025-10-22 18:45:27.21 +07:00  [INF] 
+2025-10-22 18:45:31.99 +07:00  [INF] 
+2025-10-22 18:45:32.01 +07:00  [WRN] 
+2025-10-22 18:45:32.01 +07:00  [INF] 
+2025-10-22 18:45:32.12 +07:00  [INF] 
+2025-10-22 18:45:33.29 +07:00  [INF] 
+2025-10-22 18:45:33.54 +07:00  [INF] 
+2025-10-22 18:45:33.57 +07:00  [INF] 
+2025-10-22 18:45:33.57 +07:00  [INF] 
+2025-10-22 18:45:33.57 +07:00  [INF] 
+2025-10-22 18:45:33.62 +07:00  [INF] 
+2025-10-22 18:45:33.62 +07:00  [INF] 
+2025-10-22 18:45:33.62 +07:00  [INF] 
+2025-10-22 18:45:33.62 +07:00  [WRN] 
+2025-10-22 18:45:33.62 +07:00  [WRN] 
+2025-10-22 18:45:33.62 +07:00  [INF] 
+2025-10-22 18:45:33.63 +07:00  [INF] 
+2025-10-22 18:45:33.70 +07:00  [INF] 
+2025-10-22 18:45:33.70 +07:00  [INF] 
+2025-10-22 18:45:33.70 +07:00  [INF] 
+2025-10-22 18:45:33.71 +07:00  [INF] 
+2025-10-22 18:50:58.16 +07:00  [INF] 
+2025-10-22 18:51:04.54 +07:00  [INF] 
+2025-10-22 18:51:04.79 +07:00  [INF] 
+2025-10-22 18:51:04.79 +07:00  [INF] 
+2025-10-22 18:51:04.80 +07:00  [INF] 
+2025-10-22 18:51:04.80 +07:00  [INF] 
+2025-10-22 18:51:10.97 +07:00  [INF] 
+2025-10-22 18:51:11.09 +07:00  [WRN] 
+2025-10-22 18:51:11.09 +07:00  [INF] 
+2025-10-22 18:51:11.13 +07:00  [INF] 
+2025-10-22 18:51:12.40 +07:00  [INF] 
+2025-10-22 18:51:12.62 +07:00  [INF] 
+2025-10-22 18:51:12.64 +07:00  [INF] 
+2025-10-22 18:51:12.65 +07:00  [INF] 
+2025-10-22 18:51:12.65 +07:00  [INF] 
+2025-10-22 18:51:12.70 +07:00  [INF] 
+2025-10-22 18:51:12.70 +07:00  [INF] 
+2025-10-22 18:51:12.71 +07:00  [INF] 
+2025-10-22 18:51:12.71 +07:00  [WRN] 
+2025-10-22 18:51:12.71 +07:00  [WRN] 
+2025-10-22 18:51:12.71 +07:00  [INF] 
+2025-10-22 18:51:12.71 +07:00  [INF] 
+2025-10-22 18:51:12.72 +07:00  [INF] 
+2025-10-22 18:51:12.72 +07:00  [INF] 
+2025-10-22 18:51:12.72 +07:00  [INF] 
+2025-10-22 18:51:12.73 +07:00  [INF] 
+2025-10-22 18:51:12.73 +07:00  [WRN] 
+2025-10-22 18:51:12.73 +07:00  [INF] 
+2025-10-22 18:51:12.73 +07:00  [WRN] 
+2025-10-22 18:51:12.73 +07:00  [INF] 
+2025-10-22 18:51:12.73 +07:00  [WRN] 
+2025-10-22 18:51:12.73 +07:00  [WRN] 
+2025-10-22 18:51:12.74 +07:00  [INF] 
+2025-10-22 18:51:12.82 +07:00  [INF] 
+2025-10-22 18:51:12.82 +07:00  [INF] 
+2025-10-22 18:51:12.82 +07:00  [INF] 
+2025-10-22 18:51:12.83 +07:00  [INF] 
+2025-10-22 18:53:18.32 +07:00  [INF] 
+2025-10-22 18:53:18.49 +07:00  [INF] 
+2025-10-22 19:09:38.21 +07:00  [INF] 
+2025-10-22 19:09:38.23 +07:00  [INF] 
+2025-10-22 19:09:38.23 +07:00  [INF] 
+2025-10-22 19:09:38.35 +07:00  [INF] 
+2025-10-22 19:09:38.36 +07:00  [INF] 
+2025-10-22 19:09:38.36 +07:00  [INF] 
+2025-10-22 19:09:38.36 +07:00  [INF] 
+2025-10-22 19:09:38.37 +07:00  [INF] 
+2025-10-22 19:09:38.37 +07:00  [INF] 
+2025-10-22 19:09:38.38 +07:00  [INF] 
+2025-10-22 19:09:38.38 +07:00  [INF] 
+2025-10-22 19:09:38.38 +07:00  [WRN] 
+2025-10-22 19:09:38.39 +07:00  [WRN] 
+2025-10-22 19:09:38.39 +07:00  [INF] 
+2025-10-22 19:09:38.40 +07:00  [INF] 
+2025-10-22 19:09:38.40 +07:00  [INF] 
+2025-10-22 19:09:38.40 +07:00  [INF] 
+2025-10-22 19:09:38.40 +07:00  [INF] 
+2025-10-22 19:09:38.41 +07:00  [INF] 
+2025-10-22 19:09:38.41 +07:00  [INF] 
+2025-10-22 19:09:38.41 +07:00  [WRN] 
+2025-10-22 19:09:38.41 +07:00  [INF] 
+2025-10-22 19:09:38.41 +07:00  [WRN] 
+2025-10-22 19:09:38.42 +07:00  [WRN] 
+2025-10-22 19:09:38.42 +07:00  [WRN] 
+2025-10-22 19:09:38.42 +07:00  [INF] 
+2025-10-22 19:09:38.43 +07:00  [INF] 
+2025-10-22 19:09:38.43 +07:00  [INF] 
+2025-10-22 19:09:38.43 +07:00  [INF] 
+2025-10-22 19:09:38.44 +07:00  [INF] 
+2025-10-22 19:22:04.62 +07:00  [INF] 
+2025-10-22 19:22:14.24 +07:00  [INF] 
+2025-10-22 19:22:14.35 +07:00  [INF] 
+2025-10-22 19:22:14.36 +07:00  [INF] 
+2025-10-22 19:22:14.36 +07:00  [INF] 
+2025-10-22 19:22:14.36 +07:00  [INF] 
+2025-10-22 19:22:17.77 +07:00  [INF] 
+2025-10-22 19:22:37.24 +07:00  [INF] 
+2025-10-22 19:22:37.43 +07:00  [INF] 
+2025-10-22 19:22:37.43 +07:00  [INF] 
+2025-10-22 19:22:37.43 +07:00  [INF] 
+2025-10-22 19:22:37.43 +07:00  [INF] 
+2025-10-22 19:22:37.44 +07:00  [INF] 
+2025-10-22 19:22:39.64 +07:00  [INF] 
+2025-10-22 19:22:39.77 +07:00  [INF] 
+2025-10-22 19:22:39.76 +07:00  [INF] 
+2025-10-22 19:22:39.88 +07:00  [INF] 
+2025-10-22 19:22:39.94 +07:00  [INF] 
+2025-10-22 19:22:39.95 +07:00  [INF] 
+2025-10-22 19:22:39.95 +07:00  [INF] 
+2025-10-22 19:22:39.95 +07:00  [INF] 
+2025-10-22 19:22:39.95 +07:00  [INF] 
+2025-10-22 19:22:39.97 +07:00  [INF] 
+2025-10-22 19:22:39.98 +07:00  [INF] 
+2025-10-22 19:22:39.99 +07:00  [INF] 
+2025-10-22 19:22:39.99 +07:00  [INF] 
+2025-10-22 19:22:40.00 +07:00  [INF] 
+2025-10-22 19:22:42.51 +07:00  [INF] 
+2025-10-22 19:22:42.54 +07:00  [INF] 
+2025-10-22 19:22:42.55 +07:00  [INF] 
+2025-10-22 19:22:42.72 +07:00  [INF] 
+2025-10-22 19:22:49.13 +07:00  [INF] 
+2025-10-22 19:22:49.14 +07:00  [INF] 
+2025-10-22 19:22:49.17 +07:00  [INF] 
+2025-10-22 19:22:50.44 +07:00  [INF] 
+2025-10-22 19:22:50.66 +07:00  [INF] 
+2025-10-22 19:22:50.68 +07:00  [INF] 
+2025-10-22 19:22:50.69 +07:00  [INF] 
+2025-10-22 19:22:50.69 +07:00  [INF] 
+2025-10-22 19:22:50.75 +07:00  [INF] 
+2025-10-22 19:22:50.75 +07:00  [INF] 
+2025-10-22 19:22:50.75 +07:00  [INF] 
+2025-10-22 19:22:50.75 +07:00  [WRN] 
+2025-10-22 19:22:50.75 +07:00  [WRN] 
+2025-10-22 19:22:50.75 +07:00  [INF] 
+2025-10-22 19:22:50.75 +07:00  [INF] 
+2025-10-22 19:22:50.76 +07:00  [INF] 
+2025-10-22 19:22:50.76 +07:00  [INF] 
+2025-10-22 19:22:50.76 +07:00  [INF] 
+2025-10-22 19:22:50.76 +07:00  [INF] 
+2025-10-22 19:22:50.76 +07:00  [INF] 
+2025-10-22 19:22:50.76 +07:00  [WRN] 
+2025-10-22 19:22:50.76 +07:00  [INF] 
+2025-10-22 19:22:50.77 +07:00  [WRN] 
+2025-10-22 19:22:50.77 +07:00  [WRN] 
+2025-10-22 19:22:50.77 +07:00  [WRN] 
+2025-10-22 19:22:50.78 +07:00  [INF] 
+2025-10-22 19:22:50.83 +07:00  [INF] 
+2025-10-22 19:22:50.84 +07:00  [INF] 
+2025-10-22 19:22:50.84 +07:00  [INF] 
+2025-10-22 19:22:50.85 +07:00  [INF] 
+2025-10-22 19:25:36.36 +07:00  [INF] 
+2025-10-22 19:25:46.18 +07:00  [INF] 
+2025-10-22 19:25:46.40 +07:00  [INF] 
+2025-10-22 19:25:46.40 +07:00  [INF] 
+2025-10-22 19:25:46.41 +07:00  [INF] 
+2025-10-22 19:25:46.41 +07:00  [INF] 
+2025-10-22 19:25:46.41 +07:00  [INF] 
+2025-10-22 19:26:06.71 +07:00  [INF] 
+2025-10-22 19:26:11.67 +07:00  [INF] 
+2025-10-22 19:26:11.87 +07:00  [INF] 
+2025-10-22 19:26:11.88 +07:00  [INF] 
+2025-10-22 19:26:11.88 +07:00  [INF] 
+2025-10-22 19:26:11.88 +07:00  [INF] 
+2025-10-22 19:26:11.88 +07:00  [INF] 
+2025-10-22 19:26:21.26 +07:00  [INF] 
+2025-10-22 19:26:21.42 +07:00  [INF] 
+2025-10-22 19:26:21.45 +07:00  [INF] 
+2025-10-22 19:26:22.65 +07:00  [INF] 
+2025-10-22 19:26:22.83 +07:00  [INF] 
+2025-10-22 19:26:22.85 +07:00  [INF] 
+2025-10-22 19:26:22.86 +07:00  [INF] 
+2025-10-22 19:26:22.86 +07:00  [INF] 
+2025-10-22 19:26:22.97 +07:00  [INF] 
+2025-10-22 19:26:22.97 +07:00  [INF] 
+2025-10-22 19:26:22.98 +07:00  [INF] 
+2025-10-22 19:26:22.98 +07:00  [INF] 
+2025-10-22 19:26:23.04 +07:00  [INF] 
+2025-10-22 19:26:23.04 +07:00  [INF] 
+2025-10-22 19:26:23.04 +07:00  [INF] 
+2025-10-22 19:26:23.04 +07:00  [INF] 
+2025-10-22 19:26:23.17 +07:00  [INF] 
+2025-10-22 19:26:23.17 +07:00  [INF] 
+2025-10-22 19:26:23.17 +07:00  [INF] 
+2025-10-22 19:26:23.17 +07:00  [INF] 
+2025-10-22 19:26:23.20 +07:00  [INF] 
+2025-10-22 19:26:23.23 +07:00  [INF] 
+2025-10-22 19:26:23.23 +07:00  [INF] 
+2025-10-22 19:26:23.24 +07:00  [INF] 
+2025-10-22 19:26:23.25 +07:00  [INF] 
+2025-10-22 19:34:41.16 +07:00  [INF] 
+2025-10-22 19:41:29.28 +07:00  [INF] 
+2025-10-22 19:41:29.44 +07:00  [INF] 
+2025-10-22 19:41:29.44 +07:00  [INF] 
+2025-10-22 19:41:29.44 +07:00  [INF] 
+2025-10-22 19:41:29.44 +07:00  [INF] 
+2025-10-22 19:41:29.44 +07:00  [INF] 
+2025-10-22 19:41:37.65 +07:00  [INF] 
+2025-10-22 19:41:39.08 +07:00  [INF] 
+2025-10-22 19:41:39.10 +07:00  [INF] 
+2025-10-22 19:41:40.30 +07:00  [INF] 
+2025-10-22 19:41:40.48 +07:00  [INF] 
+2025-10-22 19:41:40.49 +07:00  [INF] 
+2025-10-22 19:41:40.50 +07:00  [INF] 
+2025-10-22 19:41:40.50 +07:00  [INF] 
+2025-10-22 19:41:43.95 +07:00  [INF] 
+2025-10-22 19:41:43.95 +07:00  [INF] 
+2025-10-22 19:41:43.96 +07:00  [INF] 
+2025-10-22 19:41:43.96 +07:00  [INF] 
+2025-10-22 19:41:44.01 +07:00  [INF] 
+2025-10-22 19:41:44.01 +07:00  [INF] 
+2025-10-22 19:41:44.02 +07:00  [INF] 
+2025-10-22 19:41:44.02 +07:00  [INF] 
+2025-10-22 19:41:44.42 +07:00  [INF] 
+2025-10-22 19:41:44.42 +07:00  [INF] 
+2025-10-22 19:41:44.42 +07:00  [INF] 
+2025-10-22 19:41:44.42 +07:00  [INF] 
+2025-10-22 19:41:44.45 +07:00  [INF] 
+2025-10-22 19:41:44.48 +07:00  [INF] 
+2025-10-22 19:41:44.48 +07:00  [INF] 
+2025-10-22 19:41:44.48 +07:00  [INF] 
+2025-10-22 19:41:44.49 +07:00  [INF] 
+2025-10-22 19:43:58.45 +07:00  [INF] 
+2025-10-22 19:46:09.93 +07:00  [INF] 
+2025-10-22 19:46:10.19 +07:00  [INF] 
+2025-10-22 19:46:10.20 +07:00  [INF] 
+2025-10-22 19:46:10.21 +07:00  [INF] 
+2025-10-22 19:46:10.21 +07:00  [INF] 
+2025-10-22 19:46:10.21 +07:00  [INF] 
+2025-10-22 19:47:05.52 +07:00  [INF] 
+2025-10-22 19:47:05.59 +07:00  [INF] 
+2025-10-22 19:47:05.60 +07:00  [INF] 
+2025-10-22 19:47:06.88 +07:00  [INF] 
+2025-10-22 19:47:07.03 +07:00  [INF] 
+2025-10-22 19:47:07.05 +07:00  [INF] 
+2025-10-22 19:47:07.05 +07:00  [INF] 
+2025-10-22 19:47:07.05 +07:00  [INF] 
+2025-10-22 19:47:08.69 +07:00  [INF] 
+2025-10-22 19:47:08.69 +07:00  [INF] 
+2025-10-22 19:47:08.70 +07:00  [INF] 
+2025-10-22 19:47:08.70 +07:00  [INF] 
+2025-10-22 19:47:08.74 +07:00  [INF] 
+2025-10-22 19:47:08.74 +07:00  [INF] 
+2025-10-22 19:47:08.74 +07:00  [INF] 
+2025-10-22 19:47:08.74 +07:00  [INF] 
+2025-10-22 19:47:09.00 +07:00  [INF] 
+2025-10-22 19:47:09.00 +07:00  [INF] 
+2025-10-22 19:47:09.00 +07:00  [INF] 
+2025-10-22 19:47:09.00 +07:00  [INF] 
+2025-10-22 19:47:09.03 +07:00  [INF] 
+2025-10-22 19:47:09.05 +07:00  [INF] 
+2025-10-22 19:47:09.05 +07:00  [INF] 
+2025-10-22 19:47:09.06 +07:00  [INF] 
+2025-10-22 19:47:09.06 +07:00  [INF] 
+2025-10-22 20:03:35.55 +07:00  [INF] 
+2025-10-22 20:04:01.91 +07:00  [INF] 
+2025-10-22 20:04:02.16 +07:00  [INF] 
+2025-10-22 20:04:02.16 +07:00  [INF] 
+2025-10-22 20:04:02.16 +07:00  [INF] 
+2025-10-22 20:04:02.16 +07:00  [INF] 
+2025-10-22 20:04:02.16 +07:00  [INF] 
+2025-10-22 20:04:05.85 +07:00  [INF] 
+2025-10-22 20:04:05.97 +07:00  [INF] 
+2025-10-22 20:04:06.01 +07:00  [INF] 
+2025-10-22 20:04:07.83 +07:00  [INF] 
+2025-10-22 20:04:08.07 +07:00  [INF] 
+2025-10-22 20:04:08.10 +07:00  [INF] 
+2025-10-22 20:04:08.11 +07:00  [INF] 
+2025-10-22 20:04:08.11 +07:00  [INF] 
+2025-10-22 20:04:08.53 +07:00  [INF] 
+2025-10-22 20:04:08.54 +07:00  [INF] 
+2025-10-22 20:04:08.55 +07:00  [INF] 
+2025-10-22 20:04:08.55 +07:00  [INF] 
+2025-10-22 20:04:08.62 +07:00  [INF] 
+2025-10-22 20:04:08.62 +07:00  [INF] 
+2025-10-22 20:04:08.63 +07:00  [INF] 
+2025-10-22 20:04:08.63 +07:00  [INF] 
+2025-10-22 20:04:08.68 +07:00  [INF] 
+2025-10-22 20:04:08.68 +07:00  [INF] 
+2025-10-22 20:04:08.74 +07:00  [INF] 
+2025-10-22 20:04:08.74 +07:00  [INF] 
+2025-10-22 20:04:08.75 +07:00  [INF] 
+2025-10-22 20:04:08.79 +07:00  [INF] 
+2025-10-22 20:04:08.79 +07:00  [INF] 
+2025-10-22 20:04:08.80 +07:00  [INF] 
+2025-10-22 20:04:08.81 +07:00  [INF] 
+2025-10-22 20:06:05.31 +07:00  [INF] 
+2025-10-22 20:06:05.32 +07:00  [INF] 
+2025-10-22 20:06:05.33 +07:00  [INF] 
+2025-10-22 20:06:05.46 +07:00  [INF] 
+2025-10-22 20:06:05.48 +07:00  [INF] 
+2025-10-22 20:06:05.49 +07:00  [INF] 
+2025-10-22 20:06:05.50 +07:00  [INF] 
+2025-10-22 20:06:05.50 +07:00  [INF] 
+2025-10-22 20:06:05.50 +07:00  [INF] 
+2025-10-22 20:06:05.55 +07:00  [INF] 
+2025-10-22 20:06:05.55 +07:00  [INF] 
+2025-10-22 20:06:05.56 +07:00  [INF] 
+2025-10-22 20:06:05.57 +07:00  [INF] 
+2025-10-22 20:06:05.57 +07:00  [INF] 
+2025-10-22 20:06:05.57 +07:00  [INF] 
+2025-10-22 20:06:05.57 +07:00  [INF] 
+2025-10-22 20:06:05.58 +07:00  [INF] 
+2025-10-22 20:06:05.63 +07:00  [INF] 
+2025-10-22 20:06:05.63 +07:00  [INF] 
+2025-10-22 20:06:05.64 +07:00  [INF] 
+2025-10-22 20:06:05.64 +07:00  [INF] 
+2025-10-22 20:06:05.66 +07:00  [INF] 
+2025-10-22 20:06:05.67 +07:00  [INF] 
+2025-10-22 20:06:05.67 +07:00  [INF] 
+2025-10-22 20:06:05.67 +07:00  [INF] 
+2025-10-22 20:06:05.68 +07:00  [INF] 
+2025-10-22 20:08:26.42 +07:00  [INF] 
+2025-10-22 20:08:35.65 +07:00  [INF] 
+2025-10-22 20:08:35.84 +07:00  [INF] 
+2025-10-22 20:08:35.85 +07:00  [INF] 
+2025-10-22 20:08:35.85 +07:00  [INF] 
+2025-10-22 20:08:35.85 +07:00  [INF] 
+2025-10-22 20:08:35.85 +07:00  [INF] 
+2025-10-22 20:08:43.74 +07:00  [INF] 
+2025-10-22 20:08:43.83 +07:00  [INF] 
+2025-10-22 20:08:43.86 +07:00  [INF] 
+2025-10-22 20:08:45.32 +07:00  [INF] 
+2025-10-22 20:08:45.42 +07:00  [INF] 
+2025-10-22 20:08:45.49 +07:00  [INF] 
+2025-10-22 20:08:45.50 +07:00  [INF] 
+2025-10-22 20:08:45.51 +07:00  [INF] 
+2025-10-22 20:08:45.51 +07:00  [INF] 
+2025-10-22 20:08:45.68 +07:00  [INF] 
+2025-10-22 20:08:45.69 +07:00  [INF] 
+2025-10-22 20:08:45.70 +07:00  [INF] 
+2025-10-22 20:08:45.70 +07:00  [INF] 
+2025-10-22 20:08:45.79 +07:00  [INF] 
+2025-10-22 20:08:45.80 +07:00  [INF] 
+2025-10-22 20:08:45.80 +07:00  [INF] 
+2025-10-22 20:08:45.80 +07:00  [INF] 
+2025-10-22 20:08:45.83 +07:00  [INF] 
+2025-10-22 20:08:45.83 +07:00  [INF] 
+2025-10-22 20:08:45.84 +07:00  [INF] 
+2025-10-22 20:08:45.85 +07:00  [INF] 
+2025-10-22 20:08:45.87 +07:00  [INF] 
+2025-10-22 20:08:45.90 +07:00  [INF] 
+2025-10-22 20:08:45.90 +07:00  [INF] 
+2025-10-22 20:08:45.91 +07:00  [INF] 
+2025-10-22 20:08:45.92 +07:00  [INF] 
+2025-10-22 20:24:04.30 +07:00  [INF] 
+2025-10-22 20:24:25.91 +07:00  [INF] 
+2025-10-22 20:24:26.12 +07:00  [INF] 
+2025-10-22 20:24:26.12 +07:00  [INF] 
+2025-10-22 20:24:26.13 +07:00  [INF] 
+2025-10-22 20:24:26.13 +07:00  [INF] 
+2025-10-22 20:24:26.13 +07:00  [INF] 
+2025-10-22 20:24:33.24 +07:00  [INF] 
+2025-10-22 20:24:33.34 +07:00  [INF] 
+2025-10-22 20:24:33.37 +07:00  [INF] 
+2025-10-22 20:24:34.79 +07:00  [INF] 
+2025-10-22 20:24:34.89 +07:00  [INF] 
+2025-10-22 20:24:34.96 +07:00  [INF] 
+2025-10-22 20:24:34.99 +07:00  [INF] 
+2025-10-22 20:24:35.00 +07:00  [INF] 
+2025-10-22 20:24:35.00 +07:00  [INF] 
+2025-10-22 20:24:35.14 +07:00  [INF] 
+2025-10-22 20:24:35.15 +07:00  [INF] 
+2025-10-22 20:24:35.15 +07:00  [INF] 
+2025-10-22 20:24:35.16 +07:00  [INF] 
+2025-10-22 20:24:35.21 +07:00  [INF] 
+2025-10-22 20:24:35.22 +07:00  [INF] 
+2025-10-22 20:24:35.22 +07:00  [INF] 
+2025-10-22 20:24:35.22 +07:00  [INF] 
+2025-10-22 20:24:35.24 +07:00  [INF] 
+2025-10-22 20:24:35.24 +07:00  [INF] 
+2025-10-22 20:24:35.25 +07:00  [INF] 
+2025-10-22 20:24:35.25 +07:00  [INF] 
+2025-10-22 20:24:35.28 +07:00  [INF] 
+2025-10-22 20:24:35.32 +07:00  [INF] 
+2025-10-22 20:24:35.32 +07:00  [INF] 
+2025-10-22 20:24:35.32 +07:00  [INF] 
+2025-10-22 20:24:35.34 +07:00  [INF] 
+2025-10-22 20:24:39.43 +07:00  [INF] 
+2025-10-22 20:24:39.45 +07:00  [INF] 
+2025-10-22 20:24:39.46 +07:00  [INF] 
+2025-10-22 20:24:39.58 +07:00  [INF] 
+2025-10-22 20:24:39.59 +07:00  [INF] 
+2025-10-22 20:24:39.59 +07:00  [INF] 
+2025-10-22 20:24:39.60 +07:00  [INF] 
+2025-10-22 20:24:39.60 +07:00  [INF] 
+2025-10-22 20:24:39.60 +07:00  [INF] 
+2025-10-22 20:24:39.62 +07:00  [INF] 
+2025-10-22 20:24:39.62 +07:00  [INF] 
+2025-10-22 20:24:39.62 +07:00  [INF] 
+2025-10-22 20:24:39.63 +07:00  [INF] 
+2025-10-22 20:24:39.63 +07:00  [INF] 
+2025-10-22 20:24:39.63 +07:00  [INF] 
+2025-10-22 20:24:39.63 +07:00  [INF] 
+2025-10-22 20:24:39.64 +07:00  [INF] 
+2025-10-22 20:24:39.66 +07:00  [INF] 
+2025-10-22 20:24:39.67 +07:00  [INF] 
+2025-10-22 20:24:39.67 +07:00  [INF] 
+2025-10-22 20:24:39.67 +07:00  [INF] 
+2025-10-22 20:24:39.69 +07:00  [INF] 
+2025-10-22 20:24:39.69 +07:00  [INF] 
+2025-10-22 20:24:39.69 +07:00  [INF] 
+2025-10-22 20:24:39.69 +07:00  [INF] 
+2025-10-22 20:24:39.70 +07:00  [INF] 
+2025-10-22 20:24:56.86 +07:00  [INF] 
+2025-10-22 20:24:56.86 +07:00  [INF] 
+2025-10-22 20:24:56.87 +07:00  [INF] 
+2025-10-22 20:24:56.95 +07:00  [INF] 
+2025-10-22 20:24:56.96 +07:00  [INF] 
+2025-10-22 20:24:56.97 +07:00  [INF] 
+2025-10-22 20:24:56.97 +07:00  [INF] 
+2025-10-22 20:24:56.97 +07:00  [INF] 
+2025-10-22 20:24:56.99 +07:00  [INF] 
+2025-10-22 20:24:56.99 +07:00  [INF] 
+2025-10-22 20:24:57.00 +07:00  [INF] 
+2025-10-22 20:24:57.00 +07:00  [INF] 
+2025-10-22 20:24:57.00 +07:00  [INF] 
+2025-10-22 20:24:57.00 +07:00  [INF] 
+2025-10-22 20:24:57.00 +07:00  [INF] 
+2025-10-22 20:24:57.01 +07:00  [INF] 
+2025-10-22 20:24:57.05 +07:00  [INF] 
+2025-10-22 20:24:57.06 +07:00  [INF] 
+2025-10-22 20:24:57.14 +07:00  [INF] 
+2025-10-22 20:24:57.14 +07:00  [INF] 
+2025-10-22 20:24:57.15 +07:00  [INF] 
+2025-10-22 20:24:57.17 +07:00  [INF] 
+2025-10-22 20:24:57.17 +07:00  [INF] 
+2025-10-22 20:24:57.17 +07:00  [INF] 
+2025-10-22 20:24:57.18 +07:00  [INF] 
+2025-10-22 20:33:25.85 +07:00  [INF] 
+2025-10-22 20:33:36.55 +07:00  [INF] 
+2025-10-22 20:33:36.73 +07:00  [INF] 
+2025-10-22 20:33:36.73 +07:00  [INF] 
+2025-10-22 20:33:36.73 +07:00  [INF] 
+2025-10-22 20:33:36.73 +07:00  [INF] 
+2025-10-22 20:33:36.73 +07:00  [INF] 
+2025-10-22 20:33:50.47 +07:00  [INF] 
+2025-10-22 20:33:50.55 +07:00  [INF] 
+2025-10-22 20:33:50.57 +07:00  [INF] 
+2025-10-22 20:33:51.94 +07:00  [INF] 
+2025-10-22 20:33:52.11 +07:00  [INF] 
+2025-10-22 20:33:52.12 +07:00  [INF] 
+2025-10-22 20:33:52.13 +07:00  [INF] 
+2025-10-22 20:33:52.13 +07:00  [INF] 
+2025-10-22 20:33:52.24 +07:00  [INF] 
+2025-10-22 20:33:52.25 +07:00  [INF] 
+2025-10-22 20:33:52.25 +07:00  [INF] 
+2025-10-22 20:33:52.26 +07:00  [INF] 
+2025-10-22 20:33:52.30 +07:00  [INF] 
+2025-10-22 20:33:52.30 +07:00  [INF] 
+2025-10-22 20:33:52.31 +07:00  [INF] 
+2025-10-22 20:33:52.31 +07:00  [INF] 
+2025-10-22 20:33:52.33 +07:00  [INF] 
+2025-10-22 20:33:52.33 +07:00  [INF] 
+2025-10-22 20:33:52.46 +07:00  [INF] 
+2025-10-22 20:33:52.46 +07:00  [INF] 
+2025-10-22 20:33:52.47 +07:00  [INF] 
+2025-10-22 20:33:52.50 +07:00  [INF] 
+2025-10-22 20:33:52.51 +07:00  [INF] 
+2025-10-22 20:33:52.51 +07:00  [INF] 
+2025-10-22 20:33:52.52 +07:00  [INF] 
+2025-10-22 22:02:18.41 +07:00  [INF] 
+2025-10-22 22:02:38.57 +07:00  [INF] 
+2025-10-22 22:02:39.18 +07:00  [INF] 
+2025-10-22 22:02:39.19 +07:00  [INF] 
+2025-10-22 22:02:39.19 +07:00  [INF] 
+2025-10-22 22:02:39.19 +07:00  [INF] 
+2025-10-22 22:02:39.20 +07:00  [INF] 
+2025-10-22 22:03:49.27 +07:00  [INF] 
+2025-10-22 22:04:00.33 +07:00  [INF] 
+2025-10-22 22:04:00.54 +07:00  [INF] 
+2025-10-22 22:04:00.54 +07:00  [INF] 
+2025-10-22 22:04:00.54 +07:00  [INF] 
+2025-10-22 22:04:00.55 +07:00  [INF] 
+2025-10-22 22:04:00.55 +07:00  [INF] 
+2025-10-22 22:07:59.50 +07:00  [INF] 
+2025-10-22 22:07:59.77 +07:00  [INF] 
+2025-10-22 22:08:03.64 +07:00  [INF] 
+2025-10-22 22:08:03.67 +07:00  [INF] 
+2025-10-22 22:08:03.70 +07:00  [INF] 
+2025-10-22 22:08:05.08 +07:00  [INF] 
+2025-10-22 22:08:05.29 +07:00  [INF] 
+2025-10-22 22:08:05.32 +07:00  [INF] 
+2025-10-22 22:08:05.32 +07:00  [INF] 
+2025-10-22 22:08:05.33 +07:00  [INF] 
+2025-10-22 22:08:05.59 +07:00  [INF] 
+2025-10-22 22:08:05.59 +07:00  [INF] 
+2025-10-22 22:08:05.60 +07:00  [INF] 
+2025-10-22 22:08:05.60 +07:00  [INF] 
+2025-10-22 22:08:05.65 +07:00  [INF] 
+2025-10-22 22:08:05.65 +07:00  [INF] 
+2025-10-22 22:08:05.65 +07:00  [INF] 
+2025-10-22 22:08:05.65 +07:00  [INF] 
+2025-10-22 22:08:05.68 +07:00  [INF] 
+2025-10-22 22:08:05.68 +07:00  [INF] 
+2025-10-22 22:08:05.69 +07:00  [INF] 
+2025-10-22 22:08:05.69 +07:00  [INF] 
+2025-10-22 22:08:05.73 +07:00  [INF] 
+2025-10-22 22:08:05.77 +07:00  [INF] 
+2025-10-22 22:08:05.77 +07:00  [INF] 
+2025-10-22 22:08:05.77 +07:00  [INF] 
+2025-10-22 22:08:05.79 +07:00  [INF] 
+2025-10-22 22:10:09.32 +07:00  [INF] 

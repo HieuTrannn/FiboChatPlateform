@@ -25,6 +25,12 @@ namespace Course.Infrastructure.Implements
             return await _dbSet.FirstOrDefaultAsync(predicate);
         }
 
+        public IQueryable<T> GetQueryable()
+        {
+            return _dbSet.AsQueryable();
+        }
+
+
         public async Task<T?> FindOneAsync(Expression<Func<T, bool>> filter)
         {
             return await _dbSet.FirstOrDefaultAsync(filter);
@@ -61,6 +67,20 @@ namespace Course.Infrastructure.Implements
         {
             return await _dbSet.FindAsync(id);
         }
+
+        public async Task<T?> GetByIdWithIncludeAsync(Guid id, params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = _dbSet;
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            return await query.AsSplitQuery()
+                              .FirstOrDefaultAsync(e => EF.Property<Guid>(e, "Id") == id);
+        }
+
 
         public async Task<T> InsertAsync(T entity)
         {
