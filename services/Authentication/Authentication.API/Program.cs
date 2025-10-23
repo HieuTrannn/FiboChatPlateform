@@ -29,7 +29,12 @@ builder.Services.AddSwaggerGen(c =>
         Version = "v1",
         Description = "API for Authentication Service"
     });
-    
+
+    c.AddServer(new OpenApiServer
+    {
+        Url = "/auth"
+    });
+
     // Add JWT Bearer authentication to Swagger
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
