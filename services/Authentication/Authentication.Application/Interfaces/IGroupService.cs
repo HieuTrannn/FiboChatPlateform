@@ -13,8 +13,8 @@ namespace Authentication.Application.Interfaces
         Task<GroupResponse> DeleteAsync(Guid id);
 
         // Member Management
-        Task<GroupResponse> AddMemberAsync(Guid groupId, GroupMemberRequest request);
-        Task<GroupResponse> RemoveMemberAsync(Guid groupId, Guid userId);
-        Task<List<GroupMemberResponse>> GetMembersAsync(Guid groupId);
+        Task<GroupResponse> AddMembersToGroupAsync(Guid groupId, List<Guid> userIds);
+        Task<GroupResponse> RemoveMembersFromGroupAsync(Guid groupId, List<Guid> userIds);
+        Task<List<GroupMemberResponse>> GetAllMembersOfGroupAsync(Guid groupId);
     }
 }
