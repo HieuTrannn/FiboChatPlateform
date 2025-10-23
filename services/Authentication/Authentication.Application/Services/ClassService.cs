@@ -150,6 +150,120 @@ namespace Authentication.Application.Services
             return await ToClassResponse(c);
         }
 
+        public async Task<ClassStudentResponse> AddStudentToClassAsync(Guid classId, List<Guid> userIds)
+        {
+            var c = await _unitOfWork.GetRepository<Class>().GetByIdAsync(classId);
+            if (c == null)
+            {
+                _logger.LogError("Class not found with id: {ClassId}", classId);
+                throw new CustomExceptions.NoDataFoundException("Class not found");
+            }
+
+            var addedStudents = new List<StudentResponse>();
+            var existingEnrollments = new List<ClassEnrollment>();
+
+            foreach (var userId in userIds)
+            {
+                var user = await _unitOfWork.GetRepository<Account>().GetByIdAsync(userId);
+                if (user == null)
+                {
+                    _logger.LogError("User not found with id: {UserId}", userId);
+                    throw new CustomExceptions.NoDataFoundException($"User not found with id: {userId}");
+                }
+
+                // Check if user is already enrolled
+                var existingEnrollment = await _unitOfWork.GetRepository<ClassEnrollment>()
+                    .GetAllAsync(x => x.UserId == userId && x.ClassId == classId && x.Status == ClassEnrollmentStatusEnum.Active);
+                
+                if (existingEnrollment.Any())
+                {
+                    existingEnrollments.Add(existingEnrollment.First());
+                    continue;
+                }
+
+                var enrollment = new ClassEnrollment
+                {
+                    UserId = userId,
+                    ClassId = classId,
+                    GroupId = null,
+                    RoleInClass = "student",
+                    Status = ClassEnrollmentStatusEnum.Active
+                };
+                
+                await _unitOfWork.GetRepository<ClassEnrollment>().InsertAsync(enrollment);
+                existingEnrollments.Add(enrollment);
+                addedStudents.Add(new StudentResponse
+                {
+                    Id = user.Id,
+                    FirstName = user.Firstname ?? "",
+                    LastName = user.Lastname ?? "",
+                    Email = user.Email ?? "",
+                    StudentId = user.StudentID ?? "",
+                    RoleInClass = "student",
+                    Status = ClassEnrollmentStatusEnum.Active.ToString()
+                });
+                await _unitOfWork.GetRepository<Account>().UpdateAsync(user);
+                await _unitOfWork.SaveChangeAsync();
+            }
+            return await ToClassStudentResponse(c, existingEnrollments);
+        }
+
+         public async Task<ClassStudentResponse> RemoveStudentFromClassAsync(Guid classId, List<Guid> userIds)
+        {
+            var c = await _unitOfWork.GetRepository<Class>().GetByIdAsync(classId);
+            if (c == null)
+            {
+                _logger.LogError("Class not found with id: {ClassId}", classId);
+                throw new CustomExceptions.NoDataFoundException("Class not found");
+            }
+
+            var remainingEnrollments = new List<ClassEnrollment>();
+
+            foreach (var userId in userIds)
+            {
+                var enrollments = await _unitOfWork.GetRepository<ClassEnrollment>()
+                    .GetAllAsync(x => x.UserId == userId && x.ClassId == classId && x.Status == ClassEnrollmentStatusEnum.Active);
+                
+                if (enrollments.Any())
+                {
+                    await _unitOfWork.GetRepository<ClassEnrollment>().DeleteAsync(enrollments.First().Id);
+                }
+            }
+
+            // Get remaining active enrollments
+            var activeEnrollments = await _unitOfWork.GetRepository<ClassEnrollment>()
+                .GetAllAsync(x => x.ClassId == classId && x.Status == ClassEnrollmentStatusEnum.Active);
+            
+            await _unitOfWork.SaveChangeAsync();
+            return await ToClassStudentResponse(c, activeEnrollments.ToList());
+        }
+
+        public async Task<List<ClassStudentResponse>> GetAllStudentsOfClassAsync(Guid classId)
+        {
+            var c = await _unitOfWork.GetRepository<Class>().GetByIdAsync(classId);
+            if (c == null)
+            {
+                _logger.LogError("Class not found with id: {ClassId}", classId);
+                throw new CustomExceptions.NoDataFoundException("Class not found");
+            }
+
+            var enrollments = await _unitOfWork.GetRepository<ClassEnrollment>()
+                .GetAllAsync(x => x.ClassId == classId && x.Status == ClassEnrollmentStatusEnum.Active);
+
+            var result = new List<ClassStudentResponse>();
+            
+            // Group enrollments by class (in case there are multiple classes)
+            var groupedEnrollments = enrollments.GroupBy(e => e.ClassId);
+            
+            foreach (var group in groupedEnrollments)
+            {
+                var classEnrollments = group.ToList();
+                result.Add(await ToClassStudentResponse(c, classEnrollments));
+            }
+
+            return result;
+        }
+
         // public async Task<PaginatedResponse<ClassResponse>> SearchAsync(ClassQueryRequest query)
         // {
         //     var classRepo = _unitOfWork.GetRepository<Class>();
@@ -246,6 +360,47 @@ namespace Authentication.Application.Services
                     CreatedAt = semester.CreatedAt,
                 } : null,
             };
+            return response;
+        }
+
+        private async Task<ClassStudentResponse> ToClassStudentResponse(Class c, List<ClassEnrollment> enrollments)
+        {
+            var lecturer = await _unitOfWork.GetRepository<Lecturer>().GetByIdAsync(c.LecturerId);
+            
+            var students = new List<StudentResponse>();
+            
+            foreach (var enrollment in enrollments)
+            {
+                var user = await _unitOfWork.GetRepository<Account>().GetByIdAsync(enrollment.UserId);
+                if (user != null)
+                {
+                    students.Add(new StudentResponse
+                    {
+                        Id = user.Id,
+                        FirstName = user.Firstname ?? "",
+                        LastName = user.Lastname ?? "",
+                        Email = user.Email ?? "",
+                        StudentId = user.StudentID ?? "",
+                        RoleInClass = enrollment.RoleInClass,
+                        Status = enrollment.Status.ToString()
+                    });
+                }
+            }
+
+            var response = new ClassStudentResponse
+            {
+                Id = c.Id,
+                Code = c.Code,
+                Status = c.Status.ToString(),
+                CreatedAt = c.CreatedAt,
+                Lecturer = lecturer != null ? new ClassLecturerResponse
+                {
+                    Id = lecturer.LecturerId,
+                    FullName = lecturer.FullName,
+                } : null,
+                Students = students
+            };
+            
             return response;
         }
     }

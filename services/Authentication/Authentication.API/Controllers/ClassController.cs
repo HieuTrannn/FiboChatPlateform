@@ -196,5 +196,80 @@ namespace Authentication.API.Controllers
         //         return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(ClassController)}: {ex.Message}"));
         //     }
         // }
+
+
+        /// <summary>
+        /// Add students to a class
+        /// </summary>
+        /// <param name="classId"></param>
+        /// <param name="userIds"></param>
+        /// <returns></returns>
+        [HttpPost("{classId}/add-students")]
+        public async Task<IActionResult> AddStudentsToClass([FromRoute] Guid classId, [FromForm] List<Guid> userIds)
+        {
+            try
+            {
+                var c = await _classService.AddStudentToClassAsync(classId, userIds);
+                if (c == null)
+                {
+                    return BadRequest(ApiResponse<ClassStudentResponse>.BadRequest("Add students to class failed"));
+                }
+                return Ok(ApiResponse<ClassStudentResponse>.Ok(c, "Add students to class successfully", "200"));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(ClassController), ex.Message);
+                return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(ClassController)}: {ex.Message}"));
+            }
+        }
+
+        /// <summary>
+        /// Remove students from a class
+        /// </summary>
+        /// <param name="classId"></param>
+        /// <param name="userIds"></param>
+        /// <returns></returns>
+        [HttpDelete("{classId}/remove-students")]
+        public async Task<IActionResult> RemoveStudentsFromClass([FromRoute] Guid classId, [FromForm] List<Guid> userIds)
+        {
+            try
+            {
+                var c = await _classService.RemoveStudentFromClassAsync(classId, userIds);
+                if (c == null)
+                {
+                    return BadRequest(ApiResponse<ClassStudentResponse>.BadRequest("Remove students from class failed"));
+                }
+                return Ok(ApiResponse<ClassStudentResponse>.Ok(c, "Remove students from class successfully", "200"));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(ClassController), ex.Message);
+                return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(ClassController)}: {ex.Message}"));
+            }
+        }
+
+        /// <summary>
+        /// Get all students of a class
+        /// </summary>
+        /// <param name="classId"></param>
+        /// <returns></returns>
+        [HttpGet("{classId}/students")]
+        public async Task<IActionResult> GetAllStudentsOfClass([FromRoute] Guid classId)
+        {
+            try
+            {
+                var c = await _classService.GetAllStudentsOfClassAsync(classId);
+                if (c == null)
+                {
+                    return BadRequest(ApiResponse<List<ClassStudentResponse>>.BadRequest("Get all students of class failed"));
+                }
+                return Ok(ApiResponse<List<ClassStudentResponse>>.Ok(c, "Get all students of class successfully", "200"));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(ClassController), ex.Message);
+                return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(ClassController)}: {ex.Message}"));
+            }
+        }
     }
 }
