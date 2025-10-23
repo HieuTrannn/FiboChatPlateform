@@ -3,7 +3,6 @@ using Authentication.Application.Interfaces;
 using Authentication.Domain.Entities;
 using Contracts.Common;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using static Authentication.Application.DTOs.AuthenDTO;
@@ -11,7 +10,7 @@ using static Authentication.Application.DTOs.UserDTO;
 
 namespace Authentication.API.Controllers
 {
-    [Route("auth/api/user")]
+    [Route("api/users")]
     [ApiController]
     public class UserController : ControllerBase
     {
