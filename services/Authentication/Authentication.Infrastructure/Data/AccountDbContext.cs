@@ -88,27 +88,28 @@ namespace Authentication.Infrastructure.Data
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
-            // ClassEnrollment configuration
             modelBuilder.Entity<ClassEnrollment>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.RoleInClass).IsRequired();
+{
+    entity.HasKey(e => e.Id);
+    entity.Property(e => e.RoleInClass).IsRequired();
 
-                entity.HasOne(e => e.Class)
-                    .WithMany(c => c.Enrollments)
-                    .HasForeignKey(e => e.ClassId)
-                    .OnDelete(DeleteBehavior.Cascade);
+    entity.HasOne(e => e.Class)
+        .WithMany(c => c.Enrollments)
+        .HasForeignKey(e => e.ClassId)
+        .OnDelete(DeleteBehavior.Cascade);
 
-                entity.HasOne(e => e.Group)
-                    .WithMany(g => g.Enrollments)
-                    .HasForeignKey(e => e.GroupId)
-                    .OnDelete(DeleteBehavior.Cascade);
+    // ✅ Fix GroupId foreign key - cho phép null và không kiểm tra constraint khi null
+    entity.HasOne(e => e.Group)
+        .WithMany(g => g.Enrollments)
+        .HasForeignKey(e => e.GroupId)
+        .OnDelete(DeleteBehavior.SetNull)
+        .IsRequired(false); // ✅ Quan trọng: cho phép null
 
-                entity.HasOne<Account>()
-                    .WithMany()
-                    .HasForeignKey(e => e.UserId)
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
+    entity.HasOne(e => e.User)
+        .WithMany()
+        .HasForeignKey(e => e.UserId)
+        .OnDelete(DeleteBehavior.Cascade);
+});
 
             // Lecturer configuration
             modelBuilder.Entity<Lecturer>(entity =>

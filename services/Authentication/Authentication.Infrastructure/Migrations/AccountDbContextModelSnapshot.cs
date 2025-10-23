@@ -17,7 +17,7 @@ namespace Authentication.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.9")
+                .HasAnnotation("ProductVersion", "9.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -338,9 +338,9 @@ namespace Authentication.Infrastructure.Migrations
                     b.HasOne("Authentication.Domain.Entities.Group", "Group")
                         .WithMany("Enrollments")
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("Authentication.Domain.Entities.Account", null)
+                    b.HasOne("Authentication.Domain.Entities.Account", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -349,6 +349,8 @@ namespace Authentication.Infrastructure.Migrations
                     b.Navigation("Class");
 
                     b.Navigation("Group");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Authentication.Domain.Entities.Group", b =>

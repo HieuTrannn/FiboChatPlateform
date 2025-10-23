@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Authentication.Infrastructure.Migrations
 {
     [DbContext(typeof(AccountDbContext))]
-    [Migration("20251021131959_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20251023180809_FixGroupIdNullable")]
+    partial class FixGroupIdNullable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -149,7 +149,7 @@ namespace Authentication.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("GroupId")
+                    b.Property<Guid?>("GroupId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("RoleInClass")
@@ -341,10 +341,9 @@ namespace Authentication.Infrastructure.Migrations
                     b.HasOne("Authentication.Domain.Entities.Group", "Group")
                         .WithMany("Enrollments")
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("Authentication.Domain.Entities.Account", null)
+                    b.HasOne("Authentication.Domain.Entities.Account", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -353,6 +352,8 @@ namespace Authentication.Infrastructure.Migrations
                     b.Navigation("Class");
 
                     b.Navigation("Group");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Authentication.Domain.Entities.Group", b =>
