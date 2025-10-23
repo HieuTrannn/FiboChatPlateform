@@ -72,16 +72,10 @@ app.MapOpenApi();
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
-    if (builder.Environment.IsDevelopment())
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Authentication API v1");
-        c.RoutePrefix = string.Empty;
-    }
-    else
-    {
-        c.SwaggerEndpoint("/auth/swagger/v1/swagger.json", "Authentication API v1");
-        c.RoutePrefix = "auth";
-    }
+
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Authentication API v1");
+
+    c.RoutePrefix = "swagger";
 });
 
 
