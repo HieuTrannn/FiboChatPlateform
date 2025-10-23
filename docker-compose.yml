@@ -12,6 +12,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123456
       POSTGRES_DB: fibo_chat_auth
+      TZ: Asia/Ho_Chi_Minh
     ports:
       - "5433:5432"
     volumes:
@@ -27,6 +28,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123456
       POSTGRES_DB: fibo_chat_course
+      TZ: Asia/Ho_Chi_Minh
     ports:
       - "5434:5432"
     volumes:
