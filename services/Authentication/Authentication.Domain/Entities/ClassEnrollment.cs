@@ -1,4 +1,3 @@
-
 using Authentication.Domain.Enum;
 
 namespace Authentication.Domain.Entities
@@ -15,6 +14,7 @@ namespace Authentication.Domain.Entities
 
         // Navigation
         public Class Class { get; set; } = null!;
-        public Group Group { get; set; } = null!;
+        public Group? Group { get; set; }
+        public Account User { get; set; } = null!;
     }
 }
