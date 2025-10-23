@@ -188,5 +188,91 @@ namespace Authentication.Infrastructure.Implementation
             }
         }
 
+        public async Task<IList<T>> GetAllAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _dbSet.Where(predicate).ToListAsync();
+        }
+
+        public async Task<IList<T>> GetAllAsync(Expression<Func<T, bool>> predicate, string? includeProperties = null)
+        {
+            IQueryable<T> query = _dbSet.Where(predicate);
+
+            if (!string.IsNullOrEmpty(includeProperties))
+            {
+                foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProperty.Trim());
+                }
+            }
+
+            return await query.ToListAsync();
+        }
+
+        public async Task<T?> GetFirstOrDefaultAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _dbSet.FirstOrDefaultAsync(predicate);
+        }
+
+        public async Task<T?> GetFirstOrDefaultAsync(Expression<Func<T, bool>> predicate, string? includeProperties = null)
+        {
+            IQueryable<T> query = _dbSet.Where(predicate);
+
+            if (!string.IsNullOrEmpty(includeProperties))
+            {
+                foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProperty.Trim());
+                }
+            }
+
+            return await query.FirstOrDefaultAsync(predicate);
+        }
+
+        public async Task<int> CountAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _dbSet.CountAsync(predicate);
+        }
+
+        public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _dbSet.AnyAsync(predicate);
+        }
+
+        public async Task<IList<T>> FilterByAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _dbSet.Where(predicate).ToListAsync();
+        }
+
+        public async Task DeleteManyAsync(Expression<Func<T, bool>> predicate)
+        {
+            var entities = await _dbSet.Where(predicate).ToListAsync();
+            if (entities.Any())
+            {
+                _dbSet.RemoveRange(entities);
+            }
+        }
+
+        public async Task DeleteRangeAsync(Expression<Func<T, bool>> predicate)
+        {
+            var entities = await _dbSet.Where(predicate).ToListAsync();
+            if (entities.Any())
+            {
+                _dbSet.RemoveRange(entities);
+            }
+        }
+
+        public async Task<T?> GetByIdWithIncludeAsync(Guid id, params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = _dbSet;
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            return await query.AsSplitQuery()
+                              .FirstOrDefaultAsync(e => EF.Property<Guid>(e, "Id") == id);
+        }
+
     }
 }

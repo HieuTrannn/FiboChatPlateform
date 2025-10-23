@@ -71,6 +71,11 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
+if (app.Environment.IsDevelopment())
+{
+    app.UsePathBase("/auth");
+}
+
 // ===== PathBase: để Swagger và endpoint biết prefix /auth =====
 // Configure the HTTP request pipeline.
 app.MapOpenApi();

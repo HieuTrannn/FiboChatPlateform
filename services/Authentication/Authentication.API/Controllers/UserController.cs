@@ -11,7 +11,7 @@ using static Authentication.Application.DTOs.UserDTO;
 
 namespace Authentication.API.Controllers
 {
-    [Route("api/user")]
+    [Route("auth/api/user")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -135,66 +135,7 @@ namespace Authentication.API.Controllers
             }
         }
 
-        [HttpGet("profile")]
-        public async Task<IActionResult> GetUserById([FromForm] string userId)
-        {
-            try
-            {
-                var user = await _userService.GetUserById(userId);
-                if (user == null)
-                {
-                    return NotFound(ApiResponse<UserInfo>.NotFound("User not found"));
-                }
-                return Ok(ApiResponse<UserInfo>.Ok(user, "Get user by id successfully", "200"));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(UserController), ex.Message);
-                return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(UserController)}: {ex.Message}"));
-            }
-        }
-
-        [Authorize]
-        [HttpPut("update-profile")]
-        public async Task<IActionResult> UpdateUserProfileAsync([FromRoute] string userId, [FromForm] UserInfo userInfo)
-        {
-            try
-            {
-                var user = await _userService.GetUserById(userId);
-                if (user == null)
-                {
-                    return NotFound(ApiResponse<UserInfo>.NotFound("User not found"));
-                }
-                var response = await _userService.UpdateUserProfileAsync(userId, userInfo);
-                return Ok(ApiResponse<UserInfo>.Ok(response, "Update user profile successfully", "200"));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(UserController), ex.Message);
-                return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(UserController)}: {ex.Message}"));
-            }
-        }
-
-        [HttpDelete]
-        public async Task<IActionResult> DeleteUserAsync([FromRoute] string userId)
-        {
-            try
-            {
-                var user = await _userService.GetUserById(userId);
-                if (user == null)
-                {
-                    return NotFound(ApiResponse<UserInfo>.NotFound("User not found"));
-                }
-                var response = await _userService.DeleteUserAsync(userId);
-                return Ok(ApiResponse<UserInfo>.Ok(response, "Delete user successfully", "200"));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(UserController), ex.Message);
-                return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(UserController)}: {ex.Message}"));
-            }
-        }
-
+        
         [Authorize]
         [HttpPut("change-password-first-time")]
         public async Task<IActionResult> ChangePasswordFirstTime([FromForm] ChangePasswordFirstTimeRequest request)
@@ -219,6 +160,104 @@ namespace Authentication.API.Controllers
                 return StatusCode(500, ApiResponse<string>.InternalError("Error at the " + nameof(UserController) + ": " + ex.Message));
             }
         }
+
+        [Authorize]
+        [HttpGet("get-user-profile")]
+        public async Task<IActionResult> GetUserProfileAsync()
+        {
+            try
+            {
+                var currentUserId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(currentUserId))
+                {
+                    _logger.LogWarning("No name identifier claim found in JWT token");
+                    return Unauthorized(new RegisterResponse { Success = false, Message = "Invalid token: Name identifier claim missing" });
+                }
+                var response = await _userService.GetUserProfileAsync(currentUserId);
+                return Ok(ApiResponse<UserInfo>.Ok(response, "Get user profile successfully", "200"));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(UserController), ex.Message);
+                return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(UserController)}: {ex.Message}"));
+            }
+        }
+
+        [Authorize]
+        [HttpPut("update-profile")]
+        public async Task<IActionResult> UpdateUserProfileAsync([FromForm] UserInfo userInfo)
+        {
+            try
+            {
+                var currentUserId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(currentUserId))
+                {
+                    _logger.LogWarning("No name identifier claim found in JWT token");
+                    return Unauthorized(new RegisterResponse { Success = false, Message = "Invalid token: Name identifier claim missing" });
+                }
+                var user = await _userService.GetUserProfileAsync(currentUserId);
+                if (user == null)
+                {
+                    return NotFound(ApiResponse<UserInfo>.NotFound("User not found"));
+                }
+                var response = await _userService.UpdateUserProfileAsync(currentUserId, userInfo);
+                return Ok(ApiResponse<UserInfo>.Ok(response, "Update user profile successfully", "200"));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(UserController), ex.Message);
+                return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(UserController)}: {ex.Message}"));
+            }
+        }
+
+        [HttpGet("get-all-users")]
+        public async Task<IActionResult> GetAllUsersAsync([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+        {
+            try
+            {
+                var response = await _userService.GetAllUsersAsync(page, pageSize);
+                return Ok(ApiResponse<BasePaginatedList<UserResponse>>.Ok(response, "Get all users successfully", "200"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<string>.InternalError("Error at the " + nameof(UserController) + ": " + ex.Message));
+            }
+        }
+
+        [HttpGet("get-user-by-id")]
+        public async Task<IActionResult> GetUserByIdAsync([FromRoute] string userId)
+        {
+            try
+            {
+                var response = await _userService.GetUserByIdAsync(userId);
+                return Ok(ApiResponse<UserResponse>.Ok(response, "Get user by id successfully", "200"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<string>.InternalError("Error at the " + nameof(UserController) + ": " + ex.Message));
+            }
+        }
+
+        [HttpDelete("delete-user")]
+        public async Task<IActionResult> DeleteUserAsync([FromRoute] string userId)
+        {
+            try
+            {
+                var user = await _userService.GetUserByIdAsync(userId);
+                if (user == null)
+                {
+                    return NotFound(ApiResponse<string>.NotFound("User not found"));
+                }
+                await _userService.DeleteUserAsync(userId);
+                return Ok(ApiResponse<string>.OkResponse("Delete user successfully", StatusCode: "200"));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(UserController), ex.Message);
+                return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(UserController)}: {ex.Message}"));
+            }
+        }
+
     }
 }
 

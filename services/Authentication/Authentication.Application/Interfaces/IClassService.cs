@@ -13,5 +13,10 @@ namespace Authentication.Application.Interfaces
         Task<ClassResponse> AssignLecturerAsync(Guid classId, Guid lecturerId);
         Task<ClassResponse> UnassignLecturerAsync(Guid classId);
         // Task<PaginatedResponse<ClassResponse>> SearchAsync(ClassQueryRequest request);
+
+        // Student Management
+        Task<ClassStudentResponse> AddStudentToClassAsync(Guid classId, List<Guid> userIds);
+        Task<ClassStudentResponse> RemoveStudentFromClassAsync(Guid classId, List<Guid> userIds);
+        Task<List<ClassStudentResponse>> GetAllStudentsOfClassAsync(Guid classId);
     }
 }
