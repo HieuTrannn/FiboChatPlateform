@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Authentication.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class FixGroupIdNullable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -161,7 +161,7 @@ namespace Authentication.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     ClassId = table.Column<Guid>(type: "uuid", nullable: false),
-                    GroupId = table.Column<Guid>(type: "uuid", nullable: false),
+                    GroupId = table.Column<Guid>(type: "uuid", nullable: true),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false),
                     RoleInClass = table.Column<string>(type: "text", nullable: false),
@@ -187,7 +187,7 @@ namespace Authentication.Infrastructure.Migrations
                         column: x => x.GroupId,
                         principalTable: "Groups",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateIndex(

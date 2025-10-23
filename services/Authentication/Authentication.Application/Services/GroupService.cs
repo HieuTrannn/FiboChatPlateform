@@ -32,7 +32,7 @@ namespace Authentication.Application.Services
             var groups = await _unitOfWork.GetRepository<Group>().GetAllAsync(x => x.Where(x => x.ClassId == classId));
             var response = await Task.WhenAll(groups.Select(ToGroupResponse));
             return new BasePaginatedList<GroupResponse>(response, groups.Count, page, pageSize);
-        }   
+        }
 
         public async Task<GroupDetailResponse> GetByIdAsync(Guid id)
         {
@@ -91,55 +91,214 @@ namespace Authentication.Application.Services
             return await ToGroupResponse(group);
         }
 
-        public async Task<GroupResponse> AddMemberAsync(Guid groupId, GroupMemberRequest request)
+
+        // Member Management
+        public async Task<GroupResponse> AddMembersToGroupAsync(Guid groupId, List<Guid> userIds)
         {
-            var group = await _unitOfWork.GetRepository<Group>().GetByIdAsync(groupId);
-            if (group == null)
+            try
             {
-                _logger.LogError("Group not found with id: {Id}", groupId);
-                throw new CustomExceptions.NoDataFoundException("Group not found");
+                _logger.LogInformation("Starting to add members to group {GroupId}", groupId);
+
+                // Validate input
+                if (userIds == null || !userIds.Any())
+                {
+                    _logger.LogWarning("No user IDs provided for group {GroupId}", groupId);
+                    throw new CustomExceptions.ValidationException("User IDs cannot be empty");
+                }
+
+                if (userIds.Any(id => id == Guid.Empty))
+                {
+                    _logger.LogWarning("Invalid user ID provided for group {GroupId}", groupId);
+                    throw new CustomExceptions.ValidationException("Invalid user ID provided");
+                }
+
+                // Check if group exists
+                var group = await _unitOfWork.GetRepository<Group>().GetByIdAsync(groupId);
+                if (group == null)
+                {
+                    _logger.LogError("Group not found with id: {GroupId}", groupId);
+                    throw new CustomExceptions.NoDataFoundException("Group not found");
+                }
+
+                _logger.LogInformation("Group found: {GroupName} in class {ClassId}", group.Name, group.ClassId);
+
+                var addedMembers = new List<GroupMemberResponse>();
+                var updatedEnrollments = new List<ClassEnrollment>();
+
+                foreach (var userId in userIds)
+                {
+                    _logger.LogInformation("Processing user {UserId} for group {GroupId}", userId, groupId);
+
+                    // Validate user exists
+                    var user = await _unitOfWork.GetRepository<Account>().GetByIdAsync(userId);
+                    if (user == null)
+                    {
+                        _logger.LogError("User not found with id: {UserId}", userId);
+                        throw new CustomExceptions.NoDataFoundException($"User not found with id: {userId}");
+                    }
+
+                    _logger.LogInformation("User found: {UserEmail}", user.Email);
+
+                    // ✅ Check if user is enrolled in the class (required)
+                    var classEnrollment = await _unitOfWork.GetRepository<ClassEnrollment>()
+                        .GetAllAsync(x => x.UserId == userId && x.ClassId == group.ClassId && x.Status == ClassEnrollmentStatusEnum.Active);
+
+                    if (!classEnrollment.Any())
+                    {
+                        _logger.LogError("User {UserId} is not enrolled in class {ClassId}", userId, group.ClassId);
+                        throw new CustomExceptions.ValidationException($"User {userId} is not enrolled in this class. Please add user to class first.");
+                    }
+
+                    var enrollment = classEnrollment.First();
+                    _logger.LogInformation("User {UserId} is enrolled in class {ClassId}", userId, group.ClassId);
+
+                    // Check if user is already in this group
+                    if (enrollment.GroupId == groupId)
+                    {
+                        _logger.LogInformation("User {UserId} is already in group {GroupId}", userId, groupId);
+                        updatedEnrollments.Add(enrollment);
+                        continue;
+                    }
+
+                    // Check if user is in another group
+                    if (enrollment.GroupId.HasValue && enrollment.GroupId != groupId)
+                    {
+                        _logger.LogWarning("User {UserId} is already in another group {OtherGroupId}", userId, enrollment.GroupId);
+                        throw new CustomExceptions.ValidationException($"User {userId} is already in another group. Remove from current group first.");
+                    }
+
+                    // Update enrollment to assign to this group
+                    enrollment.GroupId = groupId;
+                    await _unitOfWork.GetRepository<ClassEnrollment>().UpdateAsync(enrollment);
+                    updatedEnrollments.Add(enrollment);
+
+                    addedMembers.Add(new GroupMemberResponse
+                    {
+                        UserId = user.Id,
+                        FirstName = user.Firstname ?? "",
+                        LastName = user.Lastname ?? "",
+                        Email = user.Email ?? "",
+                        StudentId = user.StudentID ?? "",
+                        RoleInClass = enrollment.RoleInClass,
+                        Status = enrollment.Status.ToString(),
+                    });
+
+                    _logger.LogInformation("Successfully assigned user {UserId} to group {GroupId}", userId, groupId);
+                }
+
+                // Save changes
+                _logger.LogInformation("Saving changes to database");
+                await _unitOfWork.SaveChangeAsync();
+                _logger.LogInformation("Successfully saved changes");
+
+                _logger.LogInformation("Successfully added {Count} members to group {GroupId}", addedMembers.Count, groupId);
+                return await ToGroupDetailResponse(group);
             }
-            var enrollment = new ClassEnrollment
+            catch (Exception ex)
             {
-                UserId = request.UserId,
-                GroupId = groupId,
-                RoleInClass = request.RoleInClass,
-                Status = ClassEnrollmentStatusEnum.Active
-            };
-            await _unitOfWork.GetRepository<ClassEnrollment>().InsertAsync(enrollment);
-            await _unitOfWork.SaveChangeAsync();
-            return await ToGroupResponse(group);
+                _logger.LogError(ex, "Error in AddMembersToGroupAsync for group {GroupId}: {Message}", groupId, ex.Message);
+                throw;
+            }
         }
 
-        public async Task<GroupResponse> RemoveMemberAsync(Guid groupId, Guid userId)
+        public async Task<GroupResponse> RemoveMembersFromGroupAsync(Guid groupId, List<Guid> userIds)
         {
-            var group = await _unitOfWork.GetRepository<Group>().GetByIdAsync(groupId);
-            if (group == null)
+            try
             {
-                _logger.LogError("Group not found with id: {Id}", groupId);
-                throw new CustomExceptions.NoDataFoundException("Group not found");
+                _logger.LogInformation("Starting to remove members from group {GroupId}", groupId);
+
+                // Validate input
+                if (userIds == null || !userIds.Any())
+                {
+                    _logger.LogWarning("No user IDs provided for group {GroupId}", groupId);
+                    throw new CustomExceptions.ValidationException("User IDs cannot be empty");
+                }
+
+                // Check if group exists
+                var group = await _unitOfWork.GetRepository<Group>().GetByIdAsync(groupId);
+                if (group == null)
+                {
+                    _logger.LogError("Group not found with id: {GroupId}", groupId);
+                    throw new CustomExceptions.NoDataFoundException("Group not found");
+                }
+
+                _logger.LogInformation("Group found: {GroupName}", group.Name);
+
+                foreach (var userId in userIds)
+                {
+                    _logger.LogInformation("Processing user {UserId} for removal from group {GroupId}", userId, groupId);
+
+                    // Find enrollment for this user in this group
+                    var enrollment = await _unitOfWork.GetRepository<ClassEnrollment>()
+                        .GetAllAsync(x => x.UserId == userId && x.GroupId == groupId && x.Status == ClassEnrollmentStatusEnum.Active);
+
+                    if (!enrollment.Any())
+                    {
+                        _logger.LogWarning("User {UserId} is not in group {GroupId}", userId, groupId);
+                        continue; // Skip if not in group
+                    }
+
+                    var userEnrollment = enrollment.First();
+
+                    // Remove from group (set GroupId to null)
+                    userEnrollment.GroupId = null;
+                    await _unitOfWork.GetRepository<ClassEnrollment>().UpdateAsync(userEnrollment);
+
+                    _logger.LogInformation("Successfully removed user {UserId} from group {GroupId}", userId, groupId);
+                }
+
+                // Save changes
+                _logger.LogInformation("Saving changes to database");
+                await _unitOfWork.SaveChangeAsync();
+                _logger.LogInformation("Successfully saved changes");
+
+                _logger.LogInformation("Successfully removed members from group {GroupId}", groupId);
+                return await ToGroupResponse(group);
             }
-            var enrollment = group.Enrollments.ToList().FirstOrDefault(x => x.UserId == userId);
-            if (enrollment == null)
+            catch (Exception ex)
             {
-                _logger.LogError("Enrollment not found with user id: {UserId}", userId);
-                throw new CustomExceptions.NoDataFoundException("Enrollment not found");
+                _logger.LogError(ex, "Error in RemoveMembersFromGroupAsync for group {GroupId}: {Message}", groupId, ex.Message);
+                throw;
             }
-            enrollment.Status = ClassEnrollmentStatusEnum.Disabled;
-            await _unitOfWork.GetRepository<ClassEnrollment>().UpdateAsync(enrollment);
-            await _unitOfWork.SaveChangeAsync();
-            return await ToGroupResponse(group);
         }
-        public async Task<List<GroupMemberResponse>> GetMembersAsync(Guid groupId)
+
+        public async Task<List<GroupMemberResponse>> GetAllMembersOfGroupAsync(Guid groupId)
         {
-            var group = await _unitOfWork.GetRepository<Group>().GetByIdAsync(groupId);
-            if (group == null)
+            try
             {
-                _logger.LogError("Group not found with id: {Id}", groupId);
-                throw new CustomExceptions.NoDataFoundException("Group not found");
+                _logger.LogInformation("Getting all members of group {GroupId}", groupId);
+
+                // Check if group exists
+                var group = await _unitOfWork.GetRepository<Group>().GetByIdAsync(groupId);
+                if (group == null)
+                {
+                    _logger.LogError("Group not found with id: {GroupId}", groupId);
+                    throw new CustomExceptions.NoDataFoundException("Group not found");
+                }
+
+                _logger.LogInformation("Group found: {GroupName} in class {ClassId}", group.Name, group.ClassId);
+
+                // Get all active enrollments for this group
+                var enrollments = await _unitOfWork.GetRepository<ClassEnrollment>()
+                    .GetAllAsync(x => x.GroupId == groupId && x.Status == ClassEnrollmentStatusEnum.Active);
+
+                _logger.LogInformation("Found {Count} members in group {GroupId}", enrollments.Count, groupId);
+
+                if (!enrollments.Any())
+                {
+                    _logger.LogInformation("No members found in group {GroupId}", groupId);
+                    return new List<GroupMemberResponse>();
+                }
+
+                return await ToGroupMemberResponse(enrollments.ToList());
             }
-            return await ToGroupMemberResponse(group.Enrollments.ToList());
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in GetAllMembersOfGroupAsync for group {GroupId}: {Message}", groupId, ex.Message);
+                throw;
+            }
         }
+
         private async Task<GroupResponse> ToGroupResponse(Group group)
         {
             var response = new GroupResponse
@@ -180,18 +339,36 @@ namespace Authentication.Application.Services
 
         private async Task<List<GroupMemberResponse>> ToGroupMemberResponse(List<ClassEnrollment> enrollments)
         {
-            var accounts = await _unitOfWork.GetRepository<Account>().GetAllAsync(x => x.Where(x => enrollments.Select(e => e.UserId).Contains(x.Id)));
-            var responses = enrollments.Select(e => new GroupMemberResponse
+            if (!enrollments.Any())
             {
-                UserId = e.UserId,
-                FirstName = accounts.FirstOrDefault(x => x.Id == e.UserId)?.Firstname ?? "",
-                LastName = accounts.FirstOrDefault(x => x.Id == e.UserId)?.Lastname ?? "",
-                Email = accounts.FirstOrDefault(x => x.Id == e.UserId)?.Email ?? "",
-                StudentId = accounts.FirstOrDefault(x => x.Id == e.UserId)?.StudentID ?? "",
-                RoleInClass = e.RoleInClass,
-                Status = e.Status.ToString()
+                return new List<GroupMemberResponse>();
+            }
+
+            // Get all user IDs from enrollments
+            var userIds = enrollments.Select(e => e.UserId).ToList();
+
+            // Get all accounts in one query (more efficient)
+            var accounts = await _unitOfWork.GetRepository<Account>()
+                .GetAllAsync(x => userIds.Contains(x.Id));
+
+            // Create response mapping
+            var responses = enrollments.Select(enrollment =>
+            {
+                var account = accounts.FirstOrDefault(a => a.Id == enrollment.UserId);
+                return new GroupMemberResponse
+                {
+                    UserId = enrollment.UserId,
+                    FirstName = account?.Firstname ?? "",
+                    LastName = account?.Lastname ?? "",
+                    Email = account?.Email ?? "",
+                    StudentId = account?.StudentID ?? "",
+                    RoleInClass = enrollment.RoleInClass,
+                    Status = enrollment.Status.ToString(),
+                };
             }).ToList();
-            return await Task.FromResult(responses);
+
+            _logger.LogInformation("Successfully mapped {Count} group members", responses.Count);
+            return responses;
         }
     }
 }

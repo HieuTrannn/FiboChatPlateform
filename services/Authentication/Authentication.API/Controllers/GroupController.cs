@@ -2,6 +2,7 @@ using Authentication.Application.Interfaces;
 using Authentication.Application.DTOs.GroupDTOs;
 using Contracts.Common;
 using Microsoft.AspNetCore.Mvc;
+using Authentication.Domain.Exceptions;
 
 namespace API.Controllers
 {
@@ -56,7 +57,7 @@ namespace API.Controllers
                 return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(GroupController)}: {ex.Message}"));
             }
         }
-        
+
         /// <summary>
         /// Get a group by id
         /// </summary>
@@ -146,11 +147,11 @@ namespace API.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost("{groupId}/members")]
-        public async Task<IActionResult> AddMemberToGroup(Guid groupId, [FromForm] GroupMemberRequest request)
+        public async Task<IActionResult> AddMembersToGroup(Guid groupId, [FromForm] List<Guid> userIds)
         {
             try
             {
-                var group = await _groupService.AddMemberAsync(groupId, request);
+                var group = await _groupService.AddMembersToGroupAsync(groupId, userIds);
                 return Ok(ApiResponse<GroupResponse>.Ok(group, "Add member to group successfully", "200"));
             }
             catch (Exception ex)
@@ -167,11 +168,11 @@ namespace API.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpDelete("{groupId}/members/{userId}")]
-        public async Task<IActionResult> RemoveMemberFromGroup([FromRoute] Guid groupId, [FromRoute] Guid userId)
+        public async Task<IActionResult> RemoveMembersFromGroup([FromRoute] Guid groupId, [FromRoute] List<Guid> userIds)
         {
             try
             {
-                var group = await _groupService.RemoveMemberAsync(groupId, userId);
+                var group = await _groupService.RemoveMembersFromGroupAsync(groupId, userIds);
                 return Ok(ApiResponse<GroupResponse>.Ok(group, "Remove member from group successfully", "200"));
             }
             catch (Exception ex)
@@ -187,12 +188,21 @@ namespace API.Controllers
         /// <param name="groupId"></param>
         /// <returns></returns>
         [HttpGet("{groupId}/members")]
-        public async Task<IActionResult> GetMembersOfGroup(Guid groupId)
+        public async Task<IActionResult> GetAllMembersOfGroup([FromRoute] Guid groupId)
         {
             try
             {
-                var members = await _groupService.GetMembersAsync(groupId);
-                return Ok(ApiResponse<List<GroupMemberResponse>>.Ok(members, "Get members of group successfully", "200"));
+                _logger.LogInformation("Getting all members of group {GroupId}", groupId);
+
+                var members = await _groupService.GetAllMembersOfGroupAsync(groupId);
+
+                _logger.LogInformation("Successfully retrieved {Count} members from group {GroupId}", members.Count, groupId);
+                return Ok(ApiResponse<List<GroupMemberResponse>>.Ok(members, "Get all members of group successfully", "200"));
+            }
+            catch (CustomExceptions.NoDataFoundException ex)
+            {
+                _logger.LogWarning(ex, "Group not found: {GroupId}", groupId);
+                return NotFound(ApiResponse<List<GroupMemberResponse>>.NotFound(ex.Message));
             }
             catch (Exception ex)
             {

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Authentication.Application.Interfaces;
 using Authentication.Application.DTOs.ClassDTOs;
 using Contracts.Common;
+using Authentication.Domain.Exceptions;
 
 namespace Authentication.API.Controllers
 {
@@ -61,7 +62,7 @@ namespace Authentication.API.Controllers
             }
         }
 
-     
+
         [HttpPost]
         public async Task<IActionResult> CreateClass([FromForm] ClassCreateRequest request)
         {
@@ -209,12 +210,40 @@ namespace Authentication.API.Controllers
         {
             try
             {
-                var c = await _classService.AddStudentToClassAsync(classId, userIds);
-                if (c == null)
+                // Validation
+                if (userIds == null || !userIds.Any())
                 {
+                    _logger.LogWarning("No user IDs provided for class {ClassId}", classId);
+                    return BadRequest(ApiResponse<ClassStudentResponse>.BadRequest("User IDs cannot be empty"));
+                }
+
+                if (userIds.Any(id => id == Guid.Empty))
+                {
+                    _logger.LogWarning("Invalid user ID provided for class {ClassId}", classId);
+                    return BadRequest(ApiResponse<ClassStudentResponse>.BadRequest("Invalid user ID provided"));
+                }
+
+                _logger.LogInformation("Adding {Count} students to class {ClassId}", userIds.Count, classId);
+
+                var result = await _classService.AddStudentToClassAsync(classId, userIds);
+                if (result == null)
+                {
+                    _logger.LogError("Failed to add students to class {ClassId}", classId);
                     return BadRequest(ApiResponse<ClassStudentResponse>.BadRequest("Add students to class failed"));
                 }
-                return Ok(ApiResponse<ClassStudentResponse>.Ok(c, "Add students to class successfully", "200"));
+
+                _logger.LogInformation("Successfully added students to class {ClassId}", classId);
+                return Ok(ApiResponse<ClassStudentResponse>.Ok(result, "Add students to class successfully", "200"));
+            }
+            catch (CustomExceptions.NoDataFoundException ex)
+            {
+                _logger.LogWarning(ex, "Data not found for class {ClassId}: {Message}", classId, ex.Message);
+                return NotFound(ApiResponse<ClassStudentResponse>.NotFound(ex.Message));
+            }
+            catch (CustomExceptions.ValidationException ex)
+            {
+                _logger.LogWarning(ex, "Validation error for class {ClassId}: {Message}", classId, ex.Message);
+                return BadRequest(ApiResponse<ClassStudentResponse>.BadRequest(ex.Message));
             }
             catch (Exception ex)
             {
