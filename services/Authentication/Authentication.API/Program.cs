@@ -6,14 +6,6 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Tự động set Development environment nếu chạy localhost
-if (builder.Environment.EnvironmentName == "Development" || 
-    builder.Configuration.GetConnectionString("DbConnection")?.Contains("localhost") == true)
-{
-    Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Development");
-    Console.WriteLine("🔧 Auto-detected localhost - Using Development environment");
-}
-
 // Add services to the container.
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)

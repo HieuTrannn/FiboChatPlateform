@@ -11,7 +11,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123456
-      POSTGRES_DB: fibo_chat-auth
+      POSTGRES_DB: fibo_chat_auth
     ports:
       - "5433:5432"
     volumes:
@@ -26,7 +26,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123456
-      POSTGRES_DB: fibo_chat-course
+      POSTGRES_DB: fibo_chat_course
     ports:
       - "5434:5432"
     volumes:
