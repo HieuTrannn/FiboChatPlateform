@@ -29,7 +29,12 @@ builder.Services.AddSwaggerGen(c =>
         Version = "v1",
         Description = "API for Authentication Service"
     });
-    
+
+    c.AddServer(new OpenApiServer
+    {
+        Url = "/auth"
+    });
+
     // Add JWT Bearer authentication to Swagger
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
@@ -72,16 +77,10 @@ app.MapOpenApi();
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
-    if (builder.Environment.IsDevelopment())
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Authentication API v1");
-        c.RoutePrefix = string.Empty;
-    }
-    else
-    {
-        c.SwaggerEndpoint("/auth/swagger/v1/swagger.json", "Authentication API v1");
-        c.RoutePrefix = "auth";
-    }
+
+    c.SwaggerEndpoint("v1/swagger.json", "Authentication API v1");
+
+    c.RoutePrefix = "swagger";
 });
 
 
