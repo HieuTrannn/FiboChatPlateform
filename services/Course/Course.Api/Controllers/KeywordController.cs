@@ -110,8 +110,8 @@ namespace Course.Api.Controllers
         {
             try
             {
-                var keyword = await _keywordService.DeleteAsync(id);
-                return Ok(ApiResponse<KeywordResponse>.Ok(keyword, "Delete keyword successfully", "200"));
+                await _keywordService.DeleteAsync(id);
+                return Ok(ApiResponse<string>.OkResponse("Delete keyword successfully", "200"));
             }
             catch (Exception ex)
             {

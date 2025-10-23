@@ -160,7 +160,7 @@ namespace Authentication.Application.Services
                     throw new KeyNotFoundException("Invalid username or password");
                 }
 
-                if(account.IsVerified == false)
+                if (account.IsVerified == false)
                 {
                     return new AuthResponse
                     {
@@ -309,7 +309,7 @@ namespace Authentication.Application.Services
             }
         }
 
-        public async Task<UserInfo> GetUserById(string userId)
+        public async Task<UserInfo> GetUserProfileAsync(string userId)
         {
             try
             {
@@ -361,7 +361,7 @@ namespace Authentication.Application.Services
             }
         }
 
-        public async Task<UserInfo> DeleteUserAsync(string userId)
+        public async Task DeleteUserAsync(string userId)
         {
             try
             {
@@ -371,15 +371,60 @@ namespace Authentication.Application.Services
                     _logger.LogWarning("User not found with ID: {UserId}", userId);
                     throw new KeyNotFoundException("User not found");
                 }
+
+                // 1. Delete all class enrollments for this user
+                var classEnrollmentRepo = _unitOfWork.GetRepository<ClassEnrollment>();
+                var userEnrollments = await classEnrollmentRepo.GetAllAsync(x => x.UserId == Guid.Parse(userId));
+
+                if (userEnrollments.Any())
+                {
+                    _logger.LogInformation("Deleting {Count} class enrollments for user {UserId}", userEnrollments.Count, userId);
+                    await classEnrollmentRepo.DeleteManyAsync(x => x.UserId == Guid.Parse(userId));
+                }
+
+                // 2. If user is a lecturer, remove them from classes they teach
+                var classRepo = _unitOfWork.GetRepository<Class>();
+                var classesTaughtByUser = await classRepo.GetAllAsync(x => x.LecturerId == Guid.Parse(userId));
+
+                if (classesTaughtByUser.Any())
+                {
+                    _logger.LogInformation("Removing user {UserId} as lecturer from {Count} classes", userId, classesTaughtByUser.Count);
+                    foreach (var classEntity in classesTaughtByUser)
+                    {
+                        classEntity.LecturerId = null;
+                        await classRepo.UpdateAsync(classEntity);
+                    }
+                }
+
+                // 3. Delete the user account
                 await _unitOfWork.GetRepository<Account>().SoftDeleteAsync(user.Id);
                 await _unitOfWork.SaveChangeAsync();
-                return user.Adapt<UserInfo>();
+
+                _logger.LogInformation("Successfully deleted user {UserId} and all related data", userId);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error deleting user");
+                _logger.LogError(ex, "Error deleting user and related data for user {UserId}", userId);
                 throw;
             }
+        }
+
+        public async Task<UserResponse> GetUserByIdAsync(string userId)
+        {
+            var user = await _unitOfWork.GetRepository<Account>().GetByIdAsync(userId);
+            if (user == null)
+            {
+                _logger.LogWarning("User not found with ID: {UserId}", userId);
+                throw new KeyNotFoundException("User not found");
+            }
+            return user.Adapt<UserResponse>();
+        }
+
+        public async Task<BasePaginatedList<UserResponse>> GetAllUsersAsync(int page, int pageSize)
+        {
+            var users = await _unitOfWork.GetRepository<Account>().GetAllAsync();
+            var userResponses = users.Select(user => user.Adapt<UserResponse>()).ToList();
+            return new BasePaginatedList<UserResponse>(userResponses, users.Count, page, pageSize);
         }
 
         public async Task<AuthResponse> ChangePasswordFirstTimeAsync(ChangePasswordFirstTimeRequest request)
@@ -400,7 +445,7 @@ namespace Authentication.Application.Services
                     throw new KeyNotFoundException("User not found");
                 }
 
-                if(user.IsVerified == true)
+                if (user.IsVerified == true)
                 {
                     return new AuthResponse
                     {
@@ -408,7 +453,7 @@ namespace Authentication.Application.Services
                         Message = "User has already changed password"
                     };
                 }
-               
+
                 user.Password = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
                 user.IsVerified = true;
                 await userRepo.UpdateAsync(user);
@@ -427,7 +472,7 @@ namespace Authentication.Application.Services
                 return new AuthResponse { Success = false, Message = "Fail to change password" };
             }
         }
-        
+
         private async Task SendPasswordResetEmail(Account account, string token)
         {
             string resetLink = $"http://fibo.io.vn/reset-password?token={token}";

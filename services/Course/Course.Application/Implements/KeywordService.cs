@@ -5,6 +5,8 @@ using Course.Application.Interfaces;
 using Course.Domain.Entities;
 using Course.Domain.Abstraction;
 using Microsoft.Extensions.Logging;
+using System.Text;
+using System.Globalization;
 
 namespace Course.Application.Implements
 {
@@ -39,13 +41,75 @@ namespace Course.Application.Implements
 
         public async Task<KeywordResponse> CreateAsync(KeywordCreateRequest request)
         {
-            var keyword = new Keyword
+            var normalizedName = NormalizeString(request.Name);
+
+            // Tìm keyword đã tồn tại với normalized name (so sánh trực tiếp)
+            var existingKeyword = await _unitOfWork.GetRepository<Keyword>()
+                .GetFirstOrDefaultAsync(k => NormalizeString(k.Name) == normalizedName);
+
+            Keyword keyword;
+
+            if (existingKeyword != null)
             {
-                Name = request.Name,
-            };
-            await _unitOfWork.GetRepository<Keyword>().InsertAsync(keyword);
-            await _unitOfWork.SaveChangesAsync();
+                keyword = existingKeyword;
+                _logger.LogInformation("Reusing existing keyword: '{ExistingName}' for input: '{InputName}'",
+                    existingKeyword.Name, request.Name);
+            }
+            else
+            {
+                keyword = new Keyword
+                {
+                    Name = request.Name.Trim() // Giữ nguyên format nhưng trim whitespace
+                };
+                await _unitOfWork.GetRepository<Keyword>().InsertAsync(keyword);
+                await _unitOfWork.SaveChangesAsync();
+            }
+
+            // Handle N:N relationship với MasterTopic
+            if (request.MasterTopicIds != null && request.MasterTopicIds.Any())
+            {
+                var masterTopicIds = request.MasterTopicIds
+                    .Where(id => id != Guid.Empty)
+                    .Distinct()
+                    .ToList();
+
+                foreach (var masterTopicId in masterTopicIds)
+                {
+                    // Kiểm tra relationship đã tồn tại chưa
+                    var existingRelation = await _unitOfWork.GetRepository<MasterTopicKeyword>()
+                        .GetFirstOrDefaultAsync(mtk => mtk.KeywordId == keyword.Id && mtk.MasterTopicId == masterTopicId);
+
+                    if (existingRelation == null)
+                    {
+                        keyword.MasterTopicKeywords.Add(new MasterTopicKeyword
+                        {
+                            MasterTopicId = masterTopicId,
+                            CreatedAt = DateTime.UtcNow
+                        });
+                    }
+                }
+
+                await _unitOfWork.SaveChangesAsync();
+            }
+
             return await ToKeywordResponse(keyword);
+        }
+
+        private string NormalizeString(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return string.Empty;
+
+            return input
+                .Trim()
+                .ToLowerInvariant()
+                .Normalize(NormalizationForm.FormD)
+                .Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
+                .Aggregate(new StringBuilder(), (sb, c) => sb.Append(c))
+                .ToString()
+                .Replace(" ", "")
+                .Replace("-", "")
+                .Replace("_", "");
         }
 
         public async Task<KeywordResponse> UpdateAsync(Guid id, KeywordUpdateRequest request)
@@ -63,7 +127,7 @@ namespace Course.Application.Implements
             return await ToKeywordResponse(keyword);
         }
 
-        public async Task<KeywordResponse> DeleteAsync(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
             var keyword = await _unitOfWork.GetRepository<Keyword>().GetByIdAsync(id);
             if (keyword == null)
@@ -73,7 +137,6 @@ namespace Course.Application.Implements
             }
             await _unitOfWork.GetRepository<Keyword>().SoftDeleteAsync(id);
             await _unitOfWork.SaveChangesAsync();
-            return await ToKeywordResponse(keyword);
         }
 
         private async Task<KeywordResponse> ToKeywordResponse(Keyword keyword)

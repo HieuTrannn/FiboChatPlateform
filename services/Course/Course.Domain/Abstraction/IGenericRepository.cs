@@ -27,5 +27,8 @@ namespace Course.Domain.Abstraction
         Task<int> CountAsync(Expression<Func<T, bool>> filter);
         Task<bool> ExistsAsync(Expression<Func<T, bool>> filter);
         Task DeleteRangeAsync(Expression<Func<T, bool>> predicate);
+        Task<T?> GetFirstOrDefaultAsync(Expression<Func<T, bool>> predicate);
+        Task<T?> GetFirstOrDefaultAsync(Expression<Func<T, bool>> predicate, string? includeProperties = null);
+        Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
     }
 }

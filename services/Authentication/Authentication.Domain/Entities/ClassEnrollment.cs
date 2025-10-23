@@ -7,7 +7,7 @@ namespace Authentication.Domain.Entities
     {
         public Guid Id { get; set; }
         public Guid ClassId { get; set; }
-        public Guid GroupId { get; set; }
+        public Guid? GroupId { get; set; }
         public Guid UserId { get; set; }
         public ClassEnrollmentStatusEnum Status { get; set; } = ClassEnrollmentStatusEnum.Active;     // active | disabled
         public string RoleInClass { get; set; } = "student"; // student | lecturer | ta
