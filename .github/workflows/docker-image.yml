@@ -9,29 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 🧾 Checkout code
-        uses: actions/checkout@v4
-
-      - name: ⚙️ Set up .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: "8.0.x"
-
-      - name: 🏗️ Build project
-        run: dotnet publish -c Release -o out
-
-      - name: 📦 Copy build to VPS
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          source: "out/*"
-          target: "/root/FiboChatPlateform/app"
-          debug: true
-
-
-      - name: 🔁 Restart Docker Compose on VPS
+      - name: 🔑 SSH and Deploy on VPS
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -39,5 +17,10 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             cd /root/FiboChatPlateform
+            echo "🌀 Pulling latest code..."
+            git reset --hard
+            git pull
+            echo "🐳 Restarting Docker Compose..."
             docker compose down
             docker compose up -d --build
+            echo "✅ Deploy completed!"
