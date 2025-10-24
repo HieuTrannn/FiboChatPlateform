@@ -17,6 +17,7 @@ namespace Course.Infrastructure.Persistence
             IConfigurationRoot configuration = new ConfigurationBuilder()
                 .SetBasePath(basePath)
                 .AddJsonFile("appsettings.json", optional: false)
+                .AddJsonFile($"appsettings.{environment}.json", optional: true)
                 .Build();
 
             var optionsBuilder = new DbContextOptionsBuilder<CourseDbContext>();
