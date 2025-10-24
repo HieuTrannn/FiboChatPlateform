@@ -13,11 +13,11 @@ namespace Authentication.Application.Interfaces
         Task<RegisterResponse> ForgotPasswordAsync(string email);
         Task<RegisterResponse> ResetPasswordAsync(ResetPasswordRequest request);
         Task<AuthResponse> LoginWithGoogleAsync(string idToken);
-        Task<UserInfo> GetUserProfileAsync(string userId);
-        Task<UserInfo> UpdateUserProfileAsync(string userId, UserInfo userInfo);
-        Task DeleteUserAsync(string userId);
+        Task<UserInfo> GetUserProfileAsync(Guid id);
+        Task<UserInfo> UpdateUserProfileAsync(Guid id, UserInfo userInfo);
+        Task DeleteUserAsync(Guid id);
         Task<AuthResponse> ChangePasswordFirstTimeAsync(ChangePasswordFirstTimeRequest request);
-        Task<UserResponse> GetUserByIdAsync(string userId);
+        Task<UserResponse> GetUserByIdAsync(Guid id);
         Task<BasePaginatedList<UserResponse>> GetAllUsersAsync(int page, int pageSize);
     }
 }
