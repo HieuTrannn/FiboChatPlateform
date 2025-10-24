@@ -166,8 +166,8 @@ namespace Authentication.API.Controllers
         {
             try
             {
-                var currentUserId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-                if (string.IsNullOrEmpty(currentUserId))
+                var currentUserId = Guid.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+                if (currentUserId == Guid.Empty)
                 {
                     _logger.LogWarning("No name identifier claim found in JWT token");
                     return Unauthorized(new RegisterResponse { Success = false, Message = "Invalid token: Name identifier claim missing" });
@@ -188,8 +188,8 @@ namespace Authentication.API.Controllers
         {
             try
             {
-                var currentUserId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-                if (string.IsNullOrEmpty(currentUserId))
+                var currentUserId = Guid.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+                if (currentUserId == Guid.Empty)
                 {
                     _logger.LogWarning("No name identifier claim found in JWT token");
                     return Unauthorized(new RegisterResponse { Success = false, Message = "Invalid token: Name identifier claim missing" });
@@ -232,14 +232,14 @@ namespace Authentication.API.Controllers
         /// <summary>
         /// Get user by id
         /// </summary>
-        /// <param name="userId"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("{userId}")]
-        public async Task<IActionResult> GetUserByIdAsync([FromRoute] string userId)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUserByIdAsync([FromRoute] Guid id)
         {
             try
             {
-                var response = await _userService.GetUserByIdAsync(userId);
+                var response = await _userService.GetUserByIdAsync(id);
                 return Ok(ApiResponse<UserResponse>.Ok(response, "Get user by id successfully", "200"));
             }
             catch (Exception ex)
@@ -251,19 +251,19 @@ namespace Authentication.API.Controllers
         /// <summary>
         /// Delete user
         /// </summary>
-        /// <param name="userId"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete("{userId}")]
-        public async Task<IActionResult> DeleteUserAsync([FromRoute] string userId)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUserAsync([FromRoute] Guid id)
         {
             try
             {
-                var user = await _userService.GetUserByIdAsync(userId);
+                var user = await _userService.GetUserByIdAsync(id);
                 if (user == null)
                 {
                     return NotFound(ApiResponse<string>.NotFound("User not found"));
                 }
-                await _userService.DeleteUserAsync(userId);
+                await _userService.DeleteUserAsync(id);
                 return Ok(ApiResponse<string>.OkResponse("Delete user successfully", StatusCode: "200"));
             }
             catch (Exception ex)

@@ -315,16 +315,16 @@ namespace Authentication.Application.Services
             }
         }
 
-        public async Task<UserInfo> GetUserProfileAsync(string userId)
+        public async Task<UserInfo> GetUserProfileAsync(Guid id)
         {
             try
             {
-                _logger.LogInformation("Fetching user by ID: {UserId}", userId);
+                _logger.LogInformation("Fetching user by ID: {UserId}", id);
                 var userRepo = _unitOfWork.GetRepository<Account>();
-                var user = await userRepo.GetByIdAsync(userId);
+                var user = await userRepo.GetByIdAsync(id);
                 if (user == null)
                 {
-                    _logger.LogWarning("User not found with ID: {UserId}", userId);
+                    _logger.LogWarning("User not found with ID: {UserId}", id);
                     throw new KeyNotFoundException("User not found");
                 }
                 _logger.LogInformation("User found: {UserEmail}", user.Email);
@@ -332,7 +332,7 @@ namespace Authentication.Application.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error fetching user by ID: {UserId}", userId);
+                _logger.LogError(ex, "Error fetching user by ID: {UserId}", id);
                 throw;
             }
             finally
@@ -341,15 +341,15 @@ namespace Authentication.Application.Services
             }
         }
 
-        public async Task<UserInfo> UpdateUserProfileAsync(string userId, UserInfo userInfo)
+        public async Task<UserInfo> UpdateUserProfileAsync(Guid id, UserInfo userInfo)
         {
             try
             {
                 var userRepo = _unitOfWork.GetRepository<Account>();
-                var user = await userRepo.GetByIdAsync(userId);
+                var user = await userRepo.GetByIdAsync(id);
                 if (user == null)
                 {
-                    _logger.LogWarning("User not found with ID: {UserId}", userId);
+                    _logger.LogWarning("User not found with ID: {UserId}", id);
                     throw new KeyNotFoundException("User not found");
                 }
                 user.Firstname = userInfo.Firstname;
@@ -367,34 +367,34 @@ namespace Authentication.Application.Services
             }
         }
 
-        public async Task DeleteUserAsync(string userId)
+        public async Task DeleteUserAsync(Guid id)
         {
             try
             {
-                var user = await _unitOfWork.GetRepository<Account>().GetByIdAsync(userId);
+                var user = await _unitOfWork.GetRepository<Account>().GetByIdAsync(id);
                 if (user == null)
                 {
-                    _logger.LogWarning("User not found with ID: {UserId}", userId);
+                    _logger.LogWarning("User not found with ID: {UserId}", id);
                     throw new KeyNotFoundException("User not found");
                 }
 
                 // 1. Delete all class enrollments for this user
                 var classEnrollmentRepo = _unitOfWork.GetRepository<ClassEnrollment>();
-                var userEnrollments = await classEnrollmentRepo.GetAllAsync(x => x.UserId == Guid.Parse(userId));
+                var userEnrollments = await classEnrollmentRepo.GetAllAsync(x => x.UserId == id);
 
                 if (userEnrollments.Any())
                 {
-                    _logger.LogInformation("Deleting {Count} class enrollments for user {UserId}", userEnrollments.Count, userId);
-                    await classEnrollmentRepo.DeleteManyAsync(x => x.UserId == Guid.Parse(userId));
+                    _logger.LogInformation("Deleting {Count} class enrollments for user {UserId}", userEnrollments.Count, id);
+                    await classEnrollmentRepo.DeleteManyAsync(x => x.UserId == id);
                 }
 
                 // 2. If user is a lecturer, remove them from classes they teach
                 var classRepo = _unitOfWork.GetRepository<Class>();
-                var classesTaughtByUser = await classRepo.GetAllAsync(x => x.LecturerId == Guid.Parse(userId));
+                var classesTaughtByUser = await classRepo.GetAllAsync(x => x.LecturerId == id);
 
                 if (classesTaughtByUser.Any())
                 {
-                    _logger.LogInformation("Removing user {UserId} as lecturer from {Count} classes", userId, classesTaughtByUser.Count);
+                    _logger.LogInformation("Removing user {UserId} as lecturer from {Count} classes", id, classesTaughtByUser.Count);
                     foreach (var classEntity in classesTaughtByUser)
                     {
                         classEntity.LecturerId = null;
@@ -406,21 +406,21 @@ namespace Authentication.Application.Services
                 await _unitOfWork.GetRepository<Account>().SoftDeleteAsync(user.Id);
                 await _unitOfWork.SaveChangeAsync();
 
-                _logger.LogInformation("Successfully deleted user {UserId} and all related data", userId);
+                _logger.LogInformation("Successfully deleted user {UserId} and all related data", id);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error deleting user and related data for user {UserId}", userId);
+                _logger.LogError(ex, "Error deleting user and related data for user {UserId}", id);
                 throw;
             }
         }
 
-        public async Task<UserResponse> GetUserByIdAsync(string userId)
+        public async Task<UserResponse> GetUserByIdAsync(Guid id)
         {
-            var user = await _unitOfWork.GetRepository<Account>().GetByIdAsync(userId);
+            var user = await _unitOfWork.GetRepository<Account>().GetByIdAsync(id);
             if (user == null)
             {
-                _logger.LogWarning("User not found with ID: {UserId}", userId);
+                _logger.LogWarning("User not found with ID: {UserId}", id);
                 throw new KeyNotFoundException("User not found");
             }
             return user.Adapt<UserResponse>();
@@ -437,18 +437,21 @@ namespace Authentication.Application.Services
         {
             try
             {
+                // ... existing validation ...
+
                 var userEmail = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Email)?.Value;
                 if (string.IsNullOrEmpty(userEmail))
                 {
-                    _logger.LogWarning("User email not found in context");
-                    throw new UnauthorizedAccessException("User not authenticated");
+                    _logger.LogWarning("User email not found in JWT token claims");
+                    return new AuthResponse { Success = false, Message = "User email not found in token" };
                 }
+
                 var userRepo = _unitOfWork.GetRepository<Account>();
                 var user = await userRepo.FindByConditionAsync(u => u.Email == userEmail);
                 if (user == null)
                 {
                     _logger.LogWarning("User not found with email: {Email}", userEmail);
-                    throw new KeyNotFoundException("User not found");
+                    return new AuthResponse { Success = false, Message = "User not found" };
                 }
 
                 if (user.IsVerified == true)
@@ -460,10 +463,20 @@ namespace Authentication.Application.Services
                     };
                 }
 
+                // Load Role if not loaded
+                if (user.Role == null && user.RoleId.HasValue)
+                {
+                    var roleRepo = _unitOfWork.GetRepository<Role>();
+                    user.Role = await roleRepo.FindByConditionAsync(r => r.Id == user.RoleId.Value);
+                }
+
+                // Update password
                 user.Password = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
                 user.IsVerified = true;
                 await userRepo.UpdateAsync(user);
                 await _unitOfWork.SaveChangeAsync();
+
+                // Generate JWT token
                 var token = GenerateJwtToken(user);
                 return new AuthResponse
                 {
@@ -474,8 +487,8 @@ namespace Authentication.Application.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error changing password for first time");
-                return new AuthResponse { Success = false, Message = "Fail to change password" };
+                _logger.LogError(ex, "Error changing password for first time: {Message}", ex.Message);
+                return new AuthResponse { Success = false, Message = $"Fail to change password: {ex.Message}" };
             }
         }
 
@@ -502,6 +515,7 @@ namespace Authentication.Application.Services
         {
             return BCrypt.Net.BCrypt.Verify(inputPassword, encryptedPassword);
         }
+
         private object GenerateJwtToken(Account account)
         {
             try
@@ -509,17 +523,29 @@ namespace Authentication.Application.Services
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.UTF8.GetBytes(_configuration["Authentication:Key"]);
 
+                var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.NameIdentifier, account.Id.ToString()),
+            new Claim(ClaimTypes.Email, account.Email.ToString()),
+            new Claim(JwtRegisteredClaimNames.Iat,
+                new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString(),
+                ClaimValueTypes.Integer64)
+        };
+
+                // Safe role claim
+                if (account.Role != null && !string.IsNullOrEmpty(account.Role.RoleName))
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, account.Role.RoleName));
+                }
+                else
+                {
+                    _logger.LogWarning("User {Email} has no role, using default role", account.Email);
+                    claims.Add(new Claim(ClaimTypes.Role, "User")); // Default role
+                }
+
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
-                    Subject = new ClaimsIdentity(new[]
-                    {
-                    new Claim(ClaimTypes.NameIdentifier, account.Id.ToString()),
-                    new Claim(ClaimTypes.Email, account.Email.ToString()),
-                    new Claim(ClaimTypes.Role, account.Role.RoleName.ToString()),
-                    new Claim(JwtRegisteredClaimNames.Iat,
-                    new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString(),
-                     ClaimValueTypes.Integer64)
-                         }),
+                    Subject = new ClaimsIdentity(claims),
                     Expires = DateTime.UtcNow.AddHours(2),
                     Issuer = _configuration["Authentication:Issuer"],
                     Audience = _configuration["Authentication:Audience"],
