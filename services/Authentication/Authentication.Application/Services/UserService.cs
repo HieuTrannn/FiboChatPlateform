@@ -508,6 +508,7 @@ namespace Authentication.Application.Services
                     {
                     new Claim(ClaimTypes.NameIdentifier, account.Id.ToString()),
                     new Claim(ClaimTypes.Email, account.Email.ToString()),
+                    new Claim(ClaimTypes.Email, account.Role.RoleName.ToString()),
                     new Claim(JwtRegisteredClaimNames.Iat,
                     new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString(),
                      ClaimValueTypes.Integer64)

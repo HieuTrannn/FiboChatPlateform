@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Authentication.Infrastructure.Migrations
 {
     [DbContext(typeof(AccountDbContext))]
-    [Migration("20251023180809_FixGroupIdNullable")]
-    partial class FixGroupIdNullable
+    [Migration("20251024025209_Innitial_Create")]
+    partial class Innitial_Create
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
