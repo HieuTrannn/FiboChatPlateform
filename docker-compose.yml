@@ -14,7 +14,7 @@ services:
       POSTGRES_DB: fibo_chat_auth
       TZ: Asia/Ho_Chi_Minh
     ports:
-      - "5433:5432"
+      - "5433:5432" # cổng 5433 bên ngoài VPS
     volumes:
       - postgres_auth_data:/var/lib/postgresql/data
     networks:
@@ -30,7 +30,7 @@ services:
       POSTGRES_DB: fibo_chat_course
       TZ: Asia/Ho_Chi_Minh
     ports:
-      - "5434:5432"
+      - "5434:5432" # cổng 5434 bên ngoài VPS
     volumes:
       - postgres_course_data:/var/lib/postgresql/data
     networks:
@@ -71,7 +71,7 @@ services:
       - authentication
     environment:
       ASPNETCORE_ENVIRONMENT: "Staging"
-      ConnectionStrings__CourseDb: "Host=postgres-course;Port=5434;Database=fibo_chat_course;Username=postgres;Password=123456"
+      ConnectionStrings__DbConnection: "Host=postgres-course;Port=5432;Database=fibo_chat_course;Username=postgres;Password=123456"
       Services__AuthBaseUrl: "http://fibochat-auth:5001"
     ports:
       - "5002:5002"
