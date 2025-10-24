@@ -12,27 +12,36 @@ namespace Course.Application.Implements
         private readonly ILogger<FirebaseService> _logger;
         private const string BucketName = "fibochatplatform.firebasestorage.app";
 
-        // Replace the constructor (lines 15-26) with:
         public FirebaseService(IConfiguration configuration, ILogger<FirebaseService> logger)
         {
-            var projectId = configuration["Firebase:ProjectId"];
-            var privateKey = configuration["Firebase:PrivateKey"];
-            var clientEmail = configuration["Firebase:ClientEmail"];
-
-            if (string.IsNullOrWhiteSpace(projectId) || string.IsNullOrWhiteSpace(privateKey) || string.IsNullOrWhiteSpace(clientEmail))
+            var firebaseConfigPath = configuration["Firebase:PrivateKey"];
+            
+            if (string.IsNullOrWhiteSpace(firebaseConfigPath))
             {
-                throw new InvalidOperationException("Firebase configuration is missing. Please set Firebase:ProjectId, Firebase:PrivateKey, and Firebase:ClientEmail in your configuration.");
+                throw new InvalidOperationException("Firebase:PrivateKey configuration is missing. Please set the path to your Firebase service account JSON file.");
             }
 
-            var credential = GoogleCredential.FromServiceAccountCredential(new ServiceAccountCredential(new ServiceAccountCredential.Initializer(clientEmail)
+            try
             {
-                ProjectId = projectId
-            }.FromPrivateKey(privateKey)));
-
-            _storageClient = StorageClient.Create(credential);
-            _logger = logger;
+                // Đọc trực tiếp từ file JSON
+                var credential = GoogleCredential.FromFile(firebaseConfigPath);
+                _storageClient = StorageClient.Create(credential);
+                _logger = logger;
+                _logger.LogInformation("Firebase Storage client initialized successfully from file: {FilePath}", firebaseConfigPath);
+            }
+            catch (FileNotFoundException)
+            {
+                _logger.LogError("Firebase service account file not found: {FilePath}", firebaseConfigPath);
+                throw new InvalidOperationException($"Firebase service account file not found: {firebaseConfigPath}");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to initialize Firebase Storage client from file: {FilePath}", firebaseConfigPath);
+                throw new InvalidOperationException($"Failed to initialize Firebase Storage client: {ex.Message}", ex);
+            }
         }
 
+        // ... rest of the methods remain the same
         public async Task<string> UploadAvatarAsync(Stream imageStream, string fileName)
         {
             var uniqueFileName = $"{Guid.NewGuid()}_{fileName}";
@@ -47,7 +56,6 @@ namespace Course.Application.Implements
                     imageStream
                 );
 
-
                 storageObject.Acl = new[] { new Google.Apis.Storage.v1.Data.ObjectAccessControl
                     {
                         Entity = "allUsers",
@@ -56,7 +64,6 @@ namespace Course.Application.Implements
                 };
 
                 await _storageClient.UpdateObjectAsync(storageObject);
-
 
                 return $"https://storage.googleapis.com/{BucketName}/avatars/FiboChatPlatform/{uniqueFileName}";
             }

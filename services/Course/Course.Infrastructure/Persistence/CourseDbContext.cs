@@ -28,6 +28,7 @@ namespace Course.Infrastructure.Persistence
             {
                 e.HasKey(x => x.Id);
                 e.Property(x => x.Name).IsRequired();
+
                 e.HasMany(x => x.Documents)
                  .WithOne(d => d.Topic)
                  .HasForeignKey(d => d.TopicId)
@@ -106,22 +107,16 @@ namespace Course.Infrastructure.Persistence
                  .WithMany()
                  .HasForeignKey(x => x.DomainId)
                  .OnDelete(DeleteBehavior.Restrict);
-
-                // Remove Semester foreign key constraint - SemesterId is just a reference
-                // e.HasOne(x => x.Semester)  // Remove this if it exists
-                //  .WithMany()
-                //  .HasForeignKey(x => x.SemesterId)
-                //  .OnDelete(DeleteBehavior.Restrict);
-
                 e.HasMany(x => x.Topics)
-                 .WithOne()
+                 .WithOne(t => t.MasterTopic)
+                 .HasForeignKey(t => t.MasterTopicId)
                  .OnDelete(DeleteBehavior.Cascade);
-
                 e.HasMany(x => x.MasterTopicKeywords)
                  .WithOne(mtk => mtk.MasterTopic)
                  .HasForeignKey(mtk => mtk.MasterTopicId)
                  .OnDelete(DeleteBehavior.Cascade);
             });
+
             modelBuilder.Entity<LecturerMasterTopic>(e =>
             {
                 e.HasKey(x => x.Id);
@@ -153,7 +148,7 @@ namespace Course.Infrastructure.Persistence
         }
 
 
-        // // # Từ thư mục gốc FiboChatPlatform
+        // // # Run Từ thư mục gốc FiboChatPlatform
         // dotnet ef migrations add UpdateCourseModel -p services/Course/Course.Infrastructure -s services/Course/Course.Api
 
         // // Apply migration

@@ -9,7 +9,7 @@ namespace Course.Domain.Entities
         public Guid DocumentTypeId { get; set; }
         public Guid FileId { get; set; }
         public string Title { get; set; } = null!;
-        public int version { get; set; }
+        public int Version { get; set; }
         public DocumentStatus Status { get; set; } = DocumentStatus.Draft; // draft | published
         public Guid VerifiedById { get; set; }
         public Guid UpdatedById { get; set; }
