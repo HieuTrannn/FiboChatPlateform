@@ -65,6 +65,7 @@ namespace Authentication.Application.Services
 
                 }
                 lecture.RoleId = lectureRole.Id;
+                lecture.Role = lectureRole;
 
                 await _accountRepository.InsertAsync(lecture);
                 await _unitOfWork.SaveChangeAsync();
