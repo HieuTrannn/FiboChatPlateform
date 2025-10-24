@@ -24,25 +24,23 @@ jobs:
             git fetch --all
             git reset --hard origin/main
 
-            echo "⚙️ Setting up .NET SDK..."
-            if ! command -v dotnet &> /dev/null
-            then
+            echo "⚙️ Checking .NET SDK..."
+            if ! command -v dotnet &> /dev/null; then
+              echo "➡️ Installing .NET SDK..."
               wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh
               bash dotnet-install.sh --version 8.0.100
               export PATH=$PATH:$HOME/.dotnet
             fi
 
-            # ⚙️ Cài dotnet-ef tool nếu chưa có
-            if ! dotnet tool list -g | grep -q dotnet-ef; then
-              echo "📦 Installing dotnet-ef tool..."
-              dotnet tool install --global dotnet-ef --version 8.*
-              export PATH="$PATH:$HOME/.dotnet/tools"
-            else
-              echo "✅ dotnet-ef already installed."
+            echo "⚙️ Checking EF Tools..."
+            if ! dotnet tool list -g | grep -q 'dotnet-ef'; then
+              echo "➡️ Installing EF Tools..."
+              dotnet tool install --global dotnet-ef
               export PATH="$PATH:$HOME/.dotnet/tools"
             fi
 
             export ASPNETCORE_ENVIRONMENT=Staging
+            export PATH="$PATH:$HOME/.dotnet:$HOME/.dotnet/tools"
 
             echo "➡️ Updating Authentication DB..."
             dotnet ef database update \
@@ -57,7 +55,7 @@ jobs:
               --context CourseDbContext
 
             echo "🐳 Rebuilding Docker Compose..."
-            docker compose down -v
+            docker compose down 
             docker compose up -d --build
 
             echo "✅ Deploy completed successfully!"
