@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Authentication.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class FixGroupIdNullable : Migration
+    public partial class Innitial_Create : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

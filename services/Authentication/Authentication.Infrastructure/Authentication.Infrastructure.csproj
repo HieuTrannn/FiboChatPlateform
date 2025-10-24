@@ -29,8 +29,5 @@
     <ItemGroup>
         <ProjectReference Include="..\Authentication.Application\Authentication.Application.csproj" />
     </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Migrations\" />
-    </ItemGroup>
 
 </Project>
