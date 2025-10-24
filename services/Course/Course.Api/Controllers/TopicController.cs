@@ -120,5 +120,27 @@ namespace Course.Api.Controllers
                 return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(TopicController)}: {ex.Message}"));
             }
         }
+
+        /// <summary>
+        /// Get all topics of a master topic
+        /// </summary>
+        /// <param name="masterTopicId"></param>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        [HttpGet("master-topic/{masterTopicId}")]
+        public async Task<IActionResult> GetAllTopicsOfMasterTopic([FromRoute] Guid masterTopicId, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+        {
+            try
+            {
+                var topics = await _topicService.GetAllTopicsOfMasterTopicAsync(masterTopicId, page, pageSize);
+                return Ok(ApiResponse<BasePaginatedList<TopicMasterTopicResponse>>.Ok(topics, "Get all topics of master topic successfully", "200"));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(TopicController), ex.Message);
+                return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(TopicController)}: {ex.Message}"));
+            }
+        }
     }
 }

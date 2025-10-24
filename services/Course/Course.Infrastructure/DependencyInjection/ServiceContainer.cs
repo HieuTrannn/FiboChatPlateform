@@ -21,13 +21,17 @@ namespace Course.Infrastructure.DependencyInjection
 
             services.AddHttpContextAccessor();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            
             services.AddScoped<IDomainService, DomainService>();
             services.AddScoped<IKeywordService, KeywordService>();
             services.AddScoped<IMasterTopicService, MasterTopicService>();
             services.AddScoped<ITopicService, TopicService>();
             services.AddScoped<IDocumentTypeService, DocumentTypeService>();
+            services.AddScoped<IDocumentService, DocumentService>();
             services.AddScoped<IMasterTopicService, MasterTopicService>();
             services.AddScoped<ITopicService, TopicService>();
+            services.AddScoped<IFirebaseService, FirebaseService>();
+
             services.AddHttpClient<IExternalApiService, ExternalApiService>();
             services.AddScoped<IExternalApiService, ExternalApiService>();
 
