@@ -16,7 +16,7 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            set -e  # ⛑️ Dừng ngay nếu có lệnh nào bị lỗi
+            set -e  # Dừng khi có lỗi
 
             cd /root/FiboChatPlateform
 
@@ -24,34 +24,25 @@ jobs:
             git fetch --all
             git reset --hard origin/main
 
-            echo "📦 Building .NET environment..."
-            export DOTNET_ROOT=/usr/share/dotnet
-            export PATH=$PATH:$DOTNET_ROOT/tools:/root/.dotnet/tools
-
-            # Cài dotnet-ef nếu chưa có
-            if ! command -v dotnet-ef &> /dev/null
-            then
-              echo "⚙️ Installing dotnet-ef tool..."
-              dotnet tool install --global dotnet-ef
-            fi
-
-            echo "🧱 Running EF Core migrations..."
-            export ASPNETCORE_ENVIRONMENT=Staging
-
-            echo "🐳 Restarting Docker Compose..."
+            echo "🐳 Rebuilding Docker Compose..."
             docker compose down -v
             docker compose up -d --build
 
-             echo "➡️ Updating Authentication DB..."
-            dotnet ef database update \
-              --project services/Authentication/Authentication.Infrastructure \
-              --startup-project services/Authentication/Authentication.API \
+            echo "⏳ Waiting for DBs to be ready..."
+            sleep 15
+
+            echo "➡️ Updating Authentication DB..."
+            docker exec fibochat-auth \
+              dotnet ef database update \
+              --project /app/services/Authentication/Authentication.Infrastructure \
+              --startup-project /app/services/Authentication/Authentication.API \
               --context AccountDbContext
 
             echo "➡️ Updating Course DB..."
-            dotnet ef database update \
-              --project services/Course/Course.Infrastructure \
-              --startup-project services/Course/Course.Api \
+            docker exec fibochat-course \
+              dotnet ef database update \
+              --project /app/services/Course/Course.Infrastructure \
+              --startup-project /app/services/Course/Course.Api \
               --context CourseDbContext
 
             echo "✅ Deploy completed successfully!"
