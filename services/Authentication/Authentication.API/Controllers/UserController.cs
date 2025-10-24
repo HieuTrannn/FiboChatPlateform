@@ -209,7 +209,13 @@ namespace Authentication.API.Controllers
             }
         }
 
-        [HttpGet("get-all-users")]
+        /// <summary>
+        /// Get all users
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        [HttpGet]
         public async Task<IActionResult> GetAllUsersAsync([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
             try
@@ -223,7 +229,12 @@ namespace Authentication.API.Controllers
             }
         }
 
-        [HttpGet("get-user-by-id")]
+        /// <summary>
+        /// Get user by id
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        [HttpGet("{userId}")]
         public async Task<IActionResult> GetUserByIdAsync([FromRoute] string userId)
         {
             try
@@ -237,7 +248,12 @@ namespace Authentication.API.Controllers
             }
         }
 
-        [HttpDelete("delete-user")]
+        /// <summary>
+        /// Delete user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        [HttpDelete("{userId}")]
         public async Task<IActionResult> DeleteUserAsync([FromRoute] string userId)
         {
             try
