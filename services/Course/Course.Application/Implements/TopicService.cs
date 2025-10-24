@@ -73,7 +73,7 @@ namespace Course.Application.Implements
             {
                 Name = request.Name,
                 Description = request.Description,
-                MasterTopicId = request.MasterTopicId,
+                MasterTopicId = request.MasterTopicId, // Đảm bảo MasterTopicId tồn tại
                 Status = StaticEnum.StatusEnum.Active,
                 CreatedAt = DateTime.UtcNow
             };
@@ -154,6 +154,43 @@ namespace Course.Application.Implements
                 Description = topic.Description,
                 Status = topic.Status,
                 CreatedAt = topic.CreatedAt,
+            };
+            return await Task.FromResult(response);
+        }
+
+        public async Task<BasePaginatedList<TopicMasterTopicResponse>> GetAllTopicsOfMasterTopicAsync(Guid masterTopicId, int page, int pageSize)
+        {
+            var masterTopic = await _unitOfWork.GetRepository<MasterTopic>().GetByIdAsync(masterTopicId);
+            if (masterTopic == null)
+            {
+                _logger.LogError("Master topic not found with id: {Id}", masterTopicId);
+                throw new CustomExceptions.NoDataFoundException("Master topic not found");
+            }
+            var topics = await _unitOfWork.GetRepository<Topic>().GetAllAsync(includeProperties: "MasterTopic");
+            var items = new List<TopicMasterTopicResponse>(topics.Count);
+            foreach (var topic in topics)
+            {
+                items.Add(await ToTopicMasterTopicResponse(masterTopic));
+            }
+            return new BasePaginatedList<TopicMasterTopicResponse>(items, topics.Count, page, pageSize);
+        }
+
+        private async Task<TopicMasterTopicResponse> ToTopicMasterTopicResponse(MasterTopic masterTopic)
+        {
+            var topics = await _unitOfWork.GetRepository<Topic>().GetAllAsync(includeProperties: "MasterTopic");
+            var items = new List<TopicResponse>(topics.Count);
+            foreach (var topic in topics)
+            {
+                items.Add(await ToTopicResponse(topic));
+            }
+            var response = new TopicMasterTopicResponse
+            {
+                Id = masterTopic.Id,
+                Name = masterTopic.Name,
+                Description = masterTopic.Description,
+                Status = masterTopic.Status,
+                CreatedAt = masterTopic.CreatedAt,
+                Topics = items,
             };
             return await Task.FromResult(response);
         }
