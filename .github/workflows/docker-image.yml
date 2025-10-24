@@ -24,25 +24,30 @@ jobs:
             git fetch --all
             git reset --hard origin/main
 
-            echo "🐳 Rebuilding Docker Compose..."
-            docker compose down
-            docker compose up -d --build
+            echo "⚙️ Setting up .NET SDK..."
+            if ! command -v dotnet &> /dev/null
+            then
+              wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh
+              bash dotnet-install.sh --version 8.0.100
+              export PATH=$PATH:$HOME/.dotnet
+            fi
 
-            echo "⏳ Waiting for DBs to be ready..."
-            sleep 15
+            export ASPNETCORE_ENVIRONMENT=Staging
 
             echo "➡️ Updating Authentication DB..."
-            docker exec fibochat-auth \
-              dotnet ef database update \
-              --project /app/services/Authentication/Authentication.Infrastructure \
-              --startup-project /app/services/Authentication/Authentication.API \
+            dotnet ef database update \
+              --project services/Authentication/Authentication.Infrastructure \
+              --startup-project services/Authentication/Authentication.API \
               --context AccountDbContext
 
             echo "➡️ Updating Course DB..."
-            docker exec fibochat-course \
-              dotnet ef database update \
-              --project /app/services/Course/Course.Infrastructure \
-              --startup-project /app/services/Course/Course.Api \
+            dotnet ef database update \
+              --project services/Course/Course.Infrastructure \
+              --startup-project services/Course/Course.Api \
               --context CourseDbContext
+
+            echo "🐳 Rebuilding Docker Compose..."
+            docker compose down -v
+            docker compose up -d --build
 
             echo "✅ Deploy completed successfully!"
