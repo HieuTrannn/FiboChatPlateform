@@ -5,6 +5,7 @@ using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using Microsoft.AspNetCore.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,8 @@ builder.Host.UseSerilog();
 // ====== 3) API plumbing ======
 builder.Services.AddInfrastructureService(builder.Configuration);
 builder.Services.AddControllers();
+// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -28,6 +31,11 @@ builder.Services.AddSwaggerGen(c =>
         Title = "COURSE API",
         Version = "v1",
         Description = "API for Course Service"
+    });
+
+    c.AddServer(new OpenApiServer
+    {
+        Url = "/course"
     });
     
     // Add JWT Bearer authentication to Swagger
@@ -79,25 +87,28 @@ using (var scope = app.Services.CreateScope())
     var db = scope.ServiceProvider.GetRequiredService<CourseDbContext>();
 }
 
+if (app.Environment.IsDevelopment())
+{
+    app.UsePathBase("/course");
+}
+
 // ====== 5) Middlewares ======
-app.UseInfrastructurePolicy();
+app.MapOpenApi();
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
-    if (builder.Environment.IsDevelopment())
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Course API v1");
-        c.RoutePrefix = string.Empty;
-    }
-    else
-    {
-        c.SwaggerEndpoint("/course/swagger/v1/swagger.json", "Course API v1");
-        c.RoutePrefix = "course";
-    }
+
+    c.SwaggerEndpoint("v1/swagger.json", "Course API v1");
+
+    c.RoutePrefix = "swagger";
 });
 
 app.UseSerilogRequestLogging();
+app.UseInfrastructurePolicy();
+
 app.UseHttpsRedirection();
 app.UseCors("AllowAll");
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 app.Run();
