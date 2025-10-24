@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Text;
 using static Authentication.Application.DTOs.AuthenDTO;
 using static Authentication.Application.DTOs.UserDTO;
@@ -111,6 +112,11 @@ namespace Authentication.Application.Services
 
                 var accountRepo = _unitOfWork.GetRepository<Account>();
                 var account = await accountRepo.FindByConditionAsync(u => u.Email == googleUserInfo.Email);
+                if (account.Role == null && account.RoleId.HasValue)
+                {
+                    var roleRepo = _unitOfWork.GetRepository<Role>();
+                    account.Role = await roleRepo.FindByConditionAsync(r => r.Id == account.RoleId.Value);
+                }
 
                 if (account == null)
                 {
@@ -448,6 +454,11 @@ namespace Authentication.Application.Services
 
                 var userRepo = _unitOfWork.GetRepository<Account>();
                 var user = await userRepo.FindByConditionAsync(u => u.Email == userEmail);
+                if (user.Role == null && user.RoleId.HasValue)
+                {
+                    var roleRepo = _unitOfWork.GetRepository<Role>();
+                    user.Role = await roleRepo.FindByConditionAsync(r => r.Id == user.RoleId.Value);
+                }
                 if (user == null)
                 {
                     _logger.LogWarning("User not found with email: {Email}", userEmail);
