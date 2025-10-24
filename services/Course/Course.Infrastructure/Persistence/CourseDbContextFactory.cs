@@ -8,11 +8,11 @@ namespace Course.Infrastructure.Persistence
     {
         public CourseDbContext CreateDbContext(string[] args)
         {
-            // Point to Course.Api for appsettings
-            var basePath = Path.Combine(
-                Directory.GetParent(Directory.GetCurrentDirectory())!.FullName,
-                "Course.Api"
-            );
+            // Xác định môi trường hiện tại (nếu không có thì mặc định là Development)
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
+
+            // Tìm đường dẫn tới API project (vì appsettings nằm ở đó)
+            var basePath = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory())!.FullName, "Course.API");
 
             IConfigurationRoot configuration = new ConfigurationBuilder()
                 .SetBasePath(basePath)
