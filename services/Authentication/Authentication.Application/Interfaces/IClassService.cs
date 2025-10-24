@@ -10,9 +10,12 @@ namespace Authentication.Application.Interfaces
         Task<ClassResponse> CreateAsync(ClassCreateRequest request);
         Task<ClassResponse> UpdateAsync(Guid id, ClassUpdateRequest request);
         Task<ClassResponse> DeleteAsync(Guid id);
+        // Task<PaginatedResponse<ClassResponse>> SearchAsync(ClassQueryRequest request);
+
+        // Lecturer Management
         Task<ClassResponse> AssignLecturerAsync(Guid classId, Guid lecturerId);
         Task<ClassResponse> UnassignLecturerAsync(Guid classId);
-        // Task<PaginatedResponse<ClassResponse>> SearchAsync(ClassQueryRequest request);
+        Task<BasePaginatedList<ClassLectrurerResponse>> GetAllClassesOfLecturerAsync(Guid lecturerId, int page, int pageSize);
 
         // Student Management
         Task<ClassStudentResponse> AddStudentToClassAsync(Guid classId, List<Guid> userIds);

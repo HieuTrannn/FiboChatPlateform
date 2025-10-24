@@ -127,6 +127,28 @@ namespace Authentication.API.Controllers
         }
 
         /// <summary>
+        /// Get all classes of a lecturer
+        /// </summary>
+        /// <param name="lecturerId"></param>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        [HttpGet("lecturer/{lecturerId}")]
+        public async Task<IActionResult> GetAllClassesOfLecturer(Guid lecturerId, int page = 1, int pageSize = 10)
+        {
+            try
+            {
+                var classes = await _classService.GetAllClassesOfLecturerAsync(lecturerId, page, pageSize);
+                return Ok(ApiResponse<BasePaginatedList<ClassLectrurerResponse>>.Ok(classes, "Get all classes of lecturer successfully", "200"));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(ClassController), ex.Message);
+                return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(ClassController)}: {ex.Message}"));
+            }
+        }
+
+        /// <summary>
         /// Assign a lecturer to a class
         /// </summary>
         /// <param name="classId"></param>
