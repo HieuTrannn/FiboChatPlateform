@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Authentication.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Innitial_Create : Migration
+    public partial class Init_SyncWithDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
