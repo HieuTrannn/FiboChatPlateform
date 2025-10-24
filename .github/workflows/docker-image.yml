@@ -32,6 +32,16 @@ jobs:
               export PATH=$PATH:$HOME/.dotnet
             fi
 
+            # ⚙️ Cài dotnet-ef tool nếu chưa có
+            if ! dotnet tool list -g | grep -q dotnet-ef; then
+              echo "📦 Installing dotnet-ef tool..."
+              dotnet tool install --global dotnet-ef --version 8.*
+              export PATH="$PATH:$HOME/.dotnet/tools"
+            else
+              echo "✅ dotnet-ef already installed."
+              export PATH="$PATH:$HOME/.dotnet/tools"
+            fi
+
             export ASPNETCORE_ENVIRONMENT=Staging
 
             echo "➡️ Updating Authentication DB..."
