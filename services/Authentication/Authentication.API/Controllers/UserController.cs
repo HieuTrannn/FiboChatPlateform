@@ -51,7 +51,7 @@ namespace Authentication.API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError("{Classname} - Error at get account async cause by {}", nameof(UserController), ex.Message);
-                return StatusCode(500, ApiResponse<string>.InternalError("Error: " + ex.Message));
+                return StatusCode(500, ApiResponse<string>.InternalError(ex.Message));
             }
         }
 
