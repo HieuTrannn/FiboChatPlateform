@@ -383,6 +383,21 @@ namespace Authentication.Application.Services
         //     };
         // }
 
+        public async Task<BasePaginatedList<ClassLectrurerResponse>> GetAllClassesOfLecturerAsync(Guid lecturerId, int page, int pageSize)
+        {
+            // Get all classes where LecturerId matches the provided lecturerId
+            var classes = await _unitOfWork.GetRepository<Class>().GetAllAsync();
+            var lecturerClasses = classes.Where(c => c.LecturerId == lecturerId).ToList();
+
+            var items = new List<ClassLectrurerResponse>(lecturerClasses.Count);
+            foreach (var c in lecturerClasses)
+            {
+                items.Add(await ToClassLecturerResponse(c));
+            }
+
+            return new BasePaginatedList<ClassLectrurerResponse>(items, lecturerClasses.Count, page, pageSize);
+        }
+
         private async Task<ClassResponse> ToClassResponse(Class c)
         {
             var lecturer = await _unitOfWork.GetRepository<Lecturer>().GetByIdAsync(c.LecturerId);
@@ -450,6 +465,32 @@ namespace Authentication.Application.Services
                 Students = students
             };
 
+            return response;
+        }
+
+        private async Task<ClassLectrurerResponse> ToClassLecturerResponse(Class c)
+        {
+            var semester = await _unitOfWork.GetRepository<Semester>().GetByIdAsync(c.SemesterId);
+            if (semester == null)
+            {
+                return null;
+            }
+
+            var response = new ClassLectrurerResponse
+            {
+                Id = c.Id,
+                Code = c.Code,
+                Status = c.Status.ToString(),
+                CreatedAt = c.CreatedAt,
+                Semester = new SemesterResponse
+                {
+                    Id = semester.Id,
+                    Code = semester.Code,
+                    Term = semester.Term,
+                    Year = semester.Year,
+                    CreatedAt = semester.CreatedAt,
+                }
+            };
             return response;
         }
     }
