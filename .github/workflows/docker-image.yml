@@ -38,7 +38,11 @@ jobs:
             echo "🧱 Running EF Core migrations..."
             export ASPNETCORE_ENVIRONMENT=Staging
 
-            echo "➡️ Updating Authentication DB..."
+            echo "🐳 Restarting Docker Compose..."
+            docker compose down -v
+            docker compose up -d --build
+
+             echo "➡️ Updating Authentication DB..."
             dotnet ef database update \
               --project services/Authentication/Authentication.Infrastructure \
               --startup-project services/Authentication/Authentication.API \
@@ -49,9 +53,5 @@ jobs:
               --project services/Course/Course.Infrastructure \
               --startup-project services/Course/Course.Api \
               --context CourseDbContext
-
-            echo "🐳 Restarting Docker Compose..."
-            docker compose down -v
-            docker compose up -d --build
 
             echo "✅ Deploy completed successfully!"
