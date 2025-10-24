@@ -148,6 +148,12 @@ namespace Authentication.Application.Services
             {
                 var accountRepo = _unitOfWork.GetRepository<Account>();
                 var account = await accountRepo.FindByConditionAsync(u => u.Email == request.Email);
+
+                if (account.Role == null && account.RoleId.HasValue)
+                {
+                    var roleRepo = _unitOfWork.GetRepository<Role>();
+                    account.Role = await roleRepo.FindByConditionAsync(r => r.Id == account.RoleId.Value);
+                }
                 if (account == null)
                 {
                     _logger.LogInformation("Login failed: Account not found");
@@ -502,6 +508,7 @@ namespace Authentication.Application.Services
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.UTF8.GetBytes(_configuration["Authentication:Key"]);
+
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(new[]
