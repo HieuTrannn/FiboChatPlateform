@@ -77,7 +77,7 @@ namespace Authentication.Application.Services
                         Message = "Error assigning user role"
                     });
                 }
-
+                account.Role = userRole;
                 account.RoleId = userRole.Id;
 
                 await userRepo.InsertAsync(account);
@@ -508,7 +508,7 @@ namespace Authentication.Application.Services
                     {
                     new Claim(ClaimTypes.NameIdentifier, account.Id.ToString()),
                     new Claim(ClaimTypes.Email, account.Email.ToString()),
-                    new Claim(ClaimTypes.Email, account.Role.RoleName.ToString()),
+                    new Claim(ClaimTypes.Email, account.RoleId.ToString()),
                     new Claim(JwtRegisteredClaimNames.Iat,
                     new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString(),
                      ClaimValueTypes.Integer64)
