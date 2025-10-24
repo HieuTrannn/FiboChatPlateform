@@ -10,5 +10,8 @@ namespace Course.Application.Interfaces
         public Task<MasterTopicResponse> CreateAsync(MasterTopicCreateRequest request);
         public Task<MasterTopicResponse> UpdateAsync(Guid id, MasterTopicUpdateRequest request);
         public Task<MasterTopicResponse> DeleteAsync(Guid id);
+
+        // Topic Management
+        public Task<BasePaginatedList<MasterTopicTopicResponse>> GetAllTopicsOfMasterTopicAsync(Guid masterTopicId, int page, int pageSize);
     }
 }
