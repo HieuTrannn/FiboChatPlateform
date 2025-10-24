@@ -167,6 +167,8 @@ namespace Course.Application.Implements
             return await ToMasterTopicResponse(masterTopic);
         }
 
+        
+
         private async Task<MasterTopicResponse> ToMasterTopicResponse(MasterTopic masterTopic)
         {
             // Get Domain information (N:1 relationship)

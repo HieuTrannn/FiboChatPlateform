@@ -3,6 +3,7 @@ using System;
 using Course.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Course.Infrastructure.Migrations
 {
     [DbContext(typeof(CourseDbContext))]
-    partial class CourseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251024073315_AddTopicMasterTopicForeignKey")]
+    partial class AddTopicMasterTopicForeignKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -329,6 +332,9 @@ namespace Course.Infrastructure.Migrations
                     b.Property<Guid>("MasterTopicId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("MasterTopicId1")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -339,6 +345,8 @@ namespace Course.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("MasterTopicId");
+
+                    b.HasIndex("MasterTopicId1");
 
                     b.ToTable("Topics", "public");
                 });
@@ -423,9 +431,15 @@ namespace Course.Infrastructure.Migrations
 
             modelBuilder.Entity("Course.Domain.Entities.Topic", b =>
                 {
-                    b.HasOne("Course.Domain.Entities.MasterTopic", "MasterTopic")
+                    b.HasOne("Course.Domain.Entities.MasterTopic", null)
                         .WithMany("Topics")
                         .HasForeignKey("MasterTopicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Course.Domain.Entities.MasterTopic", "MasterTopic")
+                        .WithMany()
+                        .HasForeignKey("MasterTopicId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
