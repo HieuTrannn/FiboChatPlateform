@@ -19,11 +19,6 @@ obj/
 # SonarQube
 .sonarqube/
 
-# Firebase credentials (specific file)
-services/Course/Course.Api/fibochatplatform-firebase-adminsdk-fbsvc-0cd7e0bd98.json
-
-# All JSON files in Course API (to prevent future Firebase secrets)
-services/Course/Course.Api/*.json
 
 # Environment files
 .env
