@@ -10,7 +10,6 @@ COPY ["services/Course/Course.Api/Course.Api.csproj", "services/Course/Course.Ap
 COPY ["services/Course/Course.Application/Course.Application.csproj", "services/Course/Course.Application/"]
 COPY ["services/Course/Course.Domain/Course.Domain.csproj", "services/Course/Course.Domain/"]
 COPY ["services/Course/Course.Infrastructure/Course.Infrastructure.csproj", "services/Course/Course.Infrastructure/"]
-COPY ["services/Authentication/Authentication.Domain/Authentication.Domain.csproj", "services/Authentication/Authentication.Domain/"]
 COPY ["cores/Contracts/Contracts.csproj", "cores/Contracts/"]
 
 # Restore dependencies
