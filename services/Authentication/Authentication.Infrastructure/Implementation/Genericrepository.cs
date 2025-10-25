@@ -80,6 +80,9 @@ namespace Authentication.Infrastructure.Implementation
 
         public async Task<T?> GetByIdAsync(object id)
         {
+            if (id is string str && Guid.TryParse(str, out var guid))
+                id = guid;
+
             return await _dbSet.FindAsync(id);
         }
 
@@ -88,11 +91,21 @@ namespace Authentication.Infrastructure.Implementation
             await _dbSet.AddAsync(entity);
             return entity;
         }
-
         public Task UpdateAsync(T entity)
         {
-            return Task.FromResult(_dbSet.Update(entity));
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            var entry = _context.Entry(entity);
+            if (entry.State == EntityState.Detached)
+            {
+                _dbSet.Attach(entity);
+            }
+            entry.State = EntityState.Modified;
+
+            return Task.CompletedTask;
         }
+
 
         public async Task DeleteAsync(object id)
         {

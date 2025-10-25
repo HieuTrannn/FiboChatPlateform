@@ -16,7 +16,7 @@ namespace Authentication.Domain.Entities
         [Column(TypeName = "text")]
         public string Password { get; set; }
 
-        public DateTime? DateOfBirth { get; set; }
+        public DateOnly? DateOfBirth { get; set; }
         public Gender? Sex { get; set; }
         [Required]
         [MaxLength(255)]

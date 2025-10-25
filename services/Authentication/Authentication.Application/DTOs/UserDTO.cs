@@ -28,5 +28,15 @@ namespace Authentication.Application.DTOs
             public bool IsVerified { get; set; }
             public DateTime CreatedAt { get; set; }
         }
+
+        public class UpdateUserRequest
+        {
+            public string Firstname { get; set; }
+            public string Lastname { get; set; }
+            public string PhoneNumber { get; set; }
+            public DateOnly DateOfBirth { get; set; }
+            public Gender Sex { get; set; }
+            public string Address { get; set; }
+        }
     }
 }

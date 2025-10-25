@@ -120,7 +120,7 @@ namespace Authentication.API.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateLecturerById([FromRoute] Guid id, [FromForm] LecturerRequest request)
+        public async Task<IActionResult> UpdateLecturerById([FromRoute] Guid id, [FromForm] UpdateLecturerRequest request)
         {
             try
             {
