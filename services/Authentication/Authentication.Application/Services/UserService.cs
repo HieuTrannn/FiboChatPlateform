@@ -571,7 +571,7 @@ namespace Authentication.Application.Services
                 var token = tokenHandler.CreateToken(tokenDescriptor);
                 var jwt = tokenHandler.WriteToken(token);
 
-                return $"Bearer {jwt}";
+                return jwt;
             }
             catch (Exception ex)
             {
