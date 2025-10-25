@@ -28,8 +28,8 @@ namespace Authentication.Application.Services
         private readonly IConfiguration _configuration;
         private readonly IEmailService _emailService;
         private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public UserService(ILogger<IUserService> logger, IUnitOfWork unitOfWork, IRsaService rsaService, IEmailService emailService, IConfiguration configuration, IGoogleAuthService googleService, IHttpContextAccessor httpContextAccessor)
+        private readonly IFirebaseService _firebaseService;
+        public UserService(ILogger<IUserService> logger, IUnitOfWork unitOfWork, IRsaService rsaService, IEmailService emailService, IConfiguration configuration, IGoogleAuthService googleService, IHttpContextAccessor httpContextAccessor, IFirebaseService firebaseService)
         {
             _logger = logger;
             _unitOfWork = unitOfWork;
@@ -38,6 +38,7 @@ namespace Authentication.Application.Services
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
             _googleAuthService = googleService;
+            _firebaseService = firebaseService;
         }
 
         public async Task<ApiResponse<RegisterResponse>> RegisterUserAsync(RegisterReq request)
@@ -347,7 +348,7 @@ namespace Authentication.Application.Services
             }
         }
 
-        public async Task<UserInfo> UpdateUserProfileAsync(Guid id, UserInfo userInfo)
+        public async Task<UserInfo> UpdateUserProfileAsync(Guid id, UserInfo userInfo, IFormFile? avatarFile)
         {
             try
             {
@@ -362,6 +363,18 @@ namespace Authentication.Application.Services
                 user.Lastname = userInfo.Lastname;
                 user.PhoneNumber = userInfo.PhoneNumber;
                 user.StudentID = userInfo.StudentID;
+                if (avatarFile != null)
+                {
+                    _logger.LogInformation("Updating user avatar: {avatar}", avatarFile.FileName);
+                    // check image file size
+                    if (avatarFile.Length > 10 * 1024 * 1024) // 10MB
+                    {
+                        _logger.LogWarning("Image file size is too large: {size}MB", avatarFile.Length / (1024 * 1024));
+                        throw new InvalidOperationException("Image file size must be less than 10MB.");
+                    }
+                    var avatarUrl = await _firebaseService.UploadAvatarAsync(avatarFile.OpenReadStream(), avatarFile.FileName);
+                    user.AvatarUrl = avatarUrl;
+                }
                 await userRepo.UpdateAsync(user);
                 await _unitOfWork.SaveChangeAsync();
                 return user.Adapt<UserInfo>();

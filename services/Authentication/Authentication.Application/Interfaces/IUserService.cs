@@ -1,5 +1,6 @@
 ﻿using Authentication.Application.DTOs;
 using Contracts.Common;
+using Microsoft.AspNetCore.Http;
 using static Authentication.Application.DTOs.AuthenDTO;
 using static Authentication.Application.DTOs.UserDTO;
 
@@ -14,7 +15,7 @@ namespace Authentication.Application.Interfaces
         Task<RegisterResponse> ResetPasswordAsync(ResetPasswordRequest request);
         Task<AuthResponse> LoginWithGoogleAsync(string idToken);
         Task<UserInfo> GetUserProfileAsync(Guid id);
-        Task<UserInfo> UpdateUserProfileAsync(Guid id, UserInfo userInfo);
+        Task<UserInfo> UpdateUserProfileAsync(Guid id, UserInfo userInfo, IFormFile? avatarFile);
         Task DeleteUserAsync(Guid id);
         Task<AuthResponse> ChangePasswordFirstTimeAsync(ChangePasswordFirstTimeRequest request);
         Task<UserResponse> GetUserByIdAsync(Guid id);

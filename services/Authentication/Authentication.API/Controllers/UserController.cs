@@ -184,7 +184,7 @@ namespace Authentication.API.Controllers
 
         [Authorize]
         [HttpPut("update-profile")]
-        public async Task<IActionResult> UpdateUserProfileAsync([FromForm] UserInfo userInfo)
+        public async Task<IActionResult> UpdateUserProfileAsync([FromForm] UserInfo userInfo, IFormFile? avatarFile)
         {
             try
             {
@@ -199,7 +199,7 @@ namespace Authentication.API.Controllers
                 {
                     return NotFound(ApiResponse<UserInfo>.NotFound("User not found"));
                 }
-                var response = await _userService.UpdateUserProfileAsync(currentUserId, userInfo);
+                var response = await _userService.UpdateUserProfileAsync(currentUserId, userInfo, avatarFile);
                 return Ok(ApiResponse<UserInfo>.Ok(response, "Update user profile successfully", "200"));
             }
             catch (Exception ex)
