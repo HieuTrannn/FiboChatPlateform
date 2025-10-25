@@ -10,6 +10,8 @@ namespace Authentication.Domain.Entities
         [ForeignKey("Account")]
         public Guid LecturerId { get; set; }
         public string? FullName { get; set; }
+
+        public string Email { get; set; }
         public Gender Gender { get; set; }
         public string Status { get; set; }
         public virtual Account Account { get; set; } = null!;
