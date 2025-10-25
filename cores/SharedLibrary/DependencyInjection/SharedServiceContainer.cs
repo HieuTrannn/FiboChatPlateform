@@ -19,15 +19,23 @@ namespace SharedLibrary.DependencyInjection
                 .GetConnectionString("DBConnection"), posgestserverOption =>
                 posgestserverOption.EnableRetryOnFailure()));
             //config serilog 
+            var logFolder = Path.Combine(AppContext.BaseDirectory, "Logs");
+            if (!Directory.Exists(logFolder))
+            {
+                Directory.CreateDirectory(logFolder);
+            }
+
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
                 .WriteTo.Debug()
                 .WriteTo.Console()
-                .WriteTo.File(path: $"{fileName}-.text",
-                restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information,
-                outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.ff zzz } [{Level:u3}] {message:lj}{NewLine}{Exception}",
-                rollingInterval: RollingInterval.Day)
+                .WriteTo.File(
+                    path: Path.Combine(logFolder, $"{fileName}-.txt"), // đặt vào folder Logs
+                    restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information,
+                    outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.ff zzz } [{Level:u3}] {message:lj}{NewLine}{Exception}",
+                    rollingInterval: RollingInterval.Day)
                 .CreateLogger();
+
 
             // Add JWT authentication
             JWTAuthenticationScheme.AddJWTAuthenticationScheme(services, config);
