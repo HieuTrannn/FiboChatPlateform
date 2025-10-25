@@ -1,6 +1,6 @@
 namespace Authentication.Domain.Abstraction;
 
-public interface IUnitOfWork : IDisposable
+public interface IUnitOfWork
 {
     IGenericRepository<T> GetRepository<T>() where T : class;
     void Save();

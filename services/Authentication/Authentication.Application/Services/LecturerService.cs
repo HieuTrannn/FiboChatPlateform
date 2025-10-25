@@ -130,7 +130,7 @@ namespace Authentication.Application.Services
             {
                 _logger.LogInformation("Retrieving lecturer with ID: {Id}", id);
                 var lectureRepository = _unitOfWork.GetRepository<Lecturer>();
-                var lecture = await lectureRepository.GetByIdAsync(id);
+                var lecture = await lectureRepository.GetByIdAsync(id.ToString());
 
                 if (lecture == null)
                 {
@@ -155,7 +155,7 @@ namespace Authentication.Application.Services
                 _unitOfWork.BeginTransaction();
 
                 var lectureRepository = _unitOfWork.GetRepository<Lecturer>();
-                var lecture = await lectureRepository.GetByIdAsync(id);
+                var lecture = await lectureRepository.GetByIdAsync(id.ToString());
 
                 if (lecture == null)
                 {
@@ -176,7 +176,7 @@ namespace Authentication.Application.Services
             }
         }
 
-        public async Task<RegisterResponse> UpdateLecturerById(Guid id, LecturerRequest request)
+        public async Task<RegisterResponse> UpdateLecturerById(Guid id, UpdateLecturerRequest request)
         {
             try
             {
@@ -184,7 +184,7 @@ namespace Authentication.Application.Services
                 var lectureRepository = _unitOfWork.GetRepository<Lecturer>();
                 var lecture = await lectureRepository.GetByIdAsync(id);
                 var accountRepository = _unitOfWork.GetRepository<Account>();
-                var account = await accountRepository.GetByIdAsync(id.ToString());
+                var account = await accountRepository.GetByIdAsync(id);
                 if (lecture == null)
                 {
                     _logger.LogWarning("Lecturer with ID: {Id} not found.", id);
@@ -196,12 +196,11 @@ namespace Authentication.Application.Services
                     _logger.LogWarning("Account with ID: {Id} not found.", id);
                     return new RegisterResponse { Success = false, Message = "Account not found." };
                 }
-                account.Email = request.Email;
                 account.UpdatedAt = DateTime.UtcNow;
                 account.UpdatedAt = DateTime.UtcNow;
 
                 lecture.FullName = request.FullName;
-
+                lecture.Gender = request.Gender;
                 await accountRepository.UpdateAsync(account);
                 await lectureRepository.UpdateAsync(lecture);
                 await _unitOfWork.SaveChangeAsync();
