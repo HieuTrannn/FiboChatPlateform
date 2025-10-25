@@ -549,7 +549,6 @@ namespace Authentication.Application.Services
                 ClaimValueTypes.Integer64)
         };
 
-                // Safe role claim
                 if (account.Role != null && !string.IsNullOrEmpty(account.Role.RoleName))
                 {
                     claims.Add(new Claim(ClaimTypes.Role, account.Role.RoleName));
@@ -570,7 +569,9 @@ namespace Authentication.Application.Services
                 };
 
                 var token = tokenHandler.CreateToken(tokenDescriptor);
-                return tokenHandler.WriteToken(token);
+                var jwt = tokenHandler.WriteToken(token);
+
+                return $"Bearer {jwt}";
             }
             catch (Exception ex)
             {
