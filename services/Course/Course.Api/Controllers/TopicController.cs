@@ -20,7 +20,7 @@ namespace Course.Api.Controllers
         }
 
         /// <summary>
-        /// Get all topics
+        /// Get all topics (active only)
         /// </summary>
         /// <param name="page"></param>
         /// <param name="pageSize"></param>

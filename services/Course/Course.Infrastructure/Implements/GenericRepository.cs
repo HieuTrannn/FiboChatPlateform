@@ -125,13 +125,13 @@ namespace Course.Infrastructure.Implements
                 {
                     if (statusProperty.PropertyType.IsEnum)
                     {
-                        // Map to Disabled enum value (case-insensitive)
-                        var enumValue = Enum.Parse(statusProperty.PropertyType, "Disabled", ignoreCase: true);
+                        // Map to Inactive enum value (case-insensitive)
+                        var enumValue = Enum.Parse(statusProperty.PropertyType, "Inactive", ignoreCase: true);
                         statusProperty.SetValue(entity, enumValue);
                     }
                     else if (statusProperty.PropertyType == typeof(string))
                     {
-                        statusProperty.SetValue(entity, "disabled");
+                        statusProperty.SetValue(entity, "inactive");
                     }
                     else
                     {

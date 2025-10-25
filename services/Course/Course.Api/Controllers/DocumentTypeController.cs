@@ -20,7 +20,7 @@ namespace Course.Api.Controllers
         }
 
         /// <summary>
-        /// Get all document types
+        /// Get all document types (active only)
         /// </summary>
         /// <param name="page"></param>
         /// <param name="pageSize"></param>

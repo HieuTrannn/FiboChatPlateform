@@ -25,7 +25,6 @@ namespace Authentication.Domain.Entities
         [MaxLength(10)]
         public string? PhoneNumber { get; set; }
         public string? StudentID { get; set; }
-        public string? AvatarUrl { get; set; }
         public Guid? RoleId { get; set; }
         public string? Address { get; set; }
         [Column(TypeName = "text")]

@@ -4,6 +4,7 @@ using Course.Domain.Abstraction;
 using Microsoft.Extensions.Logging;
 using Contracts.Common;
 using Course.Domain.Exceptions;
+using Course.Domain.Entities;
 
 namespace Course.Application.Implements
 {
@@ -31,9 +32,9 @@ namespace Course.Application.Implements
 
         public async Task<BasePaginatedList<DomainResponse>> GetAllAsync(int page, int pageSize)
         {
-            var domains = await _unitOfWork.GetRepository<Domain.Entities.Domain>().GetAllAsync();
+            var domains = await _unitOfWork.GetRepository<Domain.Entities.Domain>().FilterByAsync(d => d.Status == StaticEnum.StatusEnum.Active);
             var response = await Task.WhenAll(domains.Select(ToDomainResponse));
-            return new BasePaginatedList<DomainResponse>(response, domains.Count, page, pageSize);
+            return new BasePaginatedList<DomainResponse>(response.ToList(), domains.Count, page, pageSize);
         }
 
         public async Task<DomainResponse> CreateAsync(DomainCreateRequest request)
@@ -70,6 +71,12 @@ namespace Course.Application.Implements
             {
                 _logger.LogError("Domain not found with id: {Id}", id);
                 throw new CustomExceptions.NoDataFoundException("Domain not found");
+            }
+            var masterTopics = await _unitOfWork.GetRepository<MasterTopic>().FilterByAsync(mt => mt.DomainId == id);
+            if (masterTopics.Any())
+            {
+                _logger.LogError("Domain has master topics: {DomainId}", id);
+                throw new CustomExceptions.NoDataFoundException("Domain cannot be deleted because it has master topics");
             }
             await _unitOfWork.GetRepository<Domain.Entities.Domain>().SoftDeleteAsync(id);
             await _unitOfWork.SaveChangesAsync();

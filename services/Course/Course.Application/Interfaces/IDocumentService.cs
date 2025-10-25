@@ -14,5 +14,6 @@ namespace Course.Application.Interfaces
         Task<DocumentResponse> DeleteAsync(Guid id);
         Task<DocumentResponse> PublishAsync(Guid id, Guid verifiedById);
         Task<DocumentResponse> UnpublishAsync(Guid id);
+        Task<BasePaginatedList<DocumentResponse>> GetAllDocumentsByLecturerIdAsync(Guid lecturerId, int page, int pageSize);
     }
 }

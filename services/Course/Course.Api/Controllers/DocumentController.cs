@@ -39,7 +39,7 @@ namespace Course.Api.Controllers
         }
 
         /// <summary>
-        /// Get all documents
+        /// Get all documents (active only)
         /// </summary>
         /// <param name="page"></param>
         /// <param name="pageSize"></param>
@@ -60,7 +60,7 @@ namespace Course.Api.Controllers
         }
 
         /// <summary>
-        /// Get all documents by topic id
+        /// Get all documents by topic id (active only)
         /// </summary>
         /// <param name="topicId"></param>
         /// <param name="page"></param>
@@ -199,6 +199,28 @@ namespace Course.Api.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error unpublishing document: {Id}", id);
+                return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(DocumentController)}: {ex.Message}"));
+            }
+        }
+
+        /// <summary>
+        /// Get all documents by lecturer id (active only)
+        /// </summary>
+        /// <param name="lecturerId"></param>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        [HttpGet("lecturer/{lecturerId}")]
+        public async Task<IActionResult> GetAllDocumentsByLecturerId([FromRoute] Guid lecturerId, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+        {
+            try
+            {
+                var documents = await _documentService.GetAllDocumentsByLecturerIdAsync(lecturerId, page, pageSize);
+                return Ok(ApiResponse<BasePaginatedList<DocumentResponse>>.Ok(documents, "Get all documents by lecturer id successfully", "200"));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting documents by lecturer id: {LecturerId}", lecturerId);
                 return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(DocumentController)}: {ex.Message}"));
             }
         }

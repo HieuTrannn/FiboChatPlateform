@@ -31,9 +31,9 @@ namespace Course.Application.Implements
         }
         public async Task<BasePaginatedList<TopicResponse>> GetAllAsync(int page, int pageSize)
         {
-            var topics = await _unitOfWork.GetRepository<Topic>().GetAllAsync();
+            var topics = await _unitOfWork.GetRepository<Topic>().FilterByAsync(t => t.Status == StaticEnum.StatusEnum.Active);
             var response = await Task.WhenAll(topics.Select(ToTopicResponse));
-            return new BasePaginatedList<TopicResponse>(response, topics.Count, page, pageSize);
+            return new BasePaginatedList<TopicResponse>(response.ToList(), topics.Count, page, pageSize);
         }
 
         public async Task<TopicResponse> CreateAsync(TopicCreateRequest request)
@@ -166,7 +166,7 @@ namespace Course.Application.Implements
                 _logger.LogError("Master topic not found with id: {Id}", masterTopicId);
                 throw new CustomExceptions.NoDataFoundException("Master topic not found");
             }
-            var topics = await _unitOfWork.GetRepository<Topic>().GetAllAsync(includeProperties: "MasterTopic");
+            var topics = await _unitOfWork.GetRepository<Topic>().FilterByAsync(t => t.MasterTopicId == masterTopicId && t.Status == StaticEnum.StatusEnum.Active);
             var items = new List<TopicMasterTopicResponse>(topics.Count);
             foreach (var topic in topics)
             {

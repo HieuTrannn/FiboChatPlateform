@@ -32,7 +32,14 @@ namespace Authentication.Infrastructure.Data
                 entity.Property(e => e.Password).HasColumnType("text");
                 entity.Property(e => e.IsVerified).HasColumnType("text");
 
-                // Foreign key relationships
+                // Fix DateOfBirth conversion issue
+                entity.Property(e => e.DateOfBirth)
+                    .HasConversion(
+                        v => v.HasValue ? v.Value.ToDateTime(TimeOnly.MinValue) : (DateTime?)null,
+                        v => v.HasValue ? DateOnly.FromDateTime(v.Value) : (DateOnly?)null)
+                    .HasColumnType("date");
+
+            // Foreign key relationships
                 entity.HasOne(e => e.Role)
                     .WithMany(r => r.Users)
                     .HasForeignKey(e => e.RoleId)
@@ -43,7 +50,7 @@ namespace Authentication.Infrastructure.Data
                     .HasForeignKey(e => e.ClassId)
                     .OnDelete(DeleteBehavior.SetNull);
             });
-
+            
             // Role configuration
             modelBuilder.Entity<Role>(entity =>
             {
