@@ -1,5 +1,6 @@
 ﻿using Authentication.Application.DTOs;
 using Contracts.Common;
+using Microsoft.AspNetCore.Http;
 using static Authentication.Application.DTOs.AuthenDTO;
 using static Authentication.Application.DTOs.UserDTO;
 

@@ -19,7 +19,7 @@ namespace Course.Api.Controllers
         }
 
         /// <summary>
-        /// Get all domains
+        /// Get all domains (active only)
         /// </summary>
         /// <param name="page"></param>
         /// <param name="pageSize"></param>

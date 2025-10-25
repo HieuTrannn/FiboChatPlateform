@@ -43,7 +43,7 @@ namespace Contracts.Common
         public enum SemesterStatusEnum
         {
             [CustomName("Active")] Active,
-            [CustomName("Disabled")] Disabled,
+            [CustomName("Inactive")] Inactive,
             [CustomName("Pending")] Pending,
         }
 

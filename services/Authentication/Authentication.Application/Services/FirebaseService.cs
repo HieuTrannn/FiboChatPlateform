@@ -1,10 +1,10 @@
-using Course.Application.Interfaces;
-using Google.Apis.Auth.OAuth2;
+using Authentication.Application.Interfaces;
 using Google.Cloud.Storage.V1;
+using Google.Apis.Auth.OAuth2;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace Course.Application.Implements
+namespace Authentication.Application.Services
 {
     public class FirebaseService : IFirebaseService
     {
@@ -14,11 +14,11 @@ namespace Course.Application.Implements
 
         public FirebaseService(IConfiguration configuration, ILogger<FirebaseService> logger)
         {
-            var firebaseConfigPath = configuration["Firebase:PrivateKey"];
+            var firebaseConfigPath = configuration["Firebase:CredentialsPath"];
             
             if (string.IsNullOrWhiteSpace(firebaseConfigPath))
             {
-                throw new InvalidOperationException("Firebase:PrivateKey configuration is missing. Please set the path to your Firebase service account JSON file.");
+                throw new InvalidOperationException("Firebase:CredentialsPath configuration is missing. Please set the path to your Firebase service account JSON file.");
             }
 
             try
@@ -41,17 +41,18 @@ namespace Course.Application.Implements
             }
         }
 
-        public async Task<string> UploadDocumentAsync(Stream fileStream, string fileName)
+        public async Task<string> UploadAvatarAsync(Stream imageStream, string fileName)
         {
             var uniqueFileName = $"{Guid.NewGuid()}_{fileName}";
             var contentType = GetContentType(fileName);
+
             try
             {
                 var storageObject = await _storageClient.UploadObjectAsync(
                     BucketName,
-                    $"documents/Topics/{uniqueFileName}",
+                    $"avatars/Accounts/{uniqueFileName}",
                     contentType,
-                    fileStream
+                    imageStream
                 );
 
                 storageObject.Acl = new[] { new Google.Apis.Storage.v1.Data.ObjectAccessControl
@@ -63,12 +64,12 @@ namespace Course.Application.Implements
 
                 await _storageClient.UpdateObjectAsync(storageObject);
 
-                return $"https://storage.googleapis.com/{BucketName}/documents/Topics/{uniqueFileName}";
+                return $"https://storage.googleapis.com/{BucketName}/avatars/Accounts/{uniqueFileName}";
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error uploading document to Firebase Storage.");
-                throw new InvalidOperationException("Error uploading document to Firebase Storage.", ex);
+                _logger.LogError(ex, "Error uploading avatar to Firebase Storage.");
+                throw new InvalidOperationException("Error uploading avatar to Firebase Storage.", ex);
             }
         }
 

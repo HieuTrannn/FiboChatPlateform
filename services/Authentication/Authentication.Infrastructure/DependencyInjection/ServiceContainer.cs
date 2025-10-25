@@ -31,6 +31,7 @@ namespace Authentication.Infrastructure.DependencyInjection
             services.AddScoped<IClassService, ClassService>();
             services.AddScoped<IGroupService, GroupService>();
             services.AddScoped<IGoogleAuthService, GoogleAuthService>();
+            services.AddScoped<IFirebaseService, FirebaseService>();
 
             services.Configure<ApiBehaviorOptions>(options =>
             {
