@@ -10,6 +10,6 @@ namespace Authentication.Application.Interfaces
         Task<List<LecturerResponse>> GetAllLecturers();
         Task<LecturerResponse> GetLecturerById(Guid id);
         Task<RegisterResponse> DeleteLecturerById(Guid id);
-        Task<RegisterResponse> UpdateLecturerById(Guid id, LecturerRequest request);
+        Task<RegisterResponse> UpdateLecturerById(Guid id, UpdateLecturerRequest request);
     }
 }

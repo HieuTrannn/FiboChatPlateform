@@ -15,7 +15,7 @@ namespace Authentication.Application.Interfaces
         Task<RegisterResponse> ResetPasswordAsync(ResetPasswordRequest request);
         Task<AuthResponse> LoginWithGoogleAsync(string idToken);
         Task<UserInfo> GetUserProfileAsync(Guid id);
-        Task<UserInfo> UpdateUserProfileAsync(Guid id, UserInfo userInfo, IFormFile? avatarFile);
+        Task<RegisterResponse> UpdateUserProfileAsync(Guid id, UpdateUserRequest request);
         Task DeleteUserAsync(Guid id);
         Task<AuthResponse> ChangePasswordFirstTimeAsync(ChangePasswordFirstTimeRequest request);
         Task<UserResponse> GetUserByIdAsync(Guid id);

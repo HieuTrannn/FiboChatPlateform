@@ -3,6 +3,7 @@ using Authentication.Application.Interfaces;
 using Authentication.Domain.Abstraction;
 using Authentication.Domain.Entities;
 using Contracts.Common;
+using FirebaseAdmin.Messaging;
 using Mapster;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -142,10 +143,7 @@ namespace Authentication.Application.Services
                 _logger.LogError("Error at login with Google: {Message}", e.Message);
                 throw;
             }
-            finally
-            {
-                _unitOfWork.Dispose();
-            }
+           
         }
 
 
@@ -156,23 +154,25 @@ namespace Authentication.Application.Services
                 var accountRepo = _unitOfWork.GetRepository<Account>();
                 var account = await accountRepo.FindByConditionAsync(u => u.Email == request.Email);
 
-                if (account.Role == null && account.RoleId.HasValue)
-                {
-                    var roleRepo = _unitOfWork.GetRepository<Role>();
-                    account.Role = await roleRepo.FindByConditionAsync(r => r.Id == account.RoleId.Value);
-                }
+                
                 if (account == null)
                 {
                     _logger.LogInformation("Login failed: Account not found");
                     throw new KeyNotFoundException("You have not register");
                 }
 
+                
+
                 if (!VerifyPassword(request.Password, account.Password))
                 {
                     _logger.LogInformation("Login failed: Invalid username or password");
                     throw new KeyNotFoundException("Invalid username or password");
                 }
-
+                if (account.Role == null && account.RoleId.HasValue)
+                {
+                    var roleRepo = _unitOfWork.GetRepository<Role>();
+                    account.Role = await roleRepo.FindByConditionAsync(r => r.Id == account.RoleId.Value);
+                }
                 if (account.IsVerified == false)
                 {
                     return new AuthResponse
@@ -199,10 +199,6 @@ namespace Authentication.Application.Services
             {
                 _logger.LogError("Error at login: {Message}", e.Message);
                 throw;
-            }
-            finally
-            {
-                _unitOfWork.Dispose();
             }
         }
 
@@ -342,49 +338,47 @@ namespace Authentication.Application.Services
                 _logger.LogError(ex, "Error fetching user by ID: {UserId}", id);
                 throw;
             }
-            finally
-            {
-                _unitOfWork.Dispose();
-            }
         }
 
-        public async Task<UserInfo> UpdateUserProfileAsync(Guid id, UserInfo userInfo, IFormFile? avatarFile)
+        public async Task<RegisterResponse> UpdateUserProfileAsync(Guid id, UpdateUserRequest request)
         {
             try
             {
+                _logger.LogInformation("Updating user profile for ID: {UserId}", id);
                 var userRepo = _unitOfWork.GetRepository<Account>();
                 var user = await userRepo.GetByIdAsync(id);
+
                 if (user == null)
                 {
                     _logger.LogWarning("User not found with ID: {UserId}", id);
                     throw new KeyNotFoundException("User not found");
                 }
-                user.Firstname = userInfo.Firstname;
-                user.Lastname = userInfo.Lastname;
-                user.PhoneNumber = userInfo.PhoneNumber;
-                user.StudentID = userInfo.StudentID;
-                if (avatarFile != null)
-                {
-                    _logger.LogInformation("Updating user avatar: {avatar}", avatarFile.FileName);
-                    // check image file size
-                    if (avatarFile.Length > 10 * 1024 * 1024) // 10MB
-                    {
-                        _logger.LogWarning("Image file size is too large: {size}MB", avatarFile.Length / (1024 * 1024));
-                        throw new InvalidOperationException("Image file size must be less than 10MB.");
-                    }
-                    var avatarUrl = await _firebaseService.UploadAvatarAsync(avatarFile.OpenReadStream(), avatarFile.FileName);
-                    user.AvatarUrl = avatarUrl;
-                }
+
+                request.Adapt(user);
+                user.UpdatedAt = DateTime.UtcNow;
+
                 await userRepo.UpdateAsync(user);
                 await _unitOfWork.SaveChangeAsync();
-                return user.Adapt<UserInfo>();
+
+
+                return new RegisterResponse
+                {
+                    Success = true,
+                    Message = "Update Successfully"
+                };
             }
             catch (Exception ex)
             {
+
                 _logger.LogError(ex, "Error updating user profile");
-                throw;
+                return new RegisterResponse
+                {
+                    Success = false,
+                    Message = ex.Message
+                };
             }
         }
+
 
         public async Task DeleteUserAsync(Guid id)
         {
@@ -556,7 +550,6 @@ namespace Authentication.Application.Services
                 ClaimValueTypes.Integer64)
         };
 
-                // Safe role claim
                 if (account.Role != null && !string.IsNullOrEmpty(account.Role.RoleName))
                 {
                     claims.Add(new Claim(ClaimTypes.Role, account.Role.RoleName));
@@ -577,7 +570,9 @@ namespace Authentication.Application.Services
                 };
 
                 var token = tokenHandler.CreateToken(tokenDescriptor);
-                return tokenHandler.WriteToken(token);
+                var jwt = tokenHandler.WriteToken(token);
+
+                return jwt;
             }
             catch (Exception ex)
             {

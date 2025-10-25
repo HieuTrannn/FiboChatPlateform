@@ -51,7 +51,7 @@ namespace Authentication.API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError("{Classname} - Error at get account async cause by {}", nameof(UserController), ex.Message);
-                return StatusCode(500, ApiResponse<string>.InternalError("Error: " + ex.Message));
+                return StatusCode(500, ApiResponse<string>.InternalError(ex.Message));
             }
         }
 
@@ -184,7 +184,7 @@ namespace Authentication.API.Controllers
 
         [Authorize]
         [HttpPut("update-profile")]
-        public async Task<IActionResult> UpdateUserProfileAsync([FromForm] UserInfo userInfo, IFormFile? avatarFile)
+        public async Task<IActionResult> UpdateUserProfileAsync([FromForm] UpdateUserRequest userInfo)
         {
             try
             {
@@ -197,15 +197,21 @@ namespace Authentication.API.Controllers
                 var user = await _userService.GetUserProfileAsync(currentUserId);
                 if (user == null)
                 {
-                    return NotFound(ApiResponse<UserInfo>.NotFound("User not found"));
+                    return NotFound(ApiResponse<RegisterResponse>.NotFound("User not found"));
                 }
-                var response = await _userService.UpdateUserProfileAsync(currentUserId, userInfo, avatarFile);
-                return Ok(ApiResponse<UserInfo>.Ok(response, "Update user profile successfully", "200"));
+                var response = await _userService.UpdateUserProfileAsync(currentUserId, userInfo);
+                if (!response.Success)
+                {
+                    return BadRequest(ApiResponse<RegisterResponse>.BadRequest("Fail to update", response));
+                }
+                return Ok(ApiResponse<RegisterResponse>.Ok(response, "Update user profile successfully", "200"));
+
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error at the {Controller}: {Message}", nameof(UserController), ex.Message);
                 return StatusCode(500, ApiResponse<string>.InternalError($"Error at the {nameof(UserController)}: {ex.Message}"));
+
             }
         }
 
