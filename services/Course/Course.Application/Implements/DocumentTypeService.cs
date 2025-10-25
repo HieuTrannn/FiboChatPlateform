@@ -5,6 +5,7 @@ using Course.Domain.Exceptions;
 using Course.Application.DTOs.DocumentDTOs;
 using Course.Domain.Entities;
 using Contracts.Common;
+using static Course.Domain.Enums.StaticEnums;
 
 namespace Course.Application.Implements
 {
@@ -33,13 +34,9 @@ namespace Course.Application.Implements
 
         public async Task<BasePaginatedList<DocumentTypeResponse>> GetAllAsync(int page, int pageSize)
         {
-            var documentTypes = await _unitOfWork.GetRepository<DocumentType>().GetAllAsync();
-            var items = new List<DocumentTypeResponse>(documentTypes.Count);
-            foreach (var documentType in documentTypes)
-            {
-                items.Add(await ToDocumentTypeResponse(documentType));
-            }
-            return new BasePaginatedList<DocumentTypeResponse>(items, documentTypes.Count, page, pageSize);
+            var documentTypes = await _unitOfWork.GetRepository<DocumentType>().FilterByAsync(dt => dt.Status == DocumentTypeStatus.Active);
+            var response = await Task.WhenAll(documentTypes.Select(ToDocumentTypeResponse));
+            return new BasePaginatedList<DocumentTypeResponse>(response.ToList(), documentTypes.Count, page, pageSize);
         }
 
         public async Task<DocumentTypeResponse> CreateAsync(DocumentTypeCreateRequest request)
@@ -74,6 +71,12 @@ namespace Course.Application.Implements
             {
                 _logger.LogError("Document type not found with id: {Id}", id);
                 throw new CustomExceptions.NoDataFoundException("Document type not found");
+            }
+            var documents = await _unitOfWork.GetRepository<Document>().FilterByAsync(d => d.DocumentTypeId == id);
+            if (documents.Any())
+            {
+                _logger.LogError("Document type has documents: {DocumentTypeId}", id);
+                throw new CustomExceptions.NoDataFoundException("Document type cannot be deleted because it has documents");
             }
             await _unitOfWork.GetRepository<DocumentType>().SoftDeleteAsync(id);
             await _unitOfWork.SaveChangesAsync();

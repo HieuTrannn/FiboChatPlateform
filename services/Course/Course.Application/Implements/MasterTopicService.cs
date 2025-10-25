@@ -56,7 +56,7 @@ namespace Course.Application.Implements
         public async Task<BasePaginatedList<MasterTopicResponse>> GetAllAsync(int page, int pageSize)
         {
             var masterTopics = await _unitOfWork.GetRepository<MasterTopic>()
-                .GetAllAsync(includeProperties: "LecturerMasterTopics");
+                .FilterByAsync(mt => mt.Status == StaticEnum.StatusEnum.Active);
 
             var items = new List<MasterTopicResponse>(masterTopics.Count);
             foreach (var masterTopic in masterTopics)
@@ -161,6 +161,12 @@ namespace Course.Application.Implements
             {
                 _logger.LogError("Master topic not found with id: {Id}", id);
                 throw new CustomExceptions.NoDataFoundException("Master topic not found");
+            }
+            var topics = await _unitOfWork.GetRepository<Topic>().FilterByAsync(t => t.MasterTopicId == id);
+            if (topics.Any())
+            {
+                _logger.LogError("Master topic has topics: {MasterTopicId}", id);
+                throw new CustomExceptions.NoDataFoundException("Master topic cannot be deleted because it has topics");
             }
             await _unitOfWork.GetRepository<MasterTopic>().SoftDeleteAsync(id);
             await _unitOfWork.SaveChangesAsync();

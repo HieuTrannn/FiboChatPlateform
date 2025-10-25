@@ -29,8 +29,8 @@ namespace Authentication.Application.Services
         private readonly IConfiguration _configuration;
         private readonly IEmailService _emailService;
         private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public UserService(ILogger<IUserService> logger, IUnitOfWork unitOfWork, IRsaService rsaService, IEmailService emailService, IConfiguration configuration, IGoogleAuthService googleService, IHttpContextAccessor httpContextAccessor)
+        private readonly IFirebaseService _firebaseService;
+        public UserService(ILogger<IUserService> logger, IUnitOfWork unitOfWork, IRsaService rsaService, IEmailService emailService, IConfiguration configuration, IGoogleAuthService googleService, IHttpContextAccessor httpContextAccessor, IFirebaseService firebaseService)
         {
             _logger = logger;
             _unitOfWork = unitOfWork;
@@ -39,6 +39,7 @@ namespace Authentication.Application.Services
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
             _googleAuthService = googleService;
+            _firebaseService = firebaseService;
         }
 
         public async Task<ApiResponse<RegisterResponse>> RegisterUserAsync(RegisterReq request)

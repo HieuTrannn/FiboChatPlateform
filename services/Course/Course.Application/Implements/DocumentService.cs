@@ -37,17 +37,17 @@ namespace Course.Application.Implements
 
         public async Task<BasePaginatedList<DocumentResponse>> GetAllAsync(int page, int pageSize)
         {
-            var documents = await _unitOfWork.GetRepository<Document>().GetAllAsync();
+            var documents = await _unitOfWork.GetRepository<Document>().FilterByAsync(d => d.Status == DocumentStatus.Active);
             var response = await Task.WhenAll(documents.Select(ToDocumentResponse));
-            return new BasePaginatedList<DocumentResponse>(response, documents.Count, page, pageSize);
+            return new BasePaginatedList<DocumentResponse>(response.ToList(), documents.Count, page, pageSize);
         }
 
         public async Task<BasePaginatedList<DocumentResponse>> GetAllByTopicIdAsync(Guid topicId, int page, int pageSize)
         {
             var documents = await _unitOfWork.GetRepository<Document>()
-                .FilterByAsync(d => d.TopicId == topicId);
+                .FilterByAsync(d => d.TopicId == topicId && d.Status == DocumentStatus.Active);
             var response = await Task.WhenAll(documents.Select(ToDocumentResponse));
-            return new BasePaginatedList<DocumentResponse>(response, documents.Count, page, pageSize);
+            return new BasePaginatedList<DocumentResponse>(response.ToList(), documents.Count, page, pageSize);
         }
 
         public async Task<DocumentResponse> CreateAsync(DocumentCreateRequest request)
@@ -329,6 +329,16 @@ namespace Course.Application.Implements
 
             _logger.LogInformation("Document unpublished successfully with id: {DocumentId}", document.Id);
             return await ToDocumentResponse(document);
+        }
+
+        // Thêm vào DocumentService.cs sau method GetAllByTopicIdAsync (khoảng dòng 51)
+
+        public async Task<BasePaginatedList<DocumentResponse>> GetAllDocumentsByLecturerIdAsync(Guid lecturerId, int page, int pageSize)
+        {
+            var documents = await _unitOfWork.GetRepository<Document>()
+                .FilterByAsync(d => d.UpdatedById == lecturerId && d.Status == DocumentStatus.Active);
+            var response = await Task.WhenAll(documents.Select(ToDocumentResponse));
+            return new BasePaginatedList<DocumentResponse>(response.ToList(), documents.Count, page, pageSize);
         }
 
         private async Task<DocumentResponse> ToDocumentResponse(Document document)
